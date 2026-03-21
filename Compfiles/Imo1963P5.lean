@@ -31,9 +31,9 @@ problem imo1963_p5 :
     simp only [ne_eq, mul_eq_zero, OfNat.ofNat_ne_zero, false_or]
     apply ne_of_gt
     apply Real.sin_pos_of_pos_of_lt_pi
-    simp only [Nat.ofNat_pos, div_pos_iff_of_pos_right, Real.pi_pos]
+    · positivity
     trans 1
-    · rw [div_lt_one (by linarith only)]
+    · rw [div_lt_one (by norm_num)]
       linarith only [Real.pi_le_four]
     · linarith only [Real.pi_gt_three]
   apply (mul_right_inj' h).mp
@@ -45,7 +45,7 @@ problem imo1963_p5 :
     linarith only
   rw [prod_sum, prod_sum, prod_sum]
   rw [show (π / 7 + π / 7)     = 2 * π / 7 by linarith only]
-  rw [show (π / 7 - π / 7)     = 0         by linarith only]
+  rw [show (π / 7 - π / 7)     = 0         by simp]
   rw [show (π / 7 + 5 * π / 7) = 6 * π / 7 by linarith only]
   rw [show (5 * π / 7 - π / 7) = 4 * π / 7 by linarith only]
   rw [show (π / 7 + 3 * π / 7) = 4 * π / 7 by linarith only]
@@ -53,7 +53,7 @@ problem imo1963_p5 :
   rw [Real.sin_zero]
   ring_nf
   rw [← Real.sin_pi_sub]
-  rw [show (π - π * (6 / 7)) = π / 7 by linarith]
   congr
-  linarith
+  ring
+
 end Imo1963P5

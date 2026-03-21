@@ -79,7 +79,7 @@ problem usa1981_p5 (x : ℝ) (n : ℕ) :
   have h14 : a m ≤ ∑ i ∈ Finset.Ico (n - m + 1) (n + 1), a i / ↑i := by
     have h15 : m ≠ 0 := Nat.pos_iff_ne_zero.mp hm3
     have h16 : (m:ℝ) ≠ 0 := Nat.cast_ne_zero.mpr h15
-    have h17 : a m = m * a m / m := CancelDenoms.cancel_factors_eq_div rfl h16
+    have h17 : a m = m * a m / m := (mul_div_cancel_left₀ (a m) h16).symm
     rw [h17]
     have h18 : ∀ ii ∈ Finset.Ico (n - m + 1) (n + 1), a m / m ≤ a ii / ii := fun ii hii ↦ by
       have h22 : ii ∈ Finset.Icc 1 n := by
@@ -88,7 +88,7 @@ problem usa1981_p5 (x : ℝ) (n : ℕ) :
         rw [Finset.mem_Icc]
         constructor
         · exact Nat.one_le_of_lt hii1
-        · exact Nat.lt_succ.mp hii2
+        · exact Nat.lt_succ_iff.mp hii2
       exact hm2 ⟨ii, h22⟩
     have h19 : ∑ _i ∈ Finset.Ico (n - m + 1) (n + 1), a m / ↑m ≤
                ∑ i ∈ Finset.Ico (n - m + 1) (n + 1), a i / ↑i := Finset.sum_le_sum h18

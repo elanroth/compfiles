@@ -9,7 +9,7 @@ import ProblemExtraction
 
 problem_file {
   tags := [.NumberTheory],
-  importedFrom :=
+  solutionImportedFrom :=
     "https://huggingface.co/datasets/AI-MO/NuminaMath-LEAN",
 }
 
@@ -54,13 +54,13 @@ problem imo2006_p4 :
           calc
             _ < (1 : ℝ) + 1 + 1 := by
               apply add_lt_add
-              · apply add_lt_add_left
+              · apply add_lt_add_right
                 apply zpow_lt_one_of_neg₀
                 · norm_num
                 · exact hx
               · apply zpow_lt_one_of_neg₀
                 · norm_num
-                · omega
+                · lia
             _ < 2 ^ 2 := by norm_num
       have hk2 : k > 1 := by
         suffices h : ((y.natAbs ^ 2 : ℤ) : ℝ) > (1 : ℝ) ^ 2
@@ -171,11 +171,11 @@ problem imo2006_p4 :
           by_cases h₁ : n₁ > 1
           · have : y + 1 = 2 * (2 ^ (n₁ - 1) * t + 1) := by
               apply Nat.eq_add_of_sub_eq at ht
-              rw [ht, mul_add]
-              simp [←Nat.mul_assoc]
-              left
-              rw [←Nat.pow_add_one', Nat.sub_add_cancel]
-              exact Nat.one_le_of_lt h₁
+              · rw [ht, mul_add]
+                simp [←Nat.mul_assoc]
+                left
+                rw [←Nat.pow_add_one', Nat.sub_add_cancel]
+                exact Nat.one_le_of_lt h₁
               exact hypos
             have h' : 2 ^ x * (2 ^ (x + 1) + 1) = 2 ^ (n₁ + 1) * (t * (2 ^ (n₁ - 1) * t + 1)) := by
               rw [h, this, ht]
@@ -241,7 +241,7 @@ problem imo2006_p4 :
                 apply Nat.eq_add_of_sub_eq at ht
                 · use s, hs', -1
                   simp [ht, h', pow_add]
-                  cutsat
+                  lia
                 · exact hypos
               · intro h'
                 simp [ht''] at h'
@@ -254,19 +254,18 @@ problem imo2006_p4 :
           · rw [←h]
             simp [add_comm]
           · rw [Nat.cast_mul, Nat.cast_sub]
-            simp [hy]
-            · trans (2 ^ (x - 1) * ↑m + ε) ^ 2 - 1
-              · ring
-              · ring_nf
-                have : ε ^ 2 = 1 := sq_eq_one_iff.mpr hε
-                simp [this]
-                ring_nf
-                congr 1
-                · nth_rw 2 [show x = x - 1 + 1 by rw [Nat.sub_add_cancel]; exact hxpos]
-                  rw [pow_add]
-                  ring
-                · congr
-                  exact Nat.sub_one_mul _ _
+            · simp [hy]
+              · trans (2 ^ (x - 1) * ↑m + ε) ^ 2 - 1
+                · ring
+                · ring_nf
+                  have : ε ^ 2 = 1 := sq_eq_one_iff.mpr hε
+                  simp [this]
+                  ring_nf
+                  congr 1
+                  · nth_rw 2 [show x = x - 1 + 1 by rw [Nat.sub_add_cancel]; exact hxpos]
+                    ring
+                  · congr
+                    exact Nat.sub_one_mul _ _
             · exact hypos
         -- or, equivalently $$ 1+2^{x+1}=2^{x-2} m^{2}+m \epsilon.
         have h : 1 + 2 ^ (x + 1) = 2 ^ (x - 2) * m ^ 2 + m * ε := by
@@ -274,7 +273,12 @@ problem imo2006_p4 :
             _ = (2 : ℤ) ^ x * (1 + 2 ^ (x + 1)) / 2 ^ x := by
               rw [mul_div_cancel_left₀]
               positivity
-            _ = (2 ^ x * 2 ^ (x - 2) * m ^ 2 + 2 ^ x * m * ε) / 2 ^ x := by rw [h]; congr; rw [←pow_add]; rw [←Nat.add_sub_assoc]; simp; ring_nf; exact Nat.le_of_succ_le hxge3
+            _ = (2 ^ x * 2 ^ (x - 2) * m ^ 2 + 2 ^ x * m * ε) / 2 ^ x := by
+                rw [h]
+                congr
+                rw [←pow_add, ←Nat.add_sub_assoc]
+                · simp; ring_nf
+                exact Nat.le_of_succ_le hxge3
             _ = 2 ^ x * (2 ^ (x - 2) * m ^ 2 + m * ε) / 2 ^ x := by rw [mul_add, ←mul_assoc, ←mul_assoc]
             _ = _ := by simp
         -- $$ Therefore $$ 1-\epsilon m=2^{x-2}\left(m^{2}-8\right).
@@ -311,7 +315,7 @@ problem imo2006_p4 :
             have : m ^ 2 < 3 ^ 2 := by apply lt_of_le_of_lt hm'; simp
             apply Nat.pow_lt_pow_iff_left ?_ |>.mp this
             simp
-          cutsat
+          lia
         · -- For $\epsilon=-1$ equation (2) gives us $$ 1+m=2^{x-2}\left(m^{2}-8\right) \geq 2\left(m^{2}-8\right),
           simp [hε] at this
           have hle : 1 + (m : ℤ) ≥ 2 * (m ^ 2 - 8) := by

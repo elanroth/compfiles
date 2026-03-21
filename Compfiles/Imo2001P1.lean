@@ -62,9 +62,9 @@ lemma aux₁ {x y z : ℝ}
     · calc -z
           _ < y := by exact (abs_lt.mp hy).left
           _ = 0 + y := by exact (zero_add y).symm
-          _ ≤ x + y := by exact add_le_add_right hx' y
+          _ ≤ x + y := by exact add_le_add_left hx' y
     · calc x + y
-        _ ≤ x + 0 := by exact add_le_add_left hy' x
+        _ ≤ x + 0 := by exact add_le_add_right hy' x
         _ = x := by exact add_zero x
         _ < z := by exact (abs_lt.mp hx).right
 
@@ -102,7 +102,7 @@ lemma aux₃ {a b : Real.Angle} (h : 2 • a + 2 • b = Real.pi)
       norm_num
     have h₃ : |a' + b'| + |Real.pi / 2| < 2 * Real.pi := by
       calc |a' + b'| + |Real.pi / 2|
-            < Real.pi + |Real.pi / 2| := by exact add_lt_add_right h₁ _
+            < Real.pi + |Real.pi / 2| := by exact add_lt_add_left h₁ _
           _ = Real.pi + Real.pi / 2 := by exact (add_right_inj _).mpr (abs_eq_self.mpr h₂)
           _ ≤ Real.pi + Real.pi / 2 + Real.pi / 2 := by exact (le_add_iff_nonneg_right _).mpr h₂
           _ = 2 * Real.pi := by ring
@@ -200,21 +200,7 @@ lemma aux₇ {a : Real.Angle} : Real.sin |a.toReal| = |a.sin| := by
   nth_rw 2 [← Real.Angle.coe_toReal a]
   rw [Real.Angle.sin_coe]
   have ha' := Real.Angle.abs_toReal_le_pi a
-  set a' := a.toReal
-  rw [abs_le] at ha'
-  by_cases ha'': 0 ≤ a'
-  · rw [abs_eq_self.mpr ha'']
-    symm
-    rw [abs_eq_self]
-    apply Real.sin_nonneg_of_mem_Icc
-    simp
-    exact ⟨ha'',ha'.right⟩
-  · push_neg at ha''
-    rw [abs_eq_neg_self.mpr (le_of_lt ha'')]
-    rw [Real.sin_neg]
-    symm
-    rw [abs_eq_neg_self]
-    apply Real.sin_nonpos_of_nonpos_of_neg_pi_le (le_of_lt ha'') ha'.left
+  exact (Real.abs_sin_eq_sin_abs_of_abs_le_pi ha').symm
 
 structure Imo2001q1Cfg where
   (A B C : EuclideanSpace ℝ (Fin 2))
@@ -319,10 +305,7 @@ lemma non_sbtw_BCP : ¬Sbtw ℝ cfg.B cfg.C cfg.P := by
   calc ∠ cfg.B cfg.C cfg.P
       ≤ ∠ cfg.B cfg.C cfg.A + ∠ cfg.P cfg.C cfg.A := by
         rw [angle_comm cfg.P cfg.C cfg.A]
-        rw [angle_eq_abs_oangle_toReal (C_ne_B cfg).symm h.ne_right.symm]
-        rw [angle_eq_abs_oangle_toReal (A_ne_C cfg) h.ne_right.symm]
-        rw [angle_eq_abs_oangle_toReal (C_ne_B cfg).symm (A_ne_C cfg)]
-        exact aux₆ h₂
+        exact angle_le_angle_add_angle cfg.C cfg.B cfg.A cfg.P
     _ < Real.pi / 2 + Real.pi / 2 := by
       apply add_lt_add_of_lt_of_le cfg.hAcuteC h₃
     _ = Real.pi := by ring
@@ -474,8 +457,7 @@ lemma four_sin_B_cos_A_le_one : 4 * Real.sin (∠ cfg.A cfg.B cfg.C) * Real.cos 
   have h₁ : Real.cos (∠ cfg.A cfg.C cfg.B) ≤ Real.cos (∠ cfg.A cfg.B cfg.C + Real.pi / 6) := by
     apply Real.cos_le_cos_of_nonneg_of_le_pi
     · apply add_nonneg (angle_nonneg _ _ _)
-      apply div_nonneg Real.pi_nonneg
-      norm_num
+      positivity
     · apply angle_le_pi
     · nth_rw 2 [angle_comm]
       exact cfg.hAB
@@ -491,9 +473,7 @@ lemma four_sin_B_cos_A_le_one : 4 * Real.sin (∠ cfg.A cfg.B cfg.C) * Real.cos 
       ≤ 4 * Real.sin (∠ cfg.A cfg.B cfg.C) * Real.cos (∠ cfg.A cfg.B cfg.C + Real.pi / 6) := by
         rw [mul_le_mul_iff_right₀]
         · exact h₁
-        · apply mul_pos
-          · norm_num
-          · exact h₂
+        · positivity
     _ = 2 * (2 * Real.sin (∠ cfg.A cfg.B cfg.C) * Real.cos (∠ cfg.A cfg.B cfg.C + Real.pi / 6)) := by ring
     _ = 2 * (Real.sin (∠ cfg.A cfg.B cfg.C - (∠ cfg.A cfg.B cfg.C + Real.pi / 6)) + Real.sin (∠ cfg.A cfg.B cfg.C + (∠ cfg.A cfg.B cfg.C + Real.pi / 6))) := by
         rw [Real.two_mul_sin_mul_cos]
@@ -538,7 +518,7 @@ lemma COP_le_OCP : ∠ cfg.C cfg.O cfg.P < ∠ cfg.O cfg.C cfg.P := by
 theorem result : ∠ cfg.C cfg.A cfg.B + ∠ cfg.C cfg.ABC.circumcenter cfg.P < Real.pi / 2 := by
   rw [CAB_OCP]
   calc Real.pi / 2 - ∠ cfg.O cfg.C cfg.P + ∠ cfg.C cfg.O cfg.P
-      < Real.pi / 2 - ∠ cfg.O cfg.C cfg.P + ∠ cfg.O cfg.C cfg.P := by exact add_lt_add_left (COP_le_OCP cfg) _
+      < Real.pi / 2 - ∠ cfg.O cfg.C cfg.P + ∠ cfg.O cfg.C cfg.P := add_lt_add_right (COP_le_OCP cfg) _
     _ = Real.pi / 2 := by ring
 
 end Imo2001q1Cfg

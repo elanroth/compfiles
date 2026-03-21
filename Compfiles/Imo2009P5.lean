@@ -12,7 +12,7 @@ import ProblemExtraction
 
 problem_file {
   tags := [.Algebra],
-  importedFrom :=
+  solutionImportedFrom :=
     "https://github.com/mortarsanjaya/imo-A-and-N/blob/main/src/IMO2009/A3/A3.lean",
 }
 
@@ -34,12 +34,9 @@ snip begin
 section extra_lemmas
 
 lemma exists_sup_fn_fin (f : ℕ → ℕ) (c : ℕ) : ∃ K : ℕ, ∀ n : ℕ, n < c → f n ≤ K := by
-  induction' c with c ih
-  · simp
-  · obtain ⟨k, hk⟩ := ih
-    use max k (f c)
-    intro n hn
-    obtain hlt | rfl := Nat.lt_succ_iff_lt_or_eq.mp hn <;> aesop
+  use Finset.sup (Finset.range c) f
+  intro n hn
+  exact Finset.le_sup (Finset.mem_range.mpr hn)
 
 private lemma pnat_to_nat_prop {P : ℕ+ → Prop} :
   (∀ n : ℕ+, P n) ↔ (∀ n : ℕ, P n.succPNat) :=
@@ -63,7 +60,7 @@ theorem final_solution_nat (f : ℕ → ℕ) :
     ∧ (∀ x y : ℕ, x ≤ f y + f (y + f x))
     ∧ (∀ x y : ℕ, f y ≤ f (y + f x) + x))
       ↔ f = λ x ↦ x := by
-  refine ⟨?_, by cutsat⟩
+  refine ⟨?_, by lia⟩
 
   ---- For the harder case, first prove that `f(0) = 0`
   rintro ⟨h, h0, h1⟩
@@ -76,9 +73,10 @@ theorem final_solution_nat (f : ℕ → ℕ) :
 
   ---- Now get `f(f(x)) = x` for all `x`
   replace h0 : ∀ x : ℕ, f (f x) = x := by
-    intro x; apply le_antisymm
-    replace h := h x 0
-    rwa [h1, zero_add, zero_add] at h
+    intro x
+    apply le_antisymm
+    · replace h := h x 0
+      rwa [h1, zero_add, zero_add] at h
     replace h0 := h0 x 0
     rwa [h1, zero_add, zero_add] at h0
 

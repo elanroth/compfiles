@@ -8,7 +8,10 @@ import Mathlib.Tactic
 
 import ProblemExtraction
 
-problem_file { tags := [.Algebra] }
+problem_file {
+  tags := [.Algebra]
+  videos := ["https://youtu.be/5NbYtDfXfR4"]
+}
 
 /-!
 # International Mathematical Olympiad 1996, Problem 3
@@ -97,7 +100,7 @@ problem imo1996_p3 (f : ℕ → ℕ) :
   -/
   have h0 := hf 0 0
   rw [zero_add] at h0
-  have hf0 : f 0 = 0 := by omega
+  have hf0 : f 0 = 0 := by lia
   have hf00 : f (f 0) = 0 := by grind
   have hm := hf 0
   rw [hf00] at hm

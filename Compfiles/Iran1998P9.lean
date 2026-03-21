@@ -28,9 +28,7 @@ namespace Iran1998P9
 snip begin
 
 lemma compute_norm (v : EuclideanSpace ℝ (Fin 3)) : ‖v‖ = Real.sqrt (∑i : Fin 3, (v i)^2) := by
-  rw[EuclideanSpace.norm_eq v]
-  congr; ext
-  rw [Real.norm_eq_abs, sq_abs]
+  simp [EuclideanSpace.norm_eq v]
 
 snip end
 
@@ -60,9 +58,9 @@ problem iran1998_p9
   have hy1 : 0 ≤ y - 1 := by linarith
   have hz1 : 0 ≤ z - 1 := by linarith
 
-  let v₁ : EuclideanSpace ℝ (Fin 3) := ![Real.sqrt x, Real.sqrt y, Real.sqrt z]
+  let v₁ : EuclideanSpace ℝ (Fin 3) := !₂[Real.sqrt x, Real.sqrt y, Real.sqrt z]
   let v₂ : EuclideanSpace ℝ (Fin 3) :=
-      ![Real.sqrt ((x - 1)/x), Real.sqrt ((y-1)/y), Real.sqrt ((z-1)/z)]
+      !₂[Real.sqrt ((x - 1)/x), Real.sqrt ((y-1)/y), Real.sqrt ((z-1)/z)]
 
   have cauchy_schwarz := abs_real_inner_le_norm v₁ v₂
 

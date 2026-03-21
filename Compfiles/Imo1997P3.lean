@@ -13,7 +13,7 @@ import ProblemExtraction
 
 problem_file {
   tags := [.Algebra]
-  importedFrom :=
+  solutionImportedFrom :=
     "https://github.com/leanprover-community/mathlib4/blob/master/Archive/Imo/Imo1997Q3.lean"
 }
 
@@ -86,10 +86,10 @@ lemma sign_eq_of_contra {n : ℕ}
       rw [Finset.mem_compl, Finset.mem_insert, Finset.mem_singleton, not_or] at mj
       exact Equiv.swap_apply_of_ne_of_ne mj.1 mj.2
     rw [cg, add_sub_add_right_eq_sub,
-      Finset.sum_pair (Fin.castSucc_lt_succ _).ne, Finset.sum_pair (Fin.castSucc_lt_succ _).ne,
+      Finset.sum_pair Fin.castSucc_lt_succ.ne, Finset.sum_pair Fin.castSucc_lt_succ.ne,
       Equiv.Perm.mul_apply, Equiv.Perm.mul_apply, ← hi, Equiv.swap_apply_left,
       Equiv.swap_apply_right, add_comm, add_sub_add_comm, ← sub_mul, ← sub_mul, Fin.val_succ,
-      Fin.coe_castSucc, Nat.cast_add, Nat.cast_one, add_sub_cancel_left, sub_add_cancel_left,
+      Fin.val_castSucc, Nat.cast_add, Nat.cast_one, add_sub_cancel_left, sub_add_cancel_left,
       one_mul, neg_one_mul]
     calc
       _ ≤ |x (p i.succ)| + |-x (p i.castSucc)| := abs_add_le ..
@@ -103,7 +103,7 @@ lemma S_one_add_S_revPerm {n : ℕ}
   simp_rw [Fin.revPerm_apply, Fin.val_rev, Fin.rev_rev, S, Equiv.Perm.one_apply,
            ← Finset.sum_add_distrib, ← add_mul]
   have cg : ∑ i : Fin n, (i + 1 + ((n - (i + 1) : ℕ) + 1)) * x i = ∑ i, (n + 1) * x i := by
-    congr! 2 with i; norm_cast; omega
+    congr! 2 with i; norm_cast; lia
   rw [cg, ← Finset.mul_sum, abs_mul, hx₁, mul_one]; exact abs_of_nonneg (by positivity)
 
 snip end

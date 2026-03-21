@@ -96,7 +96,11 @@ problem hungary1998_p6 (x y : ℤ) (z : ℕ) (hz : 1 < z) :
 
   cases z with | zero => exact Nat.not_lt_zero 1 hz | succ z =>
   cases z with | zero => exact Nat.lt_asymm hz hz | succ z =>
-  cutsat
+  rw [pow_succ, pow_succ] at h7
+
+  -- Since z ≥ 2, 3²∣yᶻ, but 3² does not divide
+  -- 33(3x² + 300x + 50 ⬝ 199), contradiction.
+  lia
 
 
 end Hungary1998P6

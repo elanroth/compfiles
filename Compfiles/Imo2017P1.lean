@@ -10,7 +10,7 @@ import ProblemExtraction
 
 problem_file {
   tags := [.NumberTheory]
-  importedFrom :=
+  solutionImportedFrom :=
     "https://github.com/roozbeh-yz/IMO-Steps/tree/main/Lean_v20/imo_proofs/imo_2017_p1.lean",
 }
 
@@ -129,20 +129,7 @@ lemma aux_2_4
   by_cases hlp: i < l
   · have hl₃: a x l = a x i + (l - i) * 3 := by
       exact aux_2_1 a ha₁ x i j l hx₀ hl₀ hl₁ hl₂
-    by_cases hl₄: a x l ≤ (c.sqrt + (1 : ℕ)) ^ (2 : ℕ)
-    · obtain hl₅ | hl₅ := lt_or_eq_of_le hl₄
-      · refine hh₄ (a x l) ?_ hl₅
-        rw [hl₃, hi₀]
-        simp
-      · cutsat
-    · push_neg at hl₄
-      have h₃: a x l < (c.sqrt + (2 : ℕ)) ^ (2 : ℕ) := by
-        rw [hl₃]
-        have h₃₁: a x i + (l - i) * (3 : ℕ) < a x i + (i + j - i) * 3 := by omega
-        refine lt_of_lt_of_le h₃₁ ?_
-        rw [Nat.add_sub_cancel_left, hj₀, hi₀]
-        omega
-      exact h₀ (a x l) hl₄ h₃
+    grind
   · push_neg at hlp
     have hl₃: l = i := Nat.le_antisymm hlp hl₁
     rw [hl₃, hi₀]
@@ -155,14 +142,13 @@ lemma aux_2_5
       (1 : ℕ) < x → if IsSquare (a x i)
                     then a x (i + (1 : ℕ)) = (a x i).sqrt
                     else a x (i + (1 : ℕ)) = a x i + (3 : ℕ))
-    (x c i j : ℕ)
+    (x c i : ℕ)
     (hx₀ : (1 : ℕ) < x)
     (hi₀ : a x i = c)
     (hh₃ : c < (c.sqrt + (1 : ℕ)) ^ (2 : ℕ))
     (hh₄ : ∀ (y : ℕ), c ≤ y → y < (c.sqrt + (1 : ℕ)) ^ (2 : ℕ) → ¬IsSquare y)
     (hh₁ : c % (3 : ℕ) = (0 : ℕ))
-    (hh₂ : c.sqrt % (3 : ℕ) = (0 : ℕ))
-     (hj₀ : j = ((c.sqrt + (3 : ℕ)) ^ (2 : ℕ) - c) / (3 : ℕ)) :
+    (hh₂ : c.sqrt % (3 : ℕ) = (0 : ℕ)) :
     ∀ (k : ℕ), i ≤ k → k < i + ((c.sqrt + (3 : ℕ)) ^ (2 : ℕ) - c) / (3 : ℕ) → ¬IsSquare (a x k) := by
   intro k
   have h₀: ∀ y t, (c.sqrt + (t : ℕ)) ^ (2 : ℕ) < y →
@@ -188,10 +174,10 @@ lemma aux_2_5
       · exfalso
         have hl₆: (a x l) % 3 = 1 := by
           rw [hl₅, Nat.pow_mod]
-          have hl₇: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 1 := by omega
+          have hl₇: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 1 := by lia
           rw [hl₇, one_pow]
           group
-        have hl₇: a x l % 3 = 0 := by omega
+        have hl₇: a x l % 3 = 0 := by lia
         rw [hl₆] at hl₇
         norm_num at hl₇
     · push_neg at hl₄
@@ -201,18 +187,11 @@ lemma aux_2_5
         · exfalso
           have hl₇: (a x l) % 3 = 1 := by
             rw [hl₆, Nat.pow_mod]
-            have hl₇: (c.sqrt + (2 : ℕ)) % (3 : ℕ) = 2 := by omega
+            have hl₇: (c.sqrt + (2 : ℕ)) % (3 : ℕ) = 2 := by lia
             rw [hl₇]
-          have hl₈: a x l % 3 = 0 := by omega
-          rw [hl₇] at hl₈
-          norm_num at hl₈
+          lia
       · push_neg at hl₅
-        have h₃: a x l < (c.sqrt + (3 : ℕ)) ^ (2 : ℕ) := by
-          rw [hl₃]
-          have h₃₁: a x i + (l - i) * (3 : ℕ) < a x i + (i + j - i) * 3 := by omega
-          refine lt_of_lt_of_le h₃₁ ?_
-          rw [Nat.add_sub_cancel_left, hj₀, hi₀]
-          omega
+        have h₃: a x l < (c.sqrt + (3 : ℕ)) ^ (2 : ℕ) := by lia
         exact h₀ (a x l) 2 hl₅ h₃
   · push_neg at hlp
     have hl₃: l = i := by exact Nat.le_antisymm hlp hl₁
@@ -236,8 +215,8 @@ lemma aux_3
     (c.sqrt + (1 : ℕ)) ^ (2 : ℕ) ∈ S ∨
     (c.sqrt + (2 : ℕ)) ^ (2 : ℕ) ∈ S ∨
     (c.sqrt + (3 : ℕ)) ^ (2 : ℕ) ∈ S := by
-  have hh₁: c % 3 = 0 ∨ c % 3 = 1 := by omega
-  have hh₂: c.sqrt % 3 = 0 ∨ c.sqrt % 3 = 1 ∨ c.sqrt % 3 = 2 := by omega
+  have hh₁: c % 3 = 0 ∨ c % 3 = 1 := by lia
+  have hh₂: c.sqrt % 3 = 0 ∨ c.sqrt % 3 = 1 ∨ c.sqrt % 3 = 2 := by lia
   have hh₃: c < (c.sqrt + (1 : ℕ)) ^ (2 : ℕ) := by exact Nat.lt_succ_sqrt' c
   have hh₅: c < (c.sqrt + (2 : ℕ)) ^ (2 : ℕ) := by
     refine lt_trans hh₃ ?_
@@ -277,12 +256,12 @@ lemma aux_3
       use (i + j)
       refine aux_2_3 a ha₁ x c i j ((c.sqrt + (3 : ℕ)) ^ (2 : ℕ)) hx₀ hi₀ hh₆ ?_ ?_ hj₀
       · simp_all
-        exact aux_2_5 a ha₁ x c i j hx₀ hi₀ hh₃ hh₄ hh₁ hh₂ hj₀
+        exact aux_2_5 a ha₁ x c i hx₀ hi₀ hh₃ hh₄ hh₁ hh₂
       · refine Nat.dvd_of_mod_eq_zero ?_
         refine Nat.sub_mod_eq_zero_of_mod_eq ?_
         rw [hh₁]
         rw [Nat.pow_mod]
-        have h₀: (c.sqrt + (3 : ℕ)) % (3 : ℕ) = 0 := by omega
+        have h₀: (c.sqrt + (3 : ℕ)) % (3 : ℕ) = 0 := by lia
         rw [h₀]
     obtain hh₂ | hh₂ := hh₂
     · right; left
@@ -294,14 +273,14 @@ lemma aux_3
       refine aux_2_3 a ha₁ x c i j ((c.sqrt + (2 : ℕ)) ^ (2 : ℕ)) hx₀ hi₀ hh₅ ?_ ?_ hj₀
       · intro k hk₀ hk₁
         refine aux_2_4 a ha₁ x c i j hj₀ hx₀ hi₀ hh₃ hh₄ ?_ k hk₀ hk₁
-        have hc₂: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 2 := by omega
+        have hc₂: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 2 := by lia
         rw [hh₁, Nat.pow_mod, hc₂]
         finiteness
       · refine Nat.dvd_of_mod_eq_zero ?_
         refine Nat.sub_mod_eq_zero_of_mod_eq ?_
         rw [hh₁]
         rw [Nat.pow_mod]
-        have h₀: (c.sqrt + (2 : ℕ)) % (3 : ℕ) = 0 := by omega
+        have h₀: (c.sqrt + (2 : ℕ)) % (3 : ℕ) = 0 := by lia
         rw [h₀]
     · left
       have hj₀: j = ((c.sqrt + (3 : ℕ) - c.sqrt % (3 : ℕ)) ^ (2 : ℕ) - c) / (3 : ℕ) := by rfl
@@ -314,7 +293,7 @@ lemma aux_3
       refine Nat.sub_mod_eq_zero_of_mod_eq ?_
       rw [hh₁]
       rw [Nat.pow_mod]
-      have h₀: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 0 := by omega
+      have h₀: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 0 := by lia
       rw [h₀]
   · obtain hh₂ | hh₂ := hh₂
     · let j : ℕ := ((c.sqrt + (1 : ℕ)) ^ (2 : ℕ) - c) / (3 : ℕ)
@@ -325,7 +304,7 @@ lemma aux_3
           refine Nat.sub_mod_eq_zero_of_mod_eq ?_
           rw [hh₁]
           rw [Nat.pow_mod]
-          have h₀: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 1 := by omega
+          have h₀: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 1 := by lia
           rw [h₀]
         exact aux_2_2 a ha₁ x c i j ((c.sqrt + (1 : ℕ)) ^ (2 : ℕ)) rfl hx₀ hi₀ hh₃ hh₄ hc₂
       left
@@ -339,7 +318,7 @@ lemma aux_3
           refine Nat.sub_mod_eq_zero_of_mod_eq ?_
           rw [hh₁]
           rw [Nat.pow_mod]
-          have h₀: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 2 := by omega
+          have h₀: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 2 := by lia
           rw [h₀]
         exact aux_2_2 a ha₁ x c i j ((c.sqrt + (1 : ℕ)) ^ (2 : ℕ)) rfl hx₀ hi₀ hh₃ hh₄ hc₃
       left
@@ -351,14 +330,14 @@ lemma aux_3
         · simp_all
           intro k hk₀ hk₁
           refine aux_2_4 a ha₁ x c i j rfl hx₀ hi₀ hh₃ hh₄ ?_ k hk₀ hk₁
-          have hc₂: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 0 := by omega
+          have hc₂: (c.sqrt + (1 : ℕ)) % (3 : ℕ) = 0 := by lia
           rw [hh₁, Nat.pow_mod, hc₂]
           finiteness
         · refine Nat.dvd_of_mod_eq_zero ?_
           refine Nat.sub_mod_eq_zero_of_mod_eq ?_
           rw [hh₁]
           rw [Nat.pow_mod]
-          have h₀: (c.sqrt + (2 : ℕ)) % (3 : ℕ) = 1 := by omega
+          have h₀: (c.sqrt + (2 : ℕ)) % (3 : ℕ) = 1 := by lia
           rw [h₀]
       right; left
       rw [← hj₀]
@@ -397,14 +376,13 @@ theorem aux_4
               have ht₃ := ha₁ x t hx₀
               have ht₄: a x (t + (1 : ℕ)) = a x t + (3 : ℕ) := by simp_all only [↓reduceIte]
               rw [ht₄]
-              have ht₅: a x t + 3 ≡ 2 + 3 [MOD (3 : ℕ)] := by exact Nat.ModEq.add_right (3 : ℕ) ht₁
-              exact ht₅
+              exact Nat.ModEq.add_right (3 : ℕ) ht₁
             refine aux_1 (a x (d - 1)) ?_
             refine hh₀ (d - 1) ?_
             exact Nat.le_sub_one_of_lt hd₃
           have hd₆ := ha₁ x (d - 1) hx₀
-          cutsat
-        · cutsat
+          lia
+        · lia
       rw [h₂ j hj₀, h₂ k hk₀]
       simp
       exact Nat.sub_lt_sub_right hj₀ hj₁
@@ -412,7 +390,7 @@ theorem aux_4
     have h₂: {n : ℕ | a x n = A} = {n : ℕ | a x n = A ∧ i ≤ n} ∪ {n : ℕ | a x n = A ∧ n < i} := by
       ext j
       simp
-      omega
+      lia
     by_cases h₃: ∃ j, a x j = A ∧ i ≤ j
     · obtain ⟨j, hj₀⟩ := h₃
       use j
@@ -461,13 +439,13 @@ theorem aux_5
       exact Nat.sub_one_lt_of_lt hd₁
     have hd₅₀ := ha₁ x (d - 1) hx₀
     by_cases hd₄: IsSquare (a x (d - 1))
-    · have hd₅: a x d = (a x (d - 1)).sqrt := by cutsat
+    · have hd₅: a x d = (a x (d - 1)).sqrt := by lia
       obtain ⟨t, ht₀⟩ := hd₄
       have ht₁: (t ^ (2 : ℕ)).sqrt = t := by exact Nat.sqrt_eq' t
       rw [hd₅, ht₀, ← pow_two, ht₁]
       rw [ht₀, ← pow_two] at hd₃
       exact Nat.Prime.dvd_of_dvd_pow Nat.prime_three hd₃
-    · cutsat
+    · lia
   · push_neg at hd₁
     interval_cases d
     rw [ha₀]
@@ -510,13 +488,11 @@ problem imo2017_p1
           rw [hd₆]
           have hd₇: 2 ^ 2 ≤ (a x (d - (1 : ℕ))) := by
             contrapose! hd₅
-            interval_cases (a x (d - (1 : ℕ)))
-            · exact fun x ↦ match x with | ⟨_ + 3, hn⟩ => nomatch hn
-            · exact fun x ↦ match x with | ⟨_ + 4, hn⟩ => nomatch hn
+            interval_cases (a x (d - (1 : ℕ))) <;> norm_num
           have hd₈: 2 ≤ (a x (d - (1 : ℕ))).sqrt := by exact Nat.le_sqrt'.mpr hd₇
           exact hd₈
         · have hd₆: a x d = a x (d - (1 : ℕ)) + 3 := by simp_all only [↓reduceIte]
-          omega
+          lia
       · have hd₂: d = 0 := Nat.eq_zero_of_not_pos hd₁
         rw [hd₂, ha₀]
         exact hx₀
@@ -533,7 +509,7 @@ problem imo2017_p1
     have hh₅: c ≤ c.sqrt := by
       have hh₆: c ∈ lowerBounds S := by exact Set.mem_of_mem_inter_right hc₀
       exact hh₆ hh₄
-    omega
+    lia
   by_cases hhc: c % 3 = 2
   · constructor
     · intro h₀
@@ -548,7 +524,7 @@ problem imo2017_p1
       have h₃: 3 ∣ c := by
         rw [← hi₀]
         exact h₂ i
-      omega
+      lia
   · have hc₃: c ≤ Nat.sqrt c + 3 := by
       have hh₀: (Nat.sqrt c + 1) ^ 2 ∈ S ∨ (Nat.sqrt c + 2) ^ 2 ∈ S ∨ (Nat.sqrt c + 3) ^ 2 ∈ S := by
         exact aux_3 a ha₁ x c i hx₀ S rfl hi₀ hc₂ hhc
@@ -602,12 +578,7 @@ problem imo2017_p1
       ring_nf
       refine Nat.le_induction ?_ ?_ c hc₃
       · norm_num
-      · intro d hd₀ hd₁
-        simp_all
-        refine Nat.add_lt_of_lt_sub ?_
-        refine lt_trans hd₁ ?_
-        ring_nf
-        omega
+      · lia
     have hc₅: c ≠ 4 := by
       contrapose! hc₂
       rw [hc₂]
@@ -619,9 +590,8 @@ problem imo2017_p1
       · exact Nat.zero_lt_of_lt hx₀
       · contrapose! hA₀
         have hx₂: x ≡ 1 [MOD 3] ∨ x ≡ 2 [MOD 3] := by
-          have hx₁₂: x % 3 = 1 ∨ x % 3 = 2 := by omega
+          have hx₁₂: x % 3 = 1 ∨ x % 3 = 2 := by lia
           exact hx₁₂
-        rw [Set.not_infinite]
         obtain hx₂ | hx₂ := hx₂
         · exfalso
           have hc₆: ¬(3 : ℕ) ∣ c := by
@@ -648,13 +618,13 @@ problem imo2017_p1
                     exact Nat.sqrt_eq r
                   rw [← hr₁]
                   exact hd₄
-                · cutsat
+                · lia
               · have hd₂: d = 0 := Nat.eq_zero_of_not_pos hd₁
                 rw [hd₂, ha₀]
                 exact hA₀
             rw [← hi₀]
             exact hh₀ i
-          cutsat
+          lia
         · refine aux_4 a ha₁ x hx₀ ?_ A
           use 0
           rw [ha₀]
@@ -668,7 +638,7 @@ problem imo2017_p1
           have hc₆: 3 ∣ c := by
             exact (Nat.ModEq.dvd_iff (congrFun (congrArg HMod.hMod hi₀) x) h₂).mp (h₃₀ i)
           interval_cases c
-          all_goals try omega
+          all_goals try lia
         use i
         rw [hi₀, hc₅]
       obtain ⟨i, h₃⟩ := h₃
@@ -679,7 +649,7 @@ problem imo2017_p1
         · rw [add_mul, one_mul, ← add_assoc]
           have hd₁: a x (i + d * (3 : ℕ) + 1) = 6 := by
             have hh₀ := ha₁ x (i + d * (3 : ℕ)) hx₀
-            have hh₁: ¬ IsSquare (3 : ℕ) := fun x ↦ match x with | ⟨_ + 4, hn⟩ => nomatch hn
+            have hh₁: ¬ IsSquare (3 : ℕ) := by norm_num
             have hh₂: a x (i + d * (3 : ℕ) + (1 : ℕ)) = a x (i + d * (3 : ℕ)) + (3 : ℕ) := by
               rw [hd₀] at hh₀
               simp [hh₁] at hh₀
@@ -688,7 +658,7 @@ problem imo2017_p1
             rw [hh₂, hd₀]
           have hd₂: a x (i + d * (3 : ℕ) + 2) = 9 := by
             have hh₀ := ha₁ x (i + d * (3 : ℕ) + 1) hx₀
-            have hh₁: ¬ IsSquare (6 : ℕ) := fun x ↦ match x with | ⟨_ + 7, hn⟩ => nomatch hn
+            have hh₁: ¬ IsSquare (6 : ℕ) := by norm_num
             have hh₂: a x (i + d * (3 : ℕ) + (2 : ℕ)) = a x (i + d * (3 : ℕ) + 1) + (3 : ℕ) := by
               rw [hd₁] at hh₀
               simp [hh₁] at hh₀
@@ -706,7 +676,7 @@ problem imo2017_p1
       use i + (j + 1) * 3
       constructor
       · exact h₄ (j + 1)
-      · omega
+      · lia
 
 
 end Imo2017P1

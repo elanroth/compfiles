@@ -3,27 +3,23 @@ Copyright (c) 2020 Oliver Nash. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Oliver Nash
 -/
-import Mathlib.Algebra.Order.BigOperators.Group.Finset
-import Mathlib.Algebra.Order.Field.Basic
-import Mathlib.Data.Fintype.Prod
-import Mathlib.Algebra.Order.Field.Rat
-import Mathlib.GroupTheory.GroupAction.Ring
-import Mathlib.Tactic.NoncommRing
-import Mathlib.Tactic.Ring
+import Mathlib
 
 import ProblemExtraction
 
 problem_file {
   tags := [.Combinatorics],
-  importedFrom :=
+  solutionImportedFrom :=
     "https://github.com/leanprover-community/mathlib4/blob/master/Archive/Imo/Imo1998Q2.lean",
 }
 
 /-!
 # International Mathematical Olympiad 1998, Problem 2
-In a competition, there are `a` contestants and `b` judges, where `b ≥ 3` is an odd integer. Each
-judge rates each contestant as either "pass" or "fail". Suppose `k` is a number such that, for any
-two judges, their ratings coincide for at most `k` contestants.
+
+In a competition, there are `a` contestants and `b` judges, where `b ≥ 3` is
+an odd integer. Each judge rates each contestant as either "pass" or "fail".
+Suppose `k` is a number such that, for any two judges, their ratings
+coincide for at most `k` contestants.
 
 Prove that `k / a ≥ (b - 1) / (2b)`.
 -/
@@ -181,7 +177,7 @@ theorem judge_pairs_card_lower_bound {z : ℕ} (hJ : Fintype.card J = 2 * z + 1)
   rw [h]; apply Int.le_of_ofNat_le_ofNat; simp only [Int.natCast_add, Int.natCast_mul]
   apply norm_bound_of_odd_sum
   suffices x + y = 2 * z + 1 by simp [← Int.natCast_add, this]
-  rw [Finset.filter_card_add_filter_neg_card_eq_card, ← hJ]; rfl
+  rw [Finset.card_filter_add_card_filter_not, ← hJ]; rfl
 
 theorem distinct_judge_pairs_card_lower_bound {z : ℕ} (hJ : Fintype.card J = 2 * z + 1) (c : C) :
     2 * z * z ≤ (Finset.univ.filter fun p : JudgePair J => p.Agree r c ∧ p.Distinct).card := by

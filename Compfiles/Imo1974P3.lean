@@ -10,7 +10,7 @@ import ProblemExtraction
 
 problem_file {
   tags := [.NumberTheory]
-  importedFrom :=
+  solutionImportedFrom :=
     "https://github.com/roozbeh-yz/IMO-Steps/blob/main/imo_proofs/imo_1974_p3.lean"
 }
 
@@ -88,33 +88,16 @@ lemma aux_4
         exact (2 * a + 1)
       · intro a ha₀
         have ha₁: a ≤ n := Finset.mem_range_succ_iff.mp ha₀
-        have ha₂: 2 * a + 1 ≤ 2 * n + 1 := by omega
+        have ha₂: 2 * a + 1 ≤ 2 * n + 1 := by lia
         have ha₃: (2 * a + 1) ∈ fs₂ := Finset.mem_range_succ_iff.mpr ha₂
         have ha₄: Odd (2 * a + 1) := odd_two_mul_add_one a
         refine Finset.mem_filter.mpr ?_
         exact And.symm ⟨ha₄, ha₃⟩
       · intro a _ b _ h₃
-        omega
+        lia
       · intro b hb₀
         use ((b - 1) / 2)
-        refine exists_prop.mpr ?_
-        have hb₁: b ∈ fs₂ ∧ Odd b := Finset.mem_filter.mp hb₀
-        have hb₂: 1 ≤ b := by
-          by_contra! hc₀
-          interval_cases b
-          have hc₁: ¬ Odd 0 := by decide
-          apply hc₁ hb₁.2
-        have hb₃: Even (b - 1) := by
-          refine (Nat.even_sub hb₂).mpr ?_
-          simp only [Nat.not_even_one, iff_false, Nat.not_even_iff_odd]
-          exact hb₁.2
-        constructor
-        · have hb₄: b < 2 * n + 2 := by exact List.mem_range.mp hb₁.1
-          have hb₅: (b - 1) / 2 < n + 1 := by omega
-          exact Finset.mem_range.mpr hb₅
-        · have hb₆: 2 * ((b - 1) / 2) = b - 1 := Nat.two_mul_div_two_of_even hb₃
-          rw [hb₆]
-          exact Nat.sub_add_cancel hb₂
+        grind
       · exact fun a _ => rfl
     exact h₀₁
   have h₁: ∑ x ∈ Finset.range (n + 1), ↑((2 * n + 1).choose (2 * x)) * k ^ (2 * x) =
@@ -125,7 +108,7 @@ lemma aux_4
         exact (2 * a)
       · intro a ha₀
         have ha₁: a < n + 1 := List.mem_range.mp ha₀
-        have ha₂: 2 * a < 2 * n + 2 := by omega
+        have ha₂: 2 * a < 2 * n + 2 := by lia
         refine Finset.mem_filter.mpr ?_
         constructor
         · exact Finset.mem_range.mpr ha₂
@@ -202,32 +185,15 @@ lemma aux_5
         exact (2 * a + 1)
       · intro a ha₀
         have ha₁: a ≤ n := Finset.mem_range_succ_iff.mp ha₀
-        have ha₂: 2 * a + 1 ≤ 2 * n + 1 := by omega
+        have ha₂: 2 * a + 1 ≤ 2 * n + 1 := by lia
         have ha₃: (2 * a + 1) ∈ fs₂ := Finset.mem_range_succ_iff.mpr ha₂
         have ha₄: Odd (2 * a + 1) := odd_two_mul_add_one a
         exact Finset.mem_filter.mpr ⟨ha₃, ha₄⟩
       · intro a _ b _ h₃
-        omega
+        lia
       · intro b hb₀
         use ((b - 1) / 2)
-        refine exists_prop.mpr ?_
-        have hb₁: b ∈ fs₂ ∧ Odd b := Finset.mem_filter.mp hb₀
-        have hb₂: 1 ≤ b := by
-          by_contra! hc₀
-          interval_cases b
-          have hc₁: ¬ Odd 0 := by decide
-          apply hc₁ hb₁.2
-        have hb₃: Even (b - 1) := by
-          refine (Nat.even_sub hb₂).mpr ?_
-          simp only [Nat.not_even_one, iff_false, Nat.not_even_iff_odd]
-          exact hb₁.2
-        constructor
-        · have hb₄: b < 2 * n + 2 := by exact List.mem_range.mp hb₁.1
-          have hb₅: (b - 1) / 2 < n + 1 := by omega
-          exact Finset.mem_range.mpr hb₅
-        · have hb₆: 2 * ((b - 1) / 2) = b - 1 := Nat.two_mul_div_two_of_even hb₃
-          rw [hb₆]
-          exact Nat.sub_add_cancel hb₂
+        grind
       · intro b hb₀
         have hb₁: (-1:ℝ) ^ (b * 2) = 1 := by
           refine (neg_one_pow_eq_one_iff_even (by norm_num)).mpr ?_
@@ -245,7 +211,7 @@ lemma aux_5
         exact (2 * a)
       · intro a ha₀
         have ha₁: a < n + 1 := List.mem_range.mp ha₀
-        have ha₂: 2 * a < 2 * n + 2 := by omega
+        have ha₂: 2 * a < 2 * n + 2 := by lia
         refine Finset.mem_filter.mpr ?_
         constructor
         · exact Finset.mem_range.mpr ha₂
@@ -262,13 +228,7 @@ lemma aux_5
           exact Finset.mem_range.mpr hb₃
         · exact Nat.two_mul_div_two_of_even hb₁.2
       · intro b hb₀
-        have hb₁: (-1:ℝ) ^ (b * 2) = 1 := by
-          refine (neg_one_pow_eq_one_iff_even (by norm_num)).mpr ?_
-          rw [mul_comm]
-          exact even_two_mul b
-        simp only [f₀, f₁]
-        ring_nf
-        rw [hb₁, mul_one]
+        simp [f₀, f₁]
     exact h₁₁
   have h₂: ∑ x ∈ Finset.range (2 * n + 1 + 1), (-k) ^ x * ↑((2 * n + 1).choose x) =
     ∑ x ∈ fs₂, ↑((2 * n + 1).choose x) * (-k) ^ x := by
@@ -388,8 +348,7 @@ problem imo1974_p3
     have hc₄: a ^ 2 ≡ 3 [MOD 5] := by
       rw [← add_assoc, ← zero_add 3] at hc₃
       norm_num at hc₃
-      have hc₄: 5 ≡ 0 [MOD 5] := by decide
-      exact Nat.ModEq.add_left_cancel hc₄ hc₃
+      exact hc₃
     have hc₅: ¬ a ^ 2 ≡ 3 [MOD 5] := by exact aux_2 a
     exact hc₅ hc₄
   · rw [h₃] at h₄₁

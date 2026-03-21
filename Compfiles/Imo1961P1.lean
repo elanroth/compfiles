@@ -158,7 +158,7 @@ problem imo1961_p1a (a b x y z : ℝ) :
     obtain ⟨h₀, h₁, h₂⟩ := h₀
     have h₃: (x + y) ^ 2 - z ^ 2 = b ^ 2 := by
       rw [add_sq, mul_assoc 2, h₂, ← h₁]
-      group
+      ring
     by_cases ha₀: a = 0
     · right
       have hb₀ : b = 0 := by grind
@@ -169,6 +169,7 @@ problem imo1961_p1a (a b x y z : ℝ) :
         refine (Odd.pow_inj ?_).mp h₄
         exact Nat.odd_iff.mpr rfl
       rw [← h₅] at h₃
+
       have h₆ : x = 0 := by
         ring_nf at h₃
         refine (pow_eq_zero_iff two_ne_zero).mp ?_
@@ -177,7 +178,7 @@ problem imo1961_p1a (a b x y z : ℝ) :
       bound
     · left
       refine ⟨ha₀, ?_⟩
-      have h₄: (x + y) ^ 2 - z ^ 2 = (x + y + z) * (x + y - z) := by exact sq_sub_sq (x + y) z
+      have h₄: (x + y) ^ 2 - z ^ 2 = (x + y + z) * (x + y - z) := sq_sub_sq (x + y) z
       have h₅: z = (a ^ 2 - b ^ 2) / (2 * a) := by grind
       refine ⟨h₅, ?_⟩
       intro m
@@ -206,7 +207,7 @@ problem imo1961_p1b (a b x y z : ℝ) (h₀ : IsSolution a b x y z) :
         exfalso
         have h₈₀: (x + y) ^ 2 - z ^ 2 = b ^ 2 := by
           rw [add_sq, mul_assoc 2, h₂, ← h₁]
-          group
+          ring
         have hy₀: y < 0 := by exact neg_of_mul_pos_right hx₀ hx₁
         have h₈₁: z ^ 2 < (x + y) ^ 2 := by
           refine lt_of_sub_pos ?_

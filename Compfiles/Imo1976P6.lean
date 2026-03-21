@@ -26,6 +26,7 @@ problem imo1976_p6 (u : ℕ → ℝ)
     (h₁ : u 1 = 5 / 2)
     (h₂ : ∀ n, u (n + 2) = u (n + 1) * ((u n) ^ 2 - 2) - u 1) :
       ∀ n > 0, ⌊u n⌋  = (2 : ℝ) ^ ((2^n - (-1 : ℝ) ^ n) / 3) := by
+  set_option backward.isDefEq.respectTransparency false in
   have h_ind : ∀ n, u n = 2 ^ ((2 ^ n - (-1) ^ n) / 3 : ℝ) +
                           2 ^ ((-2 ^ n + (-1) ^ n) / 3 : ℝ) := by
     intro n
@@ -37,7 +38,7 @@ problem imo1976_p6 (u : ℕ → ℝ)
                    sub_self, zero_div, Real.rpow_zero, neg_add_cancel,
                    zero_lt_one, pow_one, sub_neg_eq_add, lt_add_iff_pos_right]
     ring_nf at * ; norm_num at *;
-    rw [ih n (by cutsat)] ; ring_nf; norm_num [ sq, ← Real.rpow_add ] ; ring_nf;
+    rw [ih n (by lia)] ; ring_nf; norm_num [ sq, ← Real.rpow_add ] ; ring_nf;
     obtain h | h := Nat.even_or_odd n <;> norm_num [h.neg_one_pow] <;> ring_nf
   intro n hn_pos
   have h_int : ∃ k : ℤ, (2 : ℝ) ^ ((2 ^ n - (-1) ^ n) / 3 : ℝ) = k := by
@@ -48,8 +49,8 @@ problem imo1976_p6 (u : ℕ → ℝ)
     obtain ⟨w, h⟩ := h_int
     use 2 ^ w.natAbs
     obtain a | a := w <;> norm_num [ Real.rpow_def_of_pos ] at *
-    simp_all only [Int.reduceNeg]
-    · norm_num [ ← h, Real.exp_mul, Real.exp_log ];
+    · simp_all only [Int.reduceNeg]
+      norm_num [ ← h, Real.exp_mul, Real.exp_log ];
       norm_num [ show ( 2 ^ n - ( -1 ) ^ n : ℝ ) = 3 * a by exact_mod_cast h ];
     · obtain ⟨w, h_1⟩ := Nat.even_or_odd' n
       simp_all only [Int.reduceNeg]
@@ -58,13 +59,13 @@ problem imo1976_p6 (u : ℕ → ℝ)
         subst h_2
         simp_all only [Nat.ofNat_pos, mul_pos_iff_of_pos_left, Int.reduceNeg, even_two,
                        Even.mul_right, Even.neg_pow, one_pow]
-        cutsat
+        lia
       | inr h_3 =>
         subst h_3
         simp_all only [lt_add_iff_pos_left, add_pos_iff, Nat.ofNat_pos, mul_pos_iff_of_pos_left,
                        zero_lt_one, or_true, Int.reduceNeg]
-        norm_num [ Int.negSucc_eq ] at h
-        linarith [ pow_pos Nat.zero_lt_two ( 2 * w + 1 ) ];
+        norm_num [Int.negSucc_eq] at h
+        lia
   simp_all only [pow_zero, sub_self, zero_div, Real.rpow_zero, neg_add_cancel,
                  pow_one, sub_neg_eq_add, gt_iff_lt]
   obtain ⟨w, h⟩ := h_int

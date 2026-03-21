@@ -15,7 +15,7 @@ import ProblemExtraction
 
 problem_file {
   tags := [.NumberTheory],
-  importedFrom :=
+  solutionImportedFrom :=
     "https://github.com/leanprover-community/mathlib4/blob/master/Archive/Imo/Imo1988Q6.lean",
 }
 
@@ -142,7 +142,7 @@ theorem constant_descent_vieta_jumping (x y : ℕ) {claim : Prop} {H : ℕ → �
   -- Let m be the smallest element of the nonempty set S.
   let m : ℕ := WellFounded.min Nat.lt_wfRel.wf S S_nonempty
   have m_mem : m ∈ S := WellFounded.min_mem Nat.lt_wfRel.wf S S_nonempty
-  have m_min : ∀ k ∈ S, ¬k < m := fun k hk => WellFounded.not_lt_min Nat.lt_wfRel.wf S S_nonempty hk
+  have m_min : ∀ k ∈ S, ¬k < m := fun k hk => WellFounded.not_lt_min Nat.lt_wfRel.wf S hk
   -- It suffices to show that there is point (a,b) with b ∈ S and b < m.
   rsuffices ⟨p', p'_mem, p'_small⟩ : ∃ p' : ℕ × ℕ, p'.2 ∈ S ∧ p'.2 < m
   · solve_by_elim
@@ -190,7 +190,7 @@ theorem constant_descent_vieta_jumping (x y : ℕ) {claim : Prop} {H : ℕ → �
     rw [H_symm, H_quad]
     simpa using h_root
   · -- For the second condition, we note that it suffices to check that c ≠ m_x.
-    cutsat
+    lia
 
 snip end
 
@@ -203,7 +203,7 @@ problem imo1988_p6 {a b : ℕ} (h : a * b + 1 ∣ a ^ 2 + b ^ 2) :
       hk (fun x => k * x) (fun x => x * x - k) fun _ _ => False <;>
     clear hk a b
   · -- We will now show that the fibers of the solution set are described by a quadratic equation.
-    cutsat
+    lia
   · -- Show that the solution set is symmetric in a and b.
     intro x y
     simp [add_comm (x * x), mul_comm x]
@@ -234,14 +234,14 @@ problem imo1988_p6 {a b : ℕ} (h : a * b + 1 ∣ a ^ 2 + b ^ 2) :
         rw [← sub_eq_zero, ← h_root]
         ring
       rw [hzx] at hpos
-      replace hpos : z * x + 1 > 0 := pos_of_mul_pos_left hpos (Int.ofNat_zero_le k)
+      replace hpos : z * x + 1 > 0 := pos_of_mul_pos_left hpos (Int.natCast_nonneg k)
       replace hpos : z * x ≥ 0 := Int.le_of_lt_add_one hpos
       apply nonneg_of_mul_nonneg_left hpos (mod_cast hx)
     · contrapose! hV₀ with x_lt_z
       apply ne_of_gt
       calc
-        z * y > x * x := by apply mul_lt_mul' <;> omega
-        _ ≥ x * x - k := sub_le_self _ (Int.ofNat_zero_le k)
+        z * y > x * x := by apply mul_lt_mul' <;> lia
+        _ ≥ x * x - k := sub_le_self _ (Int.natCast_nonneg k)
   · -- There is no base case in this application of Vieta jumping.
     simp
 
@@ -259,7 +259,7 @@ example {a b : ℕ} (h : a * b ∣ a ^ 2 + b ^ 2 + 1) : 3 * a * b = a ^ 2 + b ^ 
   apply constant_descent_vieta_jumping a b (H := fun a b => a * a + b * b + 1 = a * b * k)
       hk (fun x => k * x) (fun x => x * x + 1) fun x _ => x ≤ 1 <;>
     clear hk a b
-  · cutsat
+  · lia
   · -- Show that the solution set is symmetric in a and b.
     intro x y; ring_nf -- Porting note: Originally, `cc` solved the entire goal
   · -- Show that the claim is true if b = 0.
@@ -276,16 +276,16 @@ example {a b : ℕ} (h : a * b ∣ a ^ 2 + b ^ 2 + 1) : 3 * a * b = a ^ 2 + b ^ 
     constructor
     · have zy_pos : z * y ≥ 0 := by rw [hV₀]; exact mod_cast Nat.zero_le _
       apply nonneg_of_mul_nonneg_left zy_pos
-      omega
+      lia
     · contrapose! hV₀ with x_lt_z
       apply ne_of_gt
       push_neg at h_base
       calc
-        z * y > x * y := by apply mul_lt_mul_of_pos_right <;> omega
-        _ ≥ x * (x + 1) := by apply mul_le_mul <;> omega
+        z * y > x * y := by apply mul_lt_mul_of_pos_right <;> lia
+        _ ≥ x * (x + 1) := by apply mul_le_mul <;> lia
         _ > x * x + 1 := by
           rw [mul_add, mul_one]
-          apply add_lt_add_left
+          apply add_lt_add_right
           assumption_mod_cast
   · -- Show the base case.
     intro x y h h_base

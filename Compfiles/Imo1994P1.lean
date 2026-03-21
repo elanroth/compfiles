@@ -14,7 +14,7 @@ import ProblemExtraction
 
 problem_file {
   tags := [.Combinatorics],
-  importedFrom :=
+  solutionImportedFrom :=
     "https://github.com/leanprover-community/mathlib4/blob/master/Archive/Imo/Imo1994Q1.lean",
 }
 
@@ -46,9 +46,9 @@ theorem tedious (m : ℕ) (k : Fin (m + 1)) : m - ((m + 1 - ↑k) + m) % (m + 1)
   obtain ⟨k, hk⟩ := k
   rw [Nat.lt_succ_iff, le_iff_exists_add] at hk
   rcases hk with ⟨c, rfl⟩
-  have : (k + c + 1 - k) + (k + c) = c + (k + c + 1) := by omega
+  have : (k + c + 1 - k) + (k + c) = c + (k + c + 1) := by lia
   rw [Fin.val_mk, this, Nat.add_mod_right, Nat.mod_eq_of_lt, Nat.add_sub_cancel]
-  omega
+  lia
 
 snip end
 
@@ -79,8 +79,9 @@ problem imo1994_p1 (n : ℕ) (m : ℕ) (A : Finset ℕ) (hm : A.card = m + 1)
   -- We exhibit `k+1` elements of `A` greater than `a (rev k)`
   set f : Fin (m + 1) ↪ ℕ :=
     ⟨fun i => a i + a (rev k), by
-      apply injective_of_le_imp_le
+      apply Function.Injective.of_eq_imp_le
       intro i j hij
+      replace hij := Nat.le_of_eq hij
       rwa [add_le_add_iff_right, a.map_rel_iff] at hij ⟩
   -- Proof that the `f i` are greater than `a (rev k)` for `i ≤ k`
   have hf : map f (Icc 0 k) ⊆ map a.toEmbedding (Ioc (rev k) (Fin.last m)) := by
@@ -97,7 +98,7 @@ problem imo1994_p1 (n : ℕ) (m : ℕ) (A : Finset ℕ) (hm : A.card = m + 1)
     rw [← a.strictMono.lt_iff_lt, hj]
     simpa using (hrange (a i) (ha i)).1
   -- A set of size `k+1` embed in one of size `k`, which yields a contradiction
-  simpa [Fin.coe_sub, tedious, rev] using card_le_card hf
+  simpa [Fin.val_sub, tedious, rev] using card_le_card hf
 
 
 

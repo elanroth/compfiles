@@ -28,11 +28,11 @@ namespace Usa2017P1
 def condition (a b : ℕ) : Prop :=
   Nat.gcd a b = 1 ∧ a > 1 ∧ b > 1 ∧ (a + b) ∣ (a ^ b + b ^ a)
 
-def solution_set : Set (ℕ × ℕ) := { x | condition x.1 x.2 }
-
 snip begin
 
-lemma divisibility_helper {n k} : k = 3 \/ k = 5 → (2 * n + k) ^ 2 ≡ 1 [MOD 4 * n + 8] := by
+def solution_set : Set (ℕ × ℕ) := { x | condition x.1 x.2 }
+
+lemma divisibility_helper {n k} : k = 3 ∨ k = 5 → (2 * n + k) ^ 2 ≡ 1 [MOD 4 * n + 8] := by
   intro H
   cases H
   case inl h3 =>
@@ -40,13 +40,13 @@ lemma divisibility_helper {n k} : k = 3 \/ k = 5 → (2 * n + k) ^ 2 ≡ 1 [MOD 
     ring_nf
     have factorized : 9 + n * 12 + n ^ 2 * 4 = (8 + n * 4) * (1 + n) + 1 := by ring_nf
     rw [factorized]
-    apply Nat.ModEq.self_mul_add
+    apply Nat.ModEq.modulus_mul_add
   case inr h5 =>
     rw [h5]
     ring_nf
     have factorized : 25 + n * 20 + n ^ 2 * 4 = (8 + n * 4) * (3 + n) + 1 := by ring_nf
     rw [factorized]
-    apply Nat.ModEq.self_mul_add
+    apply Nat.ModEq.modulus_mul_add
 
 lemma build_condition_divisibility {n} : (2 * n + 3) + (2 * n + 5) ∣
                                          (2 * n + 3) ^ (2 * n + 5) + (2 * n + 5) ^ (2 * n + 3) := by
@@ -88,13 +88,9 @@ lemma build_condition_divisibility {n} : (2 * n + 3) + (2 * n + 5) ∣
         ≡ (2 * n + 3) + (2 * n + 5) [MOD m] :=
     Nat.ModEq.add h3_5 h5_3
 
-  have h_m0 : (4 * n + 8) ≡ 0 [MOD m] := by
-    have : (4 * n + 8) = (4 * n + 8) * 1 := by rw [mul_one]
-    rw [this]
-    apply @Nat.ModEq.self_mul_add (4 * n + 8) 1 0
   have h_ab0 : (2 * n + 3) + (2 * n + 5) ≡ 0 [MOD m] := by
     have hm : (2 * n + 3) + (2 * n + 5) = 4 * n + 8 := by ring
-    simpa [m, hm] using h_m0
+    simp [m, hm]
 
   exact h_reduce.trans (h_sum_ab.trans h_ab0)
 
@@ -119,8 +115,10 @@ def build : ℕ → solution_set :=
 
 snip end
 
-problem infinite_solution_set : Infinite solution_set := by
-  apply Infinite.of_injective build (fun _ => _)
-  unfold build; simp
+problem infinite_solution_set :
+    Infinite { (x, y) : ℕ × ℕ | condition x y } := by
+  refine Infinite.of_injective build (fun _ => ?_)
+  set_option backward.isDefEq.respectTransparency false in
+  simp [build]
 
 end Usa2017P1

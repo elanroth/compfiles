@@ -209,8 +209,8 @@ problem imo2002_p5 (f : ℝ → ℝ) :
     cases n with | zero => simp [h3] | succ n =>
     cases n with | zero => simp [h8] | succ n =>
     have h10 := hf n.succ 1 1 1
-    have h12 := ih n.succ (Nat.lt.base _)
-    have h11 := ih n (by omega)
+    have h12 := ih n.succ (Nat.lt_add_one _)
+    have h11 := ih n (by lia)
     rw[h12] at h10
     simp [h8, h11] at h10
     push_cast at h10 ⊢

@@ -10,7 +10,7 @@ import ProblemExtraction
 
 problem_file {
   tags := [.NumberTheory]
-  importedFrom := "https://github.com/leanprover-community/mathlib4/blob/master/Archive/Imo/Imo2024Q2.lean"
+  solutionImportedFrom := "https://github.com/leanprover-community/mathlib4/blob/master/Archive/Imo/Imo2024Q2.lean"
 }
 
 /-!
@@ -44,7 +44,7 @@ lemma dvd_pow_iff_of_dvd_sub {a b d n : ℕ} {z : ℤ} (ha : a.Coprime d)
     (hd : (φ d : ℤ) ∣ (n : ℤ) - z) :
     d ∣ a ^ n + b ↔ (((ZMod.unitOfCoprime _ ha) ^ z : (ZMod d)ˣ) : ZMod d) + b = 0 := by
   obtain ⟨k, hk⟩ := hd
-  rw [show z = n + (-k) * φ d by cutsat]
+  rw [show z = n + (-k) * φ d by lia]
   rw [zpow_add, zpow_mul', ←ZMod.natCast_eq_zero_iff]
   simp
 
@@ -173,11 +173,11 @@ lemma ab_add_one_dvd_b_add_one : a * b + 1 ∣ b + 1 := by
   exact h.ab_add_one_dvd_a_pow_large_n_0_add_b
 
 lemma a_eq_one : a = 1 := by
-  have hle : a * b + 1 ≤ b + 1 := Nat.le_of_dvd (by omega) h.ab_add_one_dvd_b_add_one
+  have hle : a * b + 1 ≤ b + 1 := Nat.le_of_dvd (by lia) h.ab_add_one_dvd_b_add_one
   rw [add_le_add_iff_right] at hle
   suffices a ≤ 1 by
     have hp := h.a_pos
-    omega
+    lia
   have hle' : a * b ≤ 1 * b := by
     simpa using hle
   exact Nat.le_of_mul_le_mul_right hle' h.b_pos

@@ -12,7 +12,7 @@ import ProblemExtraction
 
 problem_file {
   tags := [.NumberTheory],
-  importedFrom :=
+  solutionImportedFrom :=
     "https://github.com/leanprover-community/mathlib4/blob/master/Archive/Imo/Imo2019Q4.lean",
 }
 
@@ -42,6 +42,7 @@ individually.
 theorem upper_bound {k n : ℕ} (hk : k > 0)
     (h : (k ! : ℤ) = ∏ i ∈ Finset.range n, ((2:ℤ) ^ n - (2:ℤ) ^ i)) : n < 6 := by
   have h2 : ∑ i ∈ Finset.range n, i < k := by
+    set_option backward.isDefEq.respectTransparency false in
     suffices emultiplicity 2 (k ! : ℤ) = ↑(∑ i ∈ Finset.range n, i : ℕ) by
       rw [← Nat.cast_lt (α := ℕ∞), ← this]; change emultiplicity ((2 : ℕ) : ℤ) _ < _
       simp_rw [Int.natCast_emultiplicity, Nat.emultiplicity_two_factorial_lt hk.lt.ne.symm]
@@ -58,7 +59,7 @@ theorem upper_bound {k n : ℕ} (hk : k > 0)
     · intro i hi
       simp only [Finset.mem_range] at hi
       have : (2:ℤ) ^ i ≤ (2:ℤ) ^ n := by gcongr; norm_num
-      omega
+      lia
     · apply sub_le_self
       positivity
   norm_cast

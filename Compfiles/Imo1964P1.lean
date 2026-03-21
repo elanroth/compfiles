@@ -9,7 +9,10 @@ import Mathlib.Tactic
 
 import ProblemExtraction
 
-problem_file { tags := [.NumberTheory] }
+problem_file {
+  tags := [.NumberTheory]
+  videos := ["http://youtu.be/9d2nicgd68Q"]
+}
 
 /-!
 # International Mathematical Olympiad 1964, Problem 1
@@ -53,11 +56,12 @@ problem imo_1964_p1b (n : ℕ) : ¬ 7 ∣ (2^n + 1) := by
   apply Nat.mod_eq_zero_of_dvd at h
   have h1: 2 ^ 3 % 7 = 1 := by rfl
   mod_cases h2 : n % 3 <;> rw [←Nat.div_add_mod n 3, h2] at h
-  · rw [Nat.zero_mod, add_zero, Nat.add_mod, Nat.pow_mod, pow_mul, Nat.pow_mod, h1, one_pow] at h
+  · rw [Nat.zero_mod, add_zero, Nat.add_mod, Nat.pow_mod, pow_mul,
+        Nat.pow_mod, h1, one_pow (M := ℕ)] at h
     contradiction
-  · rw [Nat.add_mod, pow_add, pow_mul, Nat.mul_mod, Nat.pow_mod, h1, one_pow] at h
+  · rw [Nat.add_mod, pow_add, pow_mul, Nat.mul_mod, Nat.pow_mod, h1, one_pow (M := ℕ)] at h
     contradiction
-  · rw [Nat.add_mod, pow_add, pow_mul, Nat.mul_mod, Nat.pow_mod, h1, one_pow] at h
+  · rw [Nat.add_mod, pow_add, pow_mul, Nat.mul_mod, Nat.pow_mod, h1, one_pow (M := ℕ)] at h
     contradiction
 
 snip begin

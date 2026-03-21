@@ -39,8 +39,7 @@ def result : ℕ → ℕ
 
 lemma prod_le_sum_pow_sum (s : Multiset ℕ) : s.prod ≤ s.sum ^ s.sum := by
   induction' s using Multiset.induction with i s' hs'
-  · rw [Multiset.sum_zero, Multiset.prod_zero]
-    norm_num
+  · simp
   · rw [Multiset.sum_cons, Multiset.prod_cons]
     by_cases hi : i = 0
     · rw [hi, zero_mul]
@@ -48,10 +47,10 @@ lemma prod_le_sum_pow_sum (s : Multiset ℕ) : s.prod ≤ s.sum ^ s.sum := by
     · push_neg at hi
       rw [← Nat.one_le_iff_ne_zero] at hi
       calc i * s'.prod
-          ≤ i * s'.sum ^ s'.sum := by exact mul_le_mul_left' hs' i
-        _ ≤ (i + s'.sum) * s'.sum ^ s'.sum := by exact mul_le_mul_right' (Nat.le_add_right _ _) _
-        _ ≤ (i + s'.sum) * (i + s'.sum) ^ s'.sum := by
-          exact mul_le_mul_left' (pow_le_pow_left' (Nat.le_add_left _ _) _) _
+          ≤ i * s'.sum ^ s'.sum := mul_le_mul_right hs' i
+        _ ≤ (i + s'.sum) * s'.sum ^ s'.sum := mul_le_mul_left (Nat.le_add_right _ _) _
+        _ ≤ (i + s'.sum) * (i + s'.sum) ^ s'.sum :=
+            mul_le_mul_right (pow_le_pow_left' (Nat.le_add_left _ _) _) _
         _ = (i + s'.sum) ^ (s'.sum + 1) := by exact Nat.pow_add_one'.symm
         _ ≤ (i + s'.sum) ^ (i + s'.sum) := by
           apply pow_le_pow_right'
@@ -137,9 +136,9 @@ lemma zero_not_in_max_prod_set {s : Multiset ℕ}
   (hs: IsMaxProdSet s) : 0 ∉ s := by
   contrapose! hs
   have ha : s.sum = (Multiset.replicate s.sum 1).sum := by
-    rw [Multiset.sum_replicate, Nat.nsmul_eq_mul, mul_one]
+    rw [Multiset.sum_replicate, Nat.nsmul_eq_mul, mul_one (M := ℕ)]
   apply not_max_prod_set_of_prod_lt_prod ha
-  rw [Multiset.prod_replicate, one_pow, Multiset.prod_eq_zero hs]
+  rw [Multiset.prod_replicate, one_pow (M := ℕ), Multiset.prod_eq_zero hs]
   norm_num
 
 lemma max_prod_set_of_subset_of_max_prod_set {s t : Multiset ℕ}
@@ -178,7 +177,7 @@ lemma one_not_in_max_prod_set_of_one_lt_sum {s : Multiset ℕ}
     rw [Multiset.sum_singleton, Multiset.insert_eq_cons, Multiset.sum_cons, Multiset.sum_singleton]
   apply not_max_prod_set_of_prod_lt_prod h1n'
   rw [Multiset.prod_singleton, Multiset.insert_eq_cons, Multiset.prod_cons, Multiset.prod_singleton]
-  omega
+  lia
 
 lemma not_in_max_prod_set_of_five_le {s : Multiset ℕ} {n : ℕ}
   (hn : 4 < n) (hs: IsMaxProdSet s) : n ∉ s := by
@@ -189,10 +188,10 @@ lemma not_in_max_prod_set_of_five_le {s : Multiset ℕ} {n : ℕ}
     rw [Multiset.sum_singleton, Multiset.insert_eq_cons, Multiset.sum_cons, Multiset.sum_singleton]
     symm
     apply Nat.sub_add_cancel
-    omega
+    lia
   apply not_max_prod_set_of_prod_lt_prod hn_sub_2
   rw [Multiset.prod_singleton, Multiset.insert_eq_cons, Multiset.prod_cons, Multiset.prod_singleton]
-  omega
+  lia
 
 lemma lt_and_gt_of_in_max_prod_set_of_four_lt_sum {s : Multiset ℕ} {n : ℕ}
   (hn : n ∈ s) (hs' : 4 < s.sum) (hs: IsMaxProdSet s) : 1 < n ∧  n < 5 := by
@@ -204,11 +203,11 @@ lemma lt_and_gt_of_in_max_prod_set_of_four_lt_sum {s : Multiset ℕ} {n : ℕ}
     contrapose! hn
     rw [hn]
     apply one_not_in_max_prod_set_of_one_lt_sum _ hs
-    omega
+    lia
   have hn_le_4 : n ≤ 4 := by
       contrapose! hn
       exact not_in_max_prod_set_of_five_le hn hs
-  omega
+  lia
 
 lemma three_in_max_prod_set_of_four_lt_sum {s : Multiset ℕ}
   (hs' : 4 < s.sum) (hs: IsMaxProdSet s) : 3 ∈ s := by
@@ -281,7 +280,7 @@ lemma three_in_max_prod_set_of_four_lt_sum {s : Multiset ℕ}
       simp [Multiset.sum_singleton, Multiset.insert_eq_cons, Multiset.sum_cons]
     apply not_max_prod_set_of_prod_lt_prod h
     simp [Multiset.prod_singleton, Multiset.insert_eq_cons, Multiset.prod_cons]
-  omega
+  lia
 
 lemma max_prod_zero : IsMaxProd 0 1 := by
   constructor
@@ -296,7 +295,7 @@ lemma max_prod_zero : IsMaxProd 0 1 := by
       rw [s_sum] at hm'
       rw [Nat.eq_zero_of_le_zero hm'] at hm
       rw [← s_prod, Multiset.prod_eq_zero hm]
-      omega
+      lia
 
 lemma max_prod_one : IsMaxProd 1 1 := by
   constructor
@@ -304,7 +303,7 @@ lemma max_prod_one : IsMaxProd 1 1 := by
     constructor <;> rfl
   · intro n hn
     rcases hn with ⟨s, ⟨s_sum, s_prod⟩⟩
-    rcases exists_mem_of_sum_lt_zero s (by omega:_) with ⟨m, hm⟩
+    rcases exists_mem_of_sum_lt_zero s (by lia:_) with ⟨m, hm⟩
     have hm' : m ≤ 1 := by
       rw [← s_sum]
       exact Multiset.le_sum_of_mem hm
@@ -316,7 +315,7 @@ lemma max_prod_one : IsMaxProd 1 1 := by
     · rw [zero_mul]
       norm_num
     · have h := prod_le_max_prod max_prod_zero ht'
-      omega
+      lia
 
 lemma max_prod_two : IsMaxProd 2 2 := by
   constructor
@@ -324,7 +323,7 @@ lemma max_prod_two : IsMaxProd 2 2 := by
     constructor <;> rfl
   · intro n hn
     rcases hn with ⟨s, ⟨s_sum, s_prod⟩⟩
-    rcases exists_mem_of_sum_lt_zero s (by omega:_) with ⟨m, hm⟩
+    rcases exists_mem_of_sum_lt_zero s (by lia:_) with ⟨m, hm⟩
     have hm' : m ≤ 2 := by
       rw [← s_sum]
       exact Multiset.le_sum_of_mem hm
@@ -336,9 +335,9 @@ lemma max_prod_two : IsMaxProd 2 2 := by
     · rw [zero_mul]
       norm_num
     · have h := prod_le_max_prod max_prod_one ht'
-      omega
+      lia
     · have h := prod_le_max_prod max_prod_zero ht'
-      omega
+      lia
 
 lemma max_prod_three : IsMaxProd 3 3 := by
   constructor
@@ -346,7 +345,7 @@ lemma max_prod_three : IsMaxProd 3 3 := by
     constructor <;> rfl
   · intro n hn
     rcases hn with ⟨s, ⟨s_sum, s_prod⟩⟩
-    rcases exists_mem_of_sum_lt_zero s (by omega:_) with ⟨m, hm⟩
+    rcases exists_mem_of_sum_lt_zero s (by lia:_) with ⟨m, hm⟩
     have hm' : m ≤ 3 := by
       rw [← s_sum]
       exact Multiset.le_sum_of_mem hm
@@ -358,11 +357,11 @@ lemma max_prod_three : IsMaxProd 3 3 := by
     · rw [zero_mul]
       norm_num
     · have h := prod_le_max_prod max_prod_two ht'
-      omega
+      lia
     · have h := prod_le_max_prod max_prod_one ht'
-      omega
+      lia
     · have h := prod_le_max_prod max_prod_zero ht'
-      omega
+      lia
 
 lemma max_prod_four : IsMaxProd 4 4 := by
   constructor
@@ -370,7 +369,7 @@ lemma max_prod_four : IsMaxProd 4 4 := by
     constructor <;> rfl
   · intro n hn
     rcases hn with ⟨s, ⟨s_sum, s_prod⟩⟩
-    rcases exists_mem_of_sum_lt_zero s (by omega:_) with ⟨m, hm⟩
+    rcases exists_mem_of_sum_lt_zero s (by lia:_) with ⟨m, hm⟩
     have hm' : m ≤ 4 := by
       rw [← s_sum]
       exact Multiset.le_sum_of_mem hm
@@ -382,13 +381,13 @@ lemma max_prod_four : IsMaxProd 4 4 := by
     · rw [zero_mul]
       norm_num
     · have h := prod_le_max_prod max_prod_three ht'
-      omega
+      lia
     · have h := prod_le_max_prod max_prod_two ht'
-      omega
+      lia
     · have h := prod_le_max_prod max_prod_one ht'
-      omega
+      lia
     · have h := prod_le_max_prod max_prod_zero ht'
-      omega
+      lia
 
 theorem generalized (n : ℕ) :
   IsMaxProd n (result n) := by
@@ -404,7 +403,7 @@ theorem generalized (n : ℕ) :
     rcases exists_max_prod_set hm with ⟨s, ⟨hs_sum, hs⟩⟩
     have hs_sum' : 4 < s.sum := by
       rw [hs_sum]
-      omega
+      lia
     have hs3 := three_in_max_prod_set_of_four_lt_sum hs_sum' hs
     have hs3' := Multiset.singleton_le.mpr hs3
     have hs_without_3 : s - {3} ≤ s := Multiset.sub_le_self _ _

@@ -57,23 +57,11 @@ problem usa1998_p5 (n : ℕ) (_hn : 2 ≤ n) :
         obtain ⟨w, hw1, hw2⟩ := hx
         have := sp_nonnegative w hw1
         replace hw2 : L + w = x := hw2
-        omega
+        lia
       | inr hx => simp_all
     · constructor
       · --cardinality is n + 1
-        have hdisj : Disjoint (Finset.map (addLeftEmbedding L) Sp) {0} := by
-          intro X hX h0 y hy
-          have hyy := h0 hy
-          rw [Finset.mem_singleton] at hyy
-          rw [hyy] at hy
-          have hxx := hX hy
-          rw [Finset.mem_map] at hxx
-          obtain ⟨z, hz, hz2⟩ := hxx
-          replace hz2 : L + z = 0 := hz2
-          have := sp_nonnegative z hz
-          omega
-        rw [Finset.card_union_of_disjoint hdisj, Finset.card_singleton,
-            Finset.card_map, sp_card]
+        grind
       · intro α hα β hβ α_ne_β
         rw [Finset.mem_union, Finset.mem_map] at hα hβ
         -- If α,β ∈ Sₙ₊₁ and either α or β is zero, then (α - β)² divides αβ.
@@ -87,7 +75,7 @@ problem usa1998_p5 (n : ℕ) (_hn : 2 ≤ n) :
             replace ha2 : L + a = α := ha2
             obtain ⟨b, hb, hb2⟩ := hβ
             replace hb2 : L + b = β := hb2
-            have a_ne_b : a ≠ b := by omega
+            have a_ne_b : a ≠ b := by lia
             have ih := hsp a ha b hb a_ne_b
             have h5 : L = (∏ t ∈ Sp.erase a, (a-t)^2) *
                          ∏ s ∈ Sp.erase a, ∏ t ∈ Sp.erase s, (s-t)^2 :=
@@ -108,7 +96,7 @@ problem usa1998_p5 (n : ℕ) (_hn : 2 ≤ n) :
                have h9 :  a * b % (a - b) ^ 2 = 0 := Int.emod_eq_zero_of_dvd ih
                rw [h8, h9]
                norm_num
-            have hab : a - b = α - β := by omega
+            have hab : a - b = α - β := by lia
             rw [ha2, hb2, hab] at Lmod'
             exact Int.dvd_of_emod_eq_zero Lmod'
 

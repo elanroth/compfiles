@@ -58,8 +58,8 @@ problem imo1963_p1 : ∀ (p x : ℝ), (x ^ 2 - p) ≥ 0 → (x ^ 2 - 1) ≥ 0 �
   rw [Real.sq_sqrt h2]
   trans Real.sqrt (x ^ 2 - p) * Real.sqrt (x ^ 2 - 1) = (p + 4 - 4 * x ^ 2) / (4 : ℝ)
   · constructor
-    · intro h; linear_combination (norm := (field_simp; ring_nf)) (1 / (4 : ℝ)) * h
-    · intro h; linear_combination (norm := (field_simp; ring_nf)) (4 : ℝ) * h
+    · intro h; linear_combination (1 / (4 : ℝ)) * h
+    · intro h; linear_combination (4 : ℝ) * h
   apply @iff_comm (c := p + 4 - 4 * x ^ 2 ≥ 0)
   · intro h; rw [ge_iff_le]
     apply (div_le_div_iff_of_pos_right (by norm_num : (0 : ℝ) < (4 : ℝ))).mp
@@ -97,7 +97,9 @@ problem imo1963_p1 : ∀ (p x : ℝ), (x ^ 2 - p) ≥ 0 → (x ^ 2 - 1) ≥ 0 �
   have tmp2 :
     ((4 : ℝ) - p) ^ (2 : ℕ) / ((4 : ℝ) * ((4 : ℝ) - (2 : ℝ) * p)) =
     (((4 : ℝ) - p) / ((2 : ℝ) * Real.sqrt ((4 : ℝ) - (2 : ℝ) * p))) ^ 2 := by
-    rw [div_pow, mul_pow, Real.sq_sqrt]; norm_num; exact le_of_lt tmp
+    rw [div_pow, mul_pow, Real.sq_sqrt]
+    · norm_num
+    · exact le_of_lt tmp
   rw [tmp2,
      sq_eq_sq₀ xge0 (le_of_lt
        (by apply div_pos

@@ -48,7 +48,7 @@ problem imo1972_p4 (a b c d e : ℝ)
            0 ≤ (c * d - c * a)^2 ∧ 0 ≤ (d * e - d * b)^2 ∧
            0 ≤ (e * a - e * c)^2 ∧ 0 ≤ (a * c - a * e)^2 ∧
            0 ≤ (b * d - b * a)^2 ∧ 0 ≤ (c * e - c * b)^2 ∧
-           0 ≤ (d * a - d * c)^2 ∧ 0 ≤ (e * b - e * d)^2 := by simp [sq_nonneg]
+           0 ≤ (d * a - d * c)^2 ∧ 0 ≤ (e * b - e * d)^2 := by simp [sq_nonneg (R := ℝ)]
 
     have bd : b = d := by
       have h₁ : (a * b - a * d)^2 = 0 := by linarith
@@ -74,9 +74,9 @@ problem imo1972_p4 (a b c d e : ℝ)
       have h₃ : d * e = d * b := by rwa [sub_eq_zero] at h₂
       exact mul_left_cancel₀ (ne_of_gt h₀.2.2.2.1) h₃
 
-    have ab : a = b := by rw [<- da]; exact bd.symm
-    have bc : b = c := by rw [<- eb]; exact ce.symm
-    have cd : c = d := by rwa [<- bc]
+    have ab : a = b := by rw [← da]; exact bd.symm
+    have bc : b = c := by rw [← eb]; exact ce.symm
+    have cd : c = d := by rwa [← bc]
     have de : d = e := by rwa [cd] at ce
     exact ⟨ab, bc, cd, de⟩
   · intro h

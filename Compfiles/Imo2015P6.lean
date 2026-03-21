@@ -10,7 +10,7 @@ import ProblemExtraction
 
 problem_file {
   tags := [.Algebra]
-  importedFrom :=
+  solutionImportedFrom :=
     "https://github.com/leanprover-community/mathlib4/blob/master/Archive/Imo/Imo2015Q6.lean",
 }
 
@@ -70,9 +70,9 @@ lemma exists_add_eq_of_mem_pool {z : ℤ} (hz : z ∈ pool a t) : ∃ u < t, u +
     simp_rw [pool, Finset.mem_map, Equiv.coe_toEmbedding, Equiv.subRight_apply] at hz
     obtain ⟨y, my, ey⟩ := hz
     rw [Finset.mem_insert, Finset.mem_erase] at my; rcases my with h | h
-    · use t; omega
+    · use t; lia
     · obtain ⟨u, lu, hu⟩ := ih h.2
-      use u; omega
+      use u; lia
 
 include ha
 
@@ -84,11 +84,11 @@ lemma pool_subset_Icc : pool a t ⊆ Finset.Icc 0 2014 := by
     intro x hx
     simp_rw [pool, Finset.mem_map, Equiv.coe_toEmbedding, Equiv.subRight_apply] at hx
     obtain ⟨y, my, ey⟩ := hx
-    suffices y ∈ Finset.Icc 1 2015 by rw [Finset.mem_Icc] at this ⊢; omega
+    suffices y ∈ Finset.Icc 1 2015 by rw [Finset.mem_Icc] at this ⊢; lia
     rw [Finset.mem_insert, Finset.mem_erase] at my; rcases my with h | ⟨h₁, h₂⟩
     · exact h ▸ ha.1 t
     · replace h₂ := ih h₂
-      rw [Finset.mem_Icc] at h₂ ⊢; omega
+      rw [Finset.mem_Icc] at h₂ ⊢; lia
 
 lemma not_mem_pool_self : a t ∉ pool a t := by
   by_contra h
@@ -102,12 +102,12 @@ lemma card_pool : Finset.card (pool a (t + 1)) = Finset.card (pool a t) + if 0 �
     rw [Finset.mem_erase, not_and_or]; exact .inr (not_mem_pool_self ha)
   rw [pool, Finset.card_map, Finset.card_insert_of_notMem nms, Finset.card_erase_eq_ite]
   split_ifs with h
-  · have := Finset.card_pos.mpr ⟨0, h⟩; omega
+  · have := Finset.card_pos.mpr ⟨0, h⟩; lia
   · rfl
 
 lemma monotone_card_pool : Monotone fun t ↦ Finset.card (pool a t) := by
   refine monotone_nat_of_le_succ fun t ↦ ?_
-  have := card_pool (t := t) ha; omega
+  have := card_pool (t := t) ha; lia
 
 /-- There exists a point where the number of balls reaches a maximum (which follows from its
 monotonicity and boundedness). We take its coordinates for the problem's `b` and `N`. -/
@@ -132,12 +132,12 @@ lemma b_pos : 0 < b := by
     · exact hbN _ h.le
   have cp1 : Finset.card (pool a 1) = 1 := by
     simp_rw [card_pool ha, pool, Finset.card_empty, Finset.notMem_empty, ite_false]
-  apply absurd (hbN 1); omega
+  apply absurd (hbN 1); lia
 
 include ht in
 lemma zero_mem_pool : 0 ∈ pool a t := by
   have := card_pool (t := t) ha
-  have := hbN (t + 1) (by omega)
+  have := hbN (t + 1) (by lia)
   simp_all
 
 include ht in
@@ -148,7 +148,7 @@ lemma sum_sub_sum_eq_sub : ∑ x ∈ pool a (t + 1), x - ∑ x ∈ pool a t, x =
     rw [Finset.mem_erase, not_and_or]; exact .inr (not_mem_pool_self ha)
   rw [Finset.sum_insert nms, Finset.sum_erase_eq_sub (h := zero_mem_pool ha hbN ht), Finset.sum_sub_distrib, Finset.sum_const,
     nsmul_one, hbN _ ht]
-  omega
+  lia
 
 /-- The telescoping sum giving the part of the problem's expression within the modulus signs. -/
 lemma sum_telescope {m n : ℕ} (hm : N ≤ m) (hn : m < n) :
@@ -156,7 +156,7 @@ lemma sum_telescope {m n : ℕ} (hm : N ≤ m) (hn : m < n) :
   induction n, hn using Nat.le_induction with
   | base => rw [sum_sub_sum_eq_sub ha hbN hm]; simp
   | succ k lk ih =>
-    rw [Finset.sum_Ico_succ_top (by omega), ih, ← sum_sub_sum_eq_sub ha hbN (by omega)]
+    rw [Finset.sum_Ico_succ_top (by lia), ih, ← sum_sub_sum_eq_sub ha hbN (by lia)]
     apply sub_add_sub_cancel'
 
 include ht in
@@ -192,7 +192,7 @@ problem imo2015_p6 (ha : Condition a) :
       nth_rw 2 [← Nat.sub_one_add_one_eq_of_pos bp]
       rw [← Finset.sum_flip, Finset.sum_range_succ, tsub_self, Nat.cast_zero, add_zero, ← Finset.sum_sub_distrib]
       have sc : ∀ x ∈ Finset.range (b - 1), (2014 - x - (b - 1 - x : ℕ)) = (2015 - b : ℤ) := fun x mx ↦ by
-        rw [Finset.mem_range] at mx; omega
+        rw [Finset.mem_range] at mx; lia
       rw [Finset.sum_congr rfl sc, Finset.sum_const, Finset.card_range, nsmul_eq_mul, Nat.cast_pred bp]
     _ ≤ _ := by
       rw [← mul_le_mul_iff_right₀ zero_lt_four, ← mul_assoc,

@@ -95,17 +95,24 @@ instance : ToString ProblemTag where
 structure ProblemFileMetadata where
   tags : List ProblemTag := []
 
+  --- If the problem formalization was imported from somewhere else,
+  --- then this field should contain the URL of that source.
+  problemImportedFrom : Option String := .none
+
   --- If the formalized solution was imported from somewhere else,
   --- then this field should contain the URL of that source.
-  importedFrom : Option String := .none
+  solutionImportedFrom : Option String := .none
+
+  -- List of URLs to videos relevant to the solution, for example recordings
+  -- of livestreams.
+  videos : List String := []
 
   --- Names of the people who wrote the solution. By default, this
   --- is automatically populated via the file's copyright header.
   authors : List String := []
 
-  --- Names of the people who wrote the solution. This field
-  --- is automatically populated via the file's copyright header,
-  --- which is assumed to be everything before the first 'import'.
+  --- Everything in the file up to but not including the first `import`.
+  --- This is automatically populated during extraction.
   copyrightHeader : String := ""
 
 structure ProblemMetadataEntry where
@@ -127,7 +134,7 @@ def parseAuthors (src : String) : List String := Id.run do
   for l in lines do
     if l.startsWith "Authors: "
     then
-      return (l.stripPrefix "Authors: ").splitToList (fun c => c = ',')
+      return (l.dropPrefix "Authors: ").toString.splitToList (fun c => c = ',')
   return []
 
 def parseCopyrightHeader (src : String) : String := Id.run do
@@ -319,13 +326,13 @@ def extractFromExt {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m]
       match inProgress.find? module with
       | .some ⟨src, cur, acc⟩ =>
          inProgress := inProgress.insert module
-            ⟨src, endPos, acc ++ (Substring.mk src cur startPos).toString ++ s⟩
+            ⟨src, endPos, acc ++ (Substring.Raw.mk src cur startPos).toString ++ s⟩
       | .none => pure ()
     | .snip_begin pos =>
       match inProgress.find? module with
       | .some ⟨src, cur, acc⟩ =>
          inProgress := inProgress.insert module
-            ⟨src, pos, acc ++ (Substring.mk src cur pos).toString⟩
+            ⟨src, pos, acc ++ (Substring.Raw.mk src cur pos).toString⟩
       | .none => pure ()
     | .snip_end pos =>
       match inProgress.find? module with
@@ -341,7 +348,7 @@ def extractFromExt {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m]
       then imports := imports ++ s!"import {im.module}\n"
 
     result := result.insert module
-      (imports ++ acc ++ (Substring.mk src endPos src.endPos).toString)
+      (imports ++ acc ++ (Substring.Raw.mk src endPos src.rawEndPos).toString)
 
   pure result
 

@@ -28,8 +28,8 @@ open scoped EuclideanGeometry
 snip begin
 
 lemma lemma1 (a b c d : ℝ) : a * c + b * d ≤ Real.sqrt (a^2 + b^2) * Real.sqrt (c^2 + d^2) := by
-  let v1 : EuclideanSpace ℝ (Fin 2) := ![a, b]
-  let v2 : EuclideanSpace ℝ (Fin 2) := ![c, d]
+  let v1 : EuclideanSpace ℝ (Fin 2) := !₂[a, b]
+  let v2 : EuclideanSpace ℝ (Fin 2) := !₂[c, d]
   have h2 : a * c + b * d ≤ |a * c + b * d| := le_abs_self _
   have h1 := abs_real_inner_le_norm v1 v2
   simp [EuclideanSpace.norm_eq, v1, v2, inner] at h1
@@ -82,6 +82,8 @@ problem usa2001_p4
   have h42 : 0 < dist A B := dist_pos.mpr (ne₁₂_of_not_collinear h50)
   rw [dist_comm] at h42
   have h43 : 0 < dist A C := dist_pos.mpr (ne₁₃_of_not_collinear h50)
+  have hmp : MulPosStrictMono ℝ := MulPosReflectLT.toMulPosStrictMono ℝ
+  have hpm : PosMulStrictMono ℝ := posMulStrictMono_iff_mulPosStrictMono.mpr hmp
   have h23 := calc
     _ ≤ _ := ptolemy
     _ ≤ _ := h2

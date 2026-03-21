@@ -95,12 +95,10 @@ problem imo1977_p4 (f : ℝ → ℝ) (a b A B : ℝ)
     have h₁₂ : A * Real.cos (2 * (θ / 2)) + B * Real.sin (2 * (θ / 2)) > 1 := by
       have h₁₃ : Real.cos (2 * (θ / 2)) = Real.cos θ := by ring_nf
       have h₁₄ : Real.sin (2 * (θ / 2)) = Real.sin θ := by ring_nf
-      cutsat
+      lia
     have h₁₃ : A * Real.cos (2 * (θ / 2)) + B * Real.sin (2 * (θ / 2)) ≤ 1 := by
-      have h₁₄ : f (θ / 2) + f (θ / 2 + Real.pi) ≥ 0 := by
-        have h₁₅ : f (θ / 2) ≥ 0 := h₁ (θ / 2)
-        have h₁₆ : f (θ / 2 + Real.pi) ≥ 0 := h₁ (θ / 2 + Real.pi)
-        positivity
+      have h₁₄ : f (θ / 2) + f (θ / 2 + Real.pi) ≥ 0 :=
+        Left.add_nonneg (h₁ (θ / 2)) (h₁ (θ / 2 + Real.pi))
       have h₁₅ : f (θ / 2) + f (θ / 2 + Real.pi) = 2 - 2 * (A * Real.cos (2 * (θ / 2)) + B * Real.sin (2 * (θ / 2))) := by
         have h₁₆ : f (θ / 2) = 1 - a * Real.cos (θ / 2) - b * Real.sin (θ / 2) - A * Real.cos (2 * (θ / 2)) - B * Real.sin (2 * (θ / 2)) := by
           rw [h₀]
@@ -200,7 +198,7 @@ problem imo1977_p4 (f : ℝ → ℝ) (a b A B : ℝ)
         have h₉ : C ^ 2 + D ^ 2 > 4 := hC_sq_add_D_sq_gt_4
         rw [←hR_sq, show 4 = (2:ℝ)^2 by norm_num] at h₉
         exact (sq_lt_sq₀ (by positivity) (by positivity)).mp h₉
-      cutsat
+      lia
 
     have h₇ : C * Real.cos θ - D * Real.sin θ ≤ 2 := by
       have h₈ : f θ + f (θ + Real.pi / 2) ≥ 0 := by
@@ -211,12 +209,6 @@ problem imo1977_p4 (f : ℝ → ℝ) (a b A B : ℝ)
         have h₁₁ : f (θ + Real.pi / 2) = 1 - a * Real.cos (θ + Real.pi / 2) - b * Real.sin (θ + Real.pi / 2) - A * Real.cos (2 * (θ + Real.pi / 2)) - B * Real.sin (2 * (θ + Real.pi / 2)) := by
           rw [h₀]
         rw [h₁₀, h₁₁]
-        have h₁₂ : Real.cos (θ + Real.pi / 2) = -Real.sin θ := by
-          rw [Real.cos_add]
-          simp [Real.cos_pi_div_two, Real.sin_pi_div_two]
-        have h₁₃ : Real.sin (θ + Real.pi / 2) = Real.cos θ := by
-          rw [Real.sin_add]
-          simp [Real.cos_pi_div_two, Real.sin_pi_div_two]
         have h₁₄ : Real.cos (2 * (θ + Real.pi / 2)) = -Real.cos (2 * θ) := by
           have h₁₅ : 2 * (θ + Real.pi / 2) = 2 * θ + Real.pi := by ring_nf
           rw [h₁₅]
@@ -225,7 +217,7 @@ problem imo1977_p4 (f : ℝ → ℝ) (a b A B : ℝ)
           have h₁₆ : 2 * (θ + Real.pi / 2) = 2 * θ + Real.pi := by ring_nf
           rw [h₁₆]
           exact Real.sin_add_pi _
-        rw [h₁₂, h₁₃, h₁₄, h₁₅]
+        rw [Real.cos_add_pi_div_two θ, Real.sin_add_pi_div_two θ, h₁₄, h₁₅]
         have h₁₆ : C = a + b := by rw [hC_def]
         have h₁₇ : D = a - b := by rw [hD_def]
         simp only [h₁₆, h₁₇] at *

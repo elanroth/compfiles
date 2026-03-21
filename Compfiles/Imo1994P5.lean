@@ -29,7 +29,7 @@ abbrev op (f : S → S) (a b : S) : S :=
 snip begin
 
 lemma sol_prop {a : ℝ} (ha : -1 < a) : -1 < -a / (1 + a) :=
-   (lt_div_iff₀ (show 0 < 1 + a by linarith)).mpr (by linarith)
+   (lt_div_iff₀ (show 0 < 1 + a by linarith)).mpr (by simp)
 
 snip end
 
@@ -144,6 +144,7 @@ problem imo1994_p5 (f : S → S) :
   have h6 := h5 x
   unfold op at h6
   obtain ⟨x, hx⟩ := x
+  set_option backward.isDefEq.respectTransparency false in
   rw [Subtype.mk_eq_mk] at h6
   dsimp only at h6
   have h7 : (f ⟨x, hx⟩).val = -x / (1 + x) := by

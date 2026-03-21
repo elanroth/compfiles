@@ -14,7 +14,7 @@ import ProblemExtraction
 
 problem_file {
   tags := [.Combinatorics]
-  importedFrom := "https://github.com/leanprover-community/mathlib4/blob/master/Archive/Imo/Imo2001Q3.lean"
+  solutionImportedFrom := "https://github.com/leanprover-community/mathlib4/blob/master/Archive/Imo/Imo2001Q3.lean"
 }
 
 /-!
@@ -67,7 +67,7 @@ lemma card_not_easy_le_five {α β : Type} [Fintype α]
     _ = #((β_solved i).biUnion fun p ↦ {j | p ∈ α_solved j}) := by congr 1; ext j; simp [not_disjoint_iff]
     _ ≤ ∑ p ∈ β_solved i, #{j | p ∈ α_solved j}              := card_biUnion_le
     _ ≤ ∑ p ∈ β_solved i, 2                           := sum_le_sum fun p mp ↦ Nat.le_of_lt_succ (h p mp)
-    _ ≤ _                                      := by rw [sum_const, smul_eq_mul]; omega
+    _ ≤ _                                      := by rw [sum_const, smul_eq_mul]; lia
 
 open Classical in
 /-- There are at most 210 girl-boy pairs who solved some problem in common that was not easy for
@@ -93,7 +93,7 @@ lemma card_not_easy_le_210 {α β : Type} [Fintype α] [Fintype β]
     _ ≤ ∑ i : β, 5 * 2 := by
       gcongr with i
       rw [sum_const, smul_eq_mul]
-      exact mul_le_mul_right' (card_not_easy_le_five hcard_α (hA _) (hB _)) _
+      exact mul_le_mul_left (card_not_easy_le_five hcard_α (hA _) (hB _)) _
     _ = _ := by simp [←hcard_β]
 
 snip end

@@ -28,7 +28,7 @@ lemma card_opposite (s s' s'' : Finset ℕ) (predicate: ℕ → Prop)
     s'.card + s''.card = s.card := by
   rw [filter]
   rw [opposite_filter]
-  exact Finset.filter_card_add_filter_neg_card_eq_card predicate
+  exact Finset.card_filter_add_card_filter_not predicate
 
 lemma no_other_p_divisors_nearby (x : ℕ) (y : ℕ) (p : ℕ) (p_gt_5 : p > 5) (x_lt_y : x < y)
     (close_by: ∃ k, k ≤ 5 ∧ x + k = y) (x_div_p : p ∣ x) : ¬ p ∣ y := by
@@ -38,7 +38,7 @@ lemma no_other_p_divisors_nearby (x : ℕ) (y : ℕ) (p : ℕ) (p_gt_5 : p > 5) 
   simp_all [Nat.dvd_add_right]
 
 lemma no_other_5_divisors_nearby (x : ℕ) (y : ℕ) (x_lt_y : x < y) (close_by: ∃ k, k ≤ 4 ∧ x + k = y) (x_div_p : 5 ∣ x) : ¬ (5 ∣ y) := by
-  omega
+  lia
 
 -- The next few functions apply the following logic from the Art of Problem Solving Solution 1
 
@@ -56,7 +56,7 @@ lemma elems_in_interval_nearby (x y n : ℕ ) (s : Finset ℕ) (interval : s = F
   (x_in_s : x ∈ s) (y_in_s : y ∈ s) (x_lt_y : x < y) : ∃ k ≤ 5, x + k = y := by
   simp_all only [Finset.mem_Icc]
   use y - x
-  omega
+  lia
 
 lemma p_gt_five_not_divides (n : ℕ) (s1 s2 : Finset ℕ) (partition : s1 ∪ s2 = Finset.Icc n (n + 5)) (no_dups: s1 ∩ s2 = ∅)
                             (equal_products : ∏ m ∈ s1, m = ∏ m ∈ s2, m) (x : ℕ) (x_in_interval : x ∈ s1 ∪ s2)
@@ -178,7 +178,7 @@ lemma at_most_one (n : ℕ) (x y : ℕ)
   (y_non_div_2 : ¬ 2 ∣ y) :
   x = y := by
   simp_all only [Finset.mem_Icc, Nat.two_dvd_ne_zero]
-  omega
+  lia
 
 lemma card_of_equal (s : Finset ℕ) : (∀ x ∈ s, ∀ y ∈ s,  x = y) → s.card ≤ 1 := by
   exact (@Finset.card_le_one ℕ s).mpr
@@ -215,21 +215,21 @@ lemma unique_divisor (n : ZMod 3) (a b c : ℕ) (n_eq_a : n = a) (s : Finset ℕ
   · use a
     have three_div_a : 3 ∣ a := by
       apply (ZMod.natCast_eq_zero_iff a 3).mp
-      simp_all only [Fin.zero_eta]
+      exact n_eq_a.symm
     grind
   · use b
     have three_div_b : 3 ∣ b := by
       simp_all only [Fin.mk_one]
       apply (ZMod.natCast_eq_zero_iff (a + 2) 3).mp
       simp_all only [Nat.cast_add, Nat.cast_ofNat]
-      rw[← n_eq_a]
-      reduce_mod_char
+      rw [← n_eq_a]
+      rfl
     constructor
     · simp_all only [Fin.mk_one, Finset.mem_insert, add_eq_left, OfNat.ofNat_ne_zero, Finset.mem_singleton, left_eq_add, or_false, or_true, and_self]
     · rintro o ⟨o_in_s, three_div_o⟩
       rw[s_eq] at o_in_s
       simp_all only [Fin.mk_one, Finset.mem_insert, Finset.mem_singleton]
-      omega
+      lia
   · use c
     have three_div_c : 3 ∣ c := by
       simp_all only [Nat.dvd_add_self_right]
@@ -237,13 +237,13 @@ lemma unique_divisor (n : ZMod 3) (a b c : ℕ) (n_eq_a : n = a) (s : Finset ℕ
       simp_all only [Nat.cast_add, Nat.cast_one]
       rw[← n_eq_a]
       simp only [Nat.reduceAdd, Fin.reduceFinMk, Fin.isValue]
-      reduce_mod_char
+      rfl
     constructor
     · simp_all only [Nat.dvd_add_self_right, Finset.mem_insert, add_eq_left, OfNat.ofNat_ne_zero, Finset.mem_singleton, or_true, and_self]
     · rintro o ⟨o_in_s, three_div_o⟩
       rw[s_eq] at o_in_s
       simp_all only [Nat.dvd_add_self_right, Finset.mem_insert, Finset.mem_singleton]
-      omega
+      lia
 
 lemma card_1_of_exists_unique (s : Finset ℕ)
   (predicate: ℕ → Prop)
@@ -275,7 +275,7 @@ lemma enumerate_primes_le_5 (p : ℕ) (pp : p.Prime) (p_le_5 : p ≤ 5) : p ∈ 
   simp only [Finset.mem_insert, Finset.mem_singleton, not_or] at H
   obtain ⟨a, b, c⟩ := H
   have := Nat.Prime.five_le_of_ne_two_of_ne_three pp
-  omega
+  lia
 
 lemma two_three_five_and_more_is_enough (x : ℕ) (two_does_not_divide : ¬ 2 ∣ x) (three_does_not_divide : ¬ 3 ∣ x) (five_does_not_divide : ¬ 5 ∣ x)
   (p_gt_5_not_dvd : ∀ (p : ℕ), p.Prime → p > 5 → ¬p ∣ x):
@@ -289,7 +289,7 @@ lemma two_three_five_and_more_is_enough (x : ℕ) (two_does_not_divide : ¬ 2 �
     cases this
     case inl h =>
       simp_all only [Nat.two_dvd_ne_zero, gt_iff_lt, Finset.mem_insert, Finset.mem_singleton, true_or]
-      omega
+      lia
     case inr h => grind
   grind
 
@@ -317,23 +317,18 @@ lemma subsets_must_overlap_pigeonhole (s s1 s2 : Finset ℕ) (predicate_s1: ℕ 
   intro h
   simp only [not_and] at h
   have step_1 : (∀ x ∈ s, predicate_s1 x → ¬predicate_s2 x) → (∀ x ∈ s, x ∈ s1 → ¬ x ∈ s2) := by
-    intro left
-    intro x x_in_s
-    intro predicate_s1_fulfills
-    intro predicate_s2_fulfills
+    intro left x x_in_s predicate_s1_fulfills predicate_s2_fulfills
     have part_1 := ((lift_x_in_s1 x x_in_s).mp predicate_s1_fulfills)
     have part_2 := ((lift_x_in_s2 x x_in_s).mp predicate_s2_fulfills)
     exact left x x_in_s part_1 part_2
   have step_2 : (∀ x ∈ s, x ∈ s1 → x ∉ s2) → Disjoint s1 s2 := by
     intro left
     dsimp [Disjoint]
-    dsimp [Finset.instHasSubset]
-    simp only [Finset.notMem_empty, imp_false]
     intro s3 rel1 rel2 a a_in_s3
     have a_in_s1 := rel1 a_in_s3
     have a_in_s2 := rel2 a_in_s3
     have a_in_s : a ∈ s := s1_is_subset (rel1 a_in_s3)
-    exact left a a_in_s a_in_s1 a_in_s2
+    exact absurd a_in_s2 (left a a_in_s a_in_s1)
   have s1_s2_disjoint : Disjoint s1 s2 := by
     apply step_2
     apply step_1
@@ -344,19 +339,14 @@ lemma subsets_must_overlap_pigeonhole (s s1 s2 : Finset ℕ) (predicate_s1: ℕ 
   rw[← card_calc] at total_size_exceeds
   rw[← card_s] at total_size_exceeds
   have s1_s2_subset : (s1 ∪ s2) ⊆ s := by
-    dsimp[Finset.instHasSubset]
-    simp only [Finset.mem_union]
-    intro a
-    intro s1_or_s2
-    cases s1_or_s2
-    case inl left =>
-      simp_all only [Finset.filter_subset, Finset.mem_filter]
-    case inr left =>
-      simp_all only [Finset.filter_subset, Finset.mem_filter]
+    intro a s1_or_s2
+    rcases Finset.mem_union.mp s1_or_s2 with left | left
+    · exact s1_is_subset left
+    · rw [s2_filter] at left; exact (Finset.mem_filter.mp left).1
   have : (s1 ∪ s2).card ≤ s.card := by
     apply Finset.card_le_card
     exact s1_s2_subset
-  omega
+  lia
 
 lemma contains_one_or_zero (n : ℕ) (s1 s2 : Finset ℕ) (partition : s1 ∪ s2 = Finset.Icc n (n + 5)) (no_dups: s1 ∩ s2 = ∅)
                       (equal_products : ∏ m ∈ s1, m = ∏ m ∈ s2, m) : ∃ x ∈ (s1 ∪ s2), x = 1 ∨ x = 0 := by
@@ -384,17 +374,17 @@ lemma contains_one_or_zero (n : ℕ) (s1 s2 : Finset ℕ) (partition : s1 ∪ s2
     have := card_opposite odd_s odd_div_by_3 odd_non_div_by_3 (λ x => 3 ∣ x) rfl rfl
     rw[three_odd_numbers] at this
     rw[odd_div_by_3_card] at this
-    omega
+    lia
 
   have at_least_2_non_divisers_of_5 : odd_non_div_by_5.card ≥ 2 := by
     have := card_opposite odd_s odd_div_by_5 odd_non_div_by_5 (fun x => 5 ∣ x) rfl rfl
     rw[three_odd_numbers] at this
-    omega
+    lia
 
   let b := odd_non_div_by_5.card
 
   have size_calculation : 2 + b > 3 := by
-    omega
+    lia
 
   have exists_odd_x_non_div_by_3_5 : ∃ x ∈ s1 ∪ s2, ¬ 3 ∣ x ∧ ¬ 5 ∣ x ∧ ¬ 2 ∣ x := by
     obtain ⟨x, ⟨x_in_odd_s, non_div_3, non_div_5⟩⟩ := subsets_must_overlap_pigeonhole
@@ -431,7 +421,7 @@ lemma contains_one_or_zero (n : ℕ) (s1 s2 : Finset ℕ) (partition : s1 ∪ s2
 lemma n_eq_1_of_contains_one
   (n : ℕ) (n_not_zero : n ≠ 0) (contains_one : 1 ∈ Finset.Icc n (n + 5)) : n = 1 := by
   simp_all only [ne_eq, Finset.mem_Icc, le_add_iff_nonneg_left, zero_le, and_true]
-  omega
+  lia
 
 lemma diffs_of_disjoint (t s w : Finset ℕ) (t_subst_s : t ⊆ s) (disjoint: Disjoint t w) : t ⊆ s \ w := by
   simp only [Finset.subset_sdiff, and_self, t_subst_s, disjoint]
@@ -457,17 +447,7 @@ lemma contradiction_of_finset_icc_1_6 (s1 s2 : Finset ℕ) (partition : s1 ∪ s
       have five_not_in_s2 : Disjoint s2 {5} := by
         have s1_s2_disjoint : Disjoint s1 s2 := Finset.disjoint_iff_inter_eq_empty.mpr disjoint
         simp_all only [Finset.disjoint_singleton_right]
-        intro five_in_s2
-        dsimp[Disjoint] at s1_s2_disjoint
-        have five_set_in_s1 : {5} ⊆ s1 := by
-          simp_all only [Finset.singleton_subset_iff]
-        have five_set_in_s2 : {5} ⊆ s2 := by
-          simp_all only [Finset.singleton_subset_iff]
-        have set_five_in_empty := s1_s2_disjoint five_set_in_s1 five_set_in_s2
-        have : ({5} : Finset ℕ).Nonempty := by
-          simp_all only [Finset.singleton_subset_iff, Finset.singleton_nonempty]
-        apply not_empty_subst_of_nonempty {5} this
-        exact set_five_in_empty
+        exact s1_s2_disjoint.notMem_of_mem_left_finset five_in_s1
       have explicit_interval: Finset.Icc 1 6 = {1, 2, 3, 4, 5, 6} := by
         rfl
       have := diffs_of_disjoint s2 (s1 ∪ s2) {5} s2_in_s1_s2 five_not_in_s2
@@ -476,8 +456,7 @@ lemma contradiction_of_finset_icc_1_6 (s1 s2 : Finset ℕ) (partition : s1 ∪ s
       simp_all only [Finset.disjoint_singleton_right]
       exact this
     have others : ∀ k ∈ s2, ¬ 5 ∣ k := by
-      intro k
-      intro k_in_s2
+      intro k k_in_s2
       have k_in_explicit_s2 : k ∈ ({1, 2, 3, 4, 6} : Finset ℕ) := by
         exact mem_of_subst k s2 {1, 2, 3, 4, 6} k_in_s2 explicit_s2
       intro five_div_k
@@ -501,17 +480,7 @@ lemma contradiction_of_finset_icc_1_6 (s1 s2 : Finset ℕ) (partition : s1 ∪ s
           exact disjoint
         have s2_s1_disjoint : Disjoint s2 s1 := Finset.disjoint_iff_inter_eq_empty.mpr this
         simp_all only [Finset.disjoint_singleton_right]
-        intro five_in_s
-        dsimp[Disjoint] at s2_s1_disjoint
-        have five_set_in_s1 : {5} ⊆ s1 := by
-          simp_all only [Finset.singleton_subset_iff]
-        have five_set_in_s2 : {5} ⊆ s2 := by
-          simp_all only [Finset.singleton_subset_iff]
-        have set_five_in_empty := s2_s1_disjoint five_set_in_s2 five_set_in_s1
-        have : ({5} : Finset ℕ).Nonempty := by
-          simp_all only [Finset.singleton_subset_iff, Finset.singleton_nonempty]
-        apply not_empty_subst_of_nonempty {5} this
-        exact set_five_in_empty
+        exact s2_s1_disjoint.notMem_of_mem_left_finset five_in_s2
       have explicit_interval: Finset.Icc 1 6 = {1, 2, 3, 4, 5, 6} := by
         rfl
       have := diffs_of_disjoint s1 (s2 ∪ s1) {5} s1_in_s2_s1 five_not_in_s1
@@ -521,13 +490,12 @@ lemma contradiction_of_finset_icc_1_6 (s1 s2 : Finset ℕ) (partition : s1 ∪ s
       simp_all only [Finset.disjoint_singleton_right]
       exact this
     have others : ∀ k ∈ s1, ¬ 5 ∣ k := by
-      intro k
-      intro k_in_s1
+      intro k k_in_s1
       have k_in_explicit_s1 : k ∈ ({1, 2, 3, 4, 6} : Finset ℕ) := by
         exact mem_of_subst k s1 {1, 2, 3, 4, 6} k_in_s1 explicit_s1
       intro five_div_k
       simp_all only [Finset.mem_insert, Finset.mem_singleton]
-      omega
+      lia
 
     have five_div_prod_s2 := Finset.dvd_prod_of_mem (λ n : ℕ => n) five_in_s2
     have five_div_prod_s1 : 5 ∣ ∏ m ∈ s1, m := by
