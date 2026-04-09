@@ -6,6 +6,7 @@ Authors:
 
 import Mathlib
 
+import Compfiles.Imo2000P5Proof
 import ProblemExtraction
 
 problem_file { tags := [.Algebra, .NumberTheory] }
@@ -20,11 +21,12 @@ Does there exist a positive integer n such that n has exactly
 
 namespace Imo2000P5
 
-determine solution : Bool := sorry
+determine solution : Bool := true
 
 problem imo2000P5 :
-    ∃ n, 0 < n ∧ n.primeFactors.card = 2000 ∧ n ∣ 2 ^ n + 1
+    (∃ n, 0 < n ∧ n.primeFactors.card = 2000 ∧ n ∣ 2 ^ n + 1)
     ↔ solution := by
-  sorry
+  simp only [solution, iff_true]
+  exact exists_dvd_two_pow_add_one 2000
 
 end Imo2000P5

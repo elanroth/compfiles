@@ -60,10 +60,16 @@ structure NordicSquare.UphillPath {n : ℕ} (ns : NordicSquare n) where
   adjacent : cells.IsChain Adjacent
   increasing : cells.IsChain fun x y ↦ (ns x : ℕ) < (ns y : ℕ)
 
-determine answer : ℕ+ → ℕ := sorry
+determine answer : ℕ+ → ℕ := fun n => 2 * (n : ℕ) ^ 2 - 2 * (n : ℕ) + 1
 
 problem imo2022_p6 {n : ℕ+} :
     IsLeast {k : ℕ | ∃ ns : NordicSquare n, #ns.UphillPath = k} (answer n) := by
+  /-
+  Proof plan for Aristotle:
+  1) Lower bound: every Nordic square has at least `2*n^2 - 2*n + 1` uphill paths.
+  2) Construction: exhibit a Nordic square achieving exactly that bound.
+  3) Conclude `IsLeast` by combining (1) and (2).
+  -/
   sorry
 
 end Imo2022P6

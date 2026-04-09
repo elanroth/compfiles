@@ -26,6 +26,12 @@ problem imo1998_p6
     (f : ℕ+ → ℕ+)
     (h : ∀ s t, f (t^2 * f s) = s * (f t)^2) :
     IsLeast {n : ℕ | n = f 1998} solution := by
+  /-
+  Proof plan for Aristotle:
+  1) Prove lower bound `120 ≤ f 1998` for every admissible `f`.
+  2) Construct a witness function `f` satisfying `h` and `f 1998 = 120`.
+  3) Combine the two parts into `IsLeast`.
+  -/
   sorry
 
 
