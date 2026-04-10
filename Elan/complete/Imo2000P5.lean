@@ -183,7 +183,7 @@ lemma quotient_val_q {n q : ℕ} (hq_prime : Nat.Prime q) (hq_odd : q ≠ 2)
     exact Nat.prime_iff.mp hq_prime;
   simp_all +decide [ emultiplicity ];
   split_ifs at * <;> norm_cast at *;
-  · grind;
+  · aesop;
   · simp_all +decide [ FiniteMultiplicity ];
     rename_i h₁ h₂; specialize h₂ ( Nat.log q ( 2 ^ n + 1 ) ) ; exact absurd h₂ ( Nat.not_dvd_of_pos_of_lt ( by positivity ) ( Nat.lt_pow_succ_log_self hq_prime.one_lt _ ) ) ;
   · simp_all +decide [ FiniteMultiplicity, Nat.finiteMultiplicity_iff ]
