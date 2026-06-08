@@ -9,7 +9,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: install elan
         run: |
@@ -21,7 +21,7 @@ jobs:
 
       - name: restore build cache
         id: restore-build-cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: .lake
           key: build-${{ hashFiles('lakefile.toml', 'lake-manifest.json', 'lean-toolchain') }}

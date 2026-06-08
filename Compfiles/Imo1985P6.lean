@@ -204,8 +204,7 @@ lemma aux_7
         rw [hd₃, zero_mul]
         exact Real.toNNReal_zero
     rw [ha₁, ha₂]
-    exact _root_.zero_le b
-
+    exact zero_le
 
 lemma aux_8
   (f : ℕ → NNReal → ℝ)
@@ -763,7 +762,7 @@ lemma aux_unique_top
       exact hd₁ i a b ha₀
     · refine one_le_pow₀ ?_
       norm_num
-  · push_neg at hz₀
+  · push Not at hz₀
     have hz₁: 0 < fd a b i := by exact hd₁ i a b ha₀
     have hz₂: 0 < Real.log (z / fd a b i) := by
       refine Real.log_pos ?_
@@ -951,7 +950,7 @@ lemma aux_unique
         norm_cast
         exact Nat.le_add_left 1 (↑N + 2)
   · have hy₂: y < x := by
-      push_neg at hy₁
+      push Not at hy₁
       exact lt_of_le_of_ne hy₁ hc₀.symm
     have hy₃: Filter.Tendsto (fd y x) Filter.atTop Filter.atTop := by
       refine hfd₂ y x hy₂ ?_
@@ -1227,18 +1226,17 @@ problem imo_1985_p6
     exact imo_1985_p6_nnreal fn (fun x ↦ h₀ ↑x) fun n x ↦ h₁ n ↑x
   obtain ⟨a, ha₀, ha₁⟩ := h₂
   refine ⟨a, ha₀, fun y hy₀ ↦ ?_⟩
-  have hy₁: 0 ≤ y.toNNReal := by exact zero_le y.toNNReal
   by_cases hy₂: 0 ≤ y
   · refine (Real.toNNReal_eq_toNNReal_iff hy₂ ?_).mp ?_
     · exact NNReal.zero_le_coe
     · rw [Real.toNNReal_coe]
       refine ha₁ y.toNNReal ?_
       intro n hn₀
-      rw [hfn₁ n _ hn₀ hy₁, hfn₁ (n + 1) _ (by lia) hy₁]
+      rw [hfn₁ n _ hn₀ zero_le, hfn₁ (n + 1) _ (by lia) zero_le]
       rw [Real.coe_toNNReal y hy₂]
       exact hy₀ n hn₀
   · exfalso
-    push_neg at hy₂
+    push Not at hy₂
     have hy₃: f 1 y < 0 := by
       rw [h₀]
       exact hy₂

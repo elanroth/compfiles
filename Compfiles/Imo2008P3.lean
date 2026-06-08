@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Manuel Candales
 -/
 import Mathlib.Data.Real.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib
 import Mathlib.Data.Nat.Prime.Basic
 import Mathlib.NumberTheory.PrimesCongruentOne
 import Mathlib.NumberTheory.LegendreSymbol.QuadraticReciprocity
@@ -44,7 +44,7 @@ Then `p = 2n + k ≥ 2n + √(p - 4) = 2n + √(2n + k - 4) > √(2n)` and we ar
 
 theorem p_lemma (p : ℕ) (hpp : Nat.Prime p) (hp_mod_4_eq_1 : p ≡ 1 [MOD 4]) (hp_gt_20 : p > 20) :
     ∃ n : ℕ, p ∣ n ^ 2 + 1 ∧ (p : ℝ) > 2 * n + sqrt (2 * n) := by
-  haveI := Fact.mk hpp
+  have := Fact.mk hpp
   have hp_mod_4_ne_3 : p % 4 ≠ 3 := by linarith [show p % 4 = 1 from hp_mod_4_eq_1]
   obtain ⟨y, hy⟩ := ZMod.exists_sq_eq_neg_one_iff.mpr hp_mod_4_ne_3
   let m := ZMod.valMinAbs y

@@ -70,7 +70,7 @@ theorem exists_between_and_separated {ι : Type*} (S : Finset ι) (f : ι → �
       exact disjoint hi hj
     rw [card_univ, Fintype.card_fin] at this
     lia
-  push_neg at h; simp only [mem_univ, Set.mem_Ioo, mem_filter, and_imp, true_and] at h
+  push Not at h; simp only [mem_univ, Set.mem_Ioo, mem_filter, and_imp, true_and] at h
   -- the `i`th interval in disjoint with `(f '' S) ∩ (a, b)`
   obtain ⟨i, h⟩ := h; unfold rel at h
   -- use the midpoint of the `i`th interval
@@ -92,11 +92,11 @@ theorem exists_between_and_separated {ι : Type*} (S : Finset ι) (f : ι → �
     · by_cases hb : f p < b
       · exact h p hp ha hb
       · apply Set.notMem_Ioo_of_ge
-        push_neg at hb
+        push Not at hb
         rw [AffineMap.lineMap_apply_ring']
         linear_combination ineq₁ * (b - a) + hb
     · apply Set.notMem_Ioo_of_le
-      push_neg at ha
+      push Not at ha
       grw [ha]
       rw [AffineMap.lineMap_apply_ring', le_add_iff_nonneg_left]
       positivity
@@ -171,9 +171,10 @@ theorem exists_affine_between_and_separated {ι : Type*} (S : Finset ι) (f : ι
   calc
     _ ≤ ‖a -ᵥ b‖ * ((j - i) / (2 * ↑(⌊n - 1⌋₊ + 1))) := by
       gcongr
-      · linarith only [hij]
-      · push_cast; rw [← le_sub_iff_add_le]
-        refine Nat.floor_le (by grw [← hS]; simp)
+      push_cast; rw [← le_sub_iff_add_le]
+      refine Nat.floor_le ?_
+      grw [← hS]
+      simp
     _ ≤ |x * ‖a -ᵥ b‖ - ⟪a -ᵥ b, a -ᵥ f p⟫| := hx
     _ = |⟪a -ᵥ b, f p -ᵥ (AffineMap.lineMap a b) (x / ‖a -ᵥ b‖)⟫| := by
       congr 1
@@ -277,7 +278,7 @@ problem imo2020_p6 : ∃ c : ℝ, 0 < c ∧ ∀ {n : ℕ}, 1 < n → ∀ {S : Fi
     norm_num
     linarith only
 
-  push_neg at h_dist
+  push Not at h_dist
   -- If the points are closer than `n^(2/3)` together, then we can solve the problem by
   -- picking the furthest such points `a` and `b`, and choosing the best perpendiculer line
   -- through the segment of width `1/2` at the edge.

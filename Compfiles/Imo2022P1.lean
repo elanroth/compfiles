@@ -164,7 +164,7 @@ lemma List.splitBy_append' {α : Type u} {r : α → α → Bool} {a b : List α
       rw [List.dropLast_concat_getLast, List.singleton_append, List.cons_head_tail]
       rw [List.flatten_append, List.flatten_splitBy, List.flatten_splitBy]
     · rw [List.mem_append, List.mem_append, List.mem_singleton]
-      push_neg
+      push Not
       constructorm* _ ∧ _
       · have h := List.nil_notMem_splitBy r a
         contrapose! h
@@ -1500,7 +1500,7 @@ lemma List.blocks_operation_middle_segment {α : Type u} [DecidableEq α] (l : L
         congr
         exact Nat.min_add_right_self
       · rw [List.drop_take]
-        lia
+        rw [Nat.add_sub_cancel_left]
     · apply List.chainLeft_eq
 
 lemma List.blocks_operation_left_head? {α : Type u} [DecidableEq α] (l : List α) (k : Fin l.length) (h : (List.chainLeft l k).val ≠ 0)

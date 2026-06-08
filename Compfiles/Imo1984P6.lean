@@ -228,7 +228,7 @@ problem imo_1984_p6
   by_cases hkm: k ≤ m
   · exfalso
     exact mylemma_k_le_m_alt a b c d k m h₂ h₃ h₄ h₅ hkm
-  · push_neg at hkm
+  · push Not at hkm
     have h₆: b * 2 ^ m - a * 2 ^ k = (b - a) * (b + a) := by
       have h₆₀: c = 2 ^ m - b := by exact (tsub_eq_of_eq_add_rev (id h₅.symm)).symm
       have h₆₁: d = 2 ^ k - a := by exact (tsub_eq_of_eq_add_rev (id h₄.symm)).symm
@@ -328,6 +328,8 @@ problem imo_1984_p6
         · rw [add_comm] at h₉₁
           symm
           rw [← Nat.pow_succ', Nat.succ_eq_add_one]
+          rw [show 2 * m - 2 + 1 = m * 2 - 1 from by lia,
+            show 2 * m - 2 = m * 2 - 2 from by lia]
           lia
         · refine le_of_lt ?_
           rw [mul_two, Nat.add_sub_assoc, Nat.pow_add, mul_comm (2 ^ m) _]
@@ -358,7 +360,7 @@ problem imo_1984_p6
           rw [h₉, hc₄, Nat.pow_succ']
           exact even_two_mul (2 ^ (2 * m - k - 3))
         exact hc₂ h₁.1
-    · push_neg at hk2m
+    · push Not at hk2m
       exfalso
       have ha: a = 0 := by
         rw [h₉]

@@ -205,15 +205,17 @@ theorem C_mem_ωA : cfg.C ∈ cfg.ωA := rfl
 theorem C_mem_ωB : cfg.C ∈ cfg.ωB := rfl
 
 theorem C'_mem_ωA : cfg.C' ∈ cfg.ωA := by
-  simpa only [dist_comm cfg.A] using
-    (dist_reflection_eq_of_mem line[ℝ, cfg.A, cfg.B]
-    (left_mem_affineSpan_pair _ _ _) cfg.C)
+  show dist cfg.C' cfg.A = dist cfg.C cfg.A
+  rw [dist_comm cfg.C' cfg.A, dist_comm cfg.C cfg.A, cfg.C'_def]
+  exact dist_reflection_eq_of_mem line[ℝ, cfg.A, cfg.B]
+    (left_mem_affineSpan_pair _ _ _) cfg.C
 
 theorem C'_mem_ωB : cfg.C' ∈ cfg.ωB :=
   cfg.symm_C' ▸ cfg.symm.C'_mem_ωA
 
 theorem XA_lt_radius_ωA : dist cfg.X cfg.A < cfg.ωA.radius := by
   have : dist cfg.C' cfg.A = dist cfg.C cfg.A := cfg.C'_mem_ωA
+  show dist cfg.X cfg.A < dist cfg.C cfg.A
   simpa [this] using cfg.sbtw_CXC'.dist_lt_max_dist cfg.A
 
 theorem XB_lt_radius_ωB : dist cfg.X cfg.B < cfg.ωB.radius :=
@@ -370,7 +372,7 @@ theorem isTangentAt_AL : s.IsTangentAt cfg.L line[ℝ, cfg.A, cfg.L] := by
     (s.radius_nonneg_of_mem hs.K_mem) cfg.A_mem_line_KK' hs.K_mem hs.K'_mem ?_
   by_contra! h
   have : Collinear ℝ {cfg.K, cfg.A, cfg.K'} := by
-    convert cfg.sbtw_AKK'.wbtw.collinear using 1
+    convert! cfg.sbtw_AKK'.wbtw.collinear using 1
     grind
   replace : Sbtw ℝ cfg.K cfg.A cfg.K' :=
     this.sbtw_of_dist_eq_of_dist_lt hs.K_mem h hs.K'_mem cfg.sbtw_KXK'.left_ne_right

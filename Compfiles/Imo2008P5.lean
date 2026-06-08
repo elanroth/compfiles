@@ -134,7 +134,7 @@ lemma even_subsets_card {α : Type} [Fintype α] :
                 Fintype.card (Finset α) := by
       have := @Fintype.card_subtype_compl (Finset α) _ (fun s => Even s.card) _ _
       have := Fintype.card_subtype_le (fun s : Finset α => Even s.card)
-      lia
+      omega
     rw [Fintype.card_finset] at hsum
     have h1 : 2 ^ Fintype.card α = 2 * 2 ^ (Fintype.card α - 1) := by
       cases hn : Fintype.card α with
@@ -160,7 +160,7 @@ lemma claim (n k : ℕ) (hn : 0 < n) (hnk : n ≤ k) (_he : Even (k - n))
   have hM : ∀ j : Fin k, (f.val j).val < n := by
     intro j
     obtain ⟨_, hM⟩ := f.property
-    by_contra h; push_neg at h; exact hM (f.val j) h j rfl
+    by_contra h; push Not at h; exact hM (f.val j) h j rfl
   have hc : ∑ i : Fin n, c i = k := by
     obtain ⟨⟨_, _⟩, hMseq⟩ := f.property
     let g : Fin k → Fin n := fun j ↦ ⟨(f.val j).val, hM j⟩
@@ -390,9 +390,9 @@ lemma lemma1 (α : Type) (A B : Set α) (hA : A.Finite) (hB : B.Finite)
     (n : Nat) (h1 : ∀ b, Set.ncard { a | f a = b } = n)
     : B.ncard * n = A.ncard := by
   classical
-  haveI hfa : Fintype {x // A x} := hA.fintype
-  haveI hfb : Fintype {x // B x} := hB.fintype
-  haveI : ∀ b, Fintype { a : {x // A x} // f a = b } := fun b =>
+  have hfa : Fintype {x // A x} := hA.fintype
+  have hfb : Fintype {x // B x} := hB.fintype
+  have : ∀ b, Fintype { a : {x // A x} // f a = b } := fun b =>
     have : Fintype { x // A x } := hfa; setFintype fun x ↦ f x = b
   have h2 : ∀ b, Fintype.card { a : {x // A x} // f a = b } = n := by
     intro b; rw [Fintype.card_eq_nat_card]; exact_mod_cast h1 b

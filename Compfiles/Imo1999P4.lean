@@ -110,8 +110,7 @@ problem imo1999_p4 (n p : ℕ) :
         exact hp2
       · right
         rcases exists_least_prime_factor hn1 with ⟨q, ⟨hq₁, hq₂, hq₃⟩⟩
-        haveI: Fact (Nat.Prime p) := { out := hp }
-        haveI: Fact (Nat.Prime q) := { out := hq₁ }
+        have : Fact (Nat.Prime p) := { out := hp }
         have hp' := hp.two_le
         have hq' := hq₁.two_le
         have h' : n ∣ (p - 1) ^ n + 1 := dvd_trans (dvd_pow_self n (by lia:_)) h
@@ -128,7 +127,7 @@ problem imo1999_p4 (n p : ℕ) :
           contrapose! hp_odd
           exact Nat.not_odd_iff_even.mpr hn'
         have hq2 : ¬q = 2 := by
-          push_neg
+          push Not
           exact Odd.ne_two_of_dvd_nat hn_odd hq₂
         have hqp := aux₁ hq₁ (by lia:_) (by lia:_) (aux₂ hq₁ hq₃) hq''
         rw [Nat.sub_add_cancel (by lia:_), Nat.prime_dvd_prime_iff_eq hq₁ hp] at hqp
@@ -171,13 +170,17 @@ problem imo1999_p4 (n p : ℕ) :
           have hqq'' : qq ∣ 8 ^ m + 1 := dvd_trans (dvd_mul_of_dvd_left (dvd_pow hqq₂ (by lia:_)) 9) h
           have hq1' := hqq₁.two_le
           have hqq2 : ¬qq = 2 := by
-            push_neg
+            push Not
             exact Odd.ne_two_of_dvd_nat hn_odd (dvd_trans hqq₂ hmn)
           have hq'p := aux₁ hqq₁ (by lia:_) (by lia:_) (aux₂ hqq₁ hqq₃) hqq''
           norm_num at hq'p
           have hqq_le := Nat.le_of_dvd (by norm_num:_) hq'p
           have hqq3 : qq = 3 := by
             interval_cases qq <;> norm_num at hq'p <;> norm_num at hqq₁ ; norm_num
+          have : Fact (Nat.Prime 3) := ⟨by norm_num⟩
+          have hm0 : m ≠ 0 := by rintro rfl; lia
+          have h3m : (3 : ℕ) ∣ m := hqq3 ▸ hqq₂
+          have hv1 : 1 ≤ padicValNat 3 m := one_le_padicValNat_of_dvd hm0 h3m
           lia
 
 end Imo1999P4

@@ -60,6 +60,7 @@ import Compfiles.Imo1975P1
 import Compfiles.Imo1975P2
 import Compfiles.Imo1975P4
 import Compfiles.Imo1975P5
+import Compfiles.Imo1975P6
 import Compfiles.Imo1976P2
 import Compfiles.Imo1976P4
 import Compfiles.Imo1976P6
@@ -68,6 +69,7 @@ import Compfiles.Imo1977P4
 import Compfiles.Imo1977P5
 import Compfiles.Imo1977P6
 import Compfiles.Imo1978P1
+import Compfiles.Imo1978P3
 import Compfiles.Imo1978P5
 import Compfiles.Imo1978P6
 import Compfiles.Imo1979P1
@@ -96,8 +98,10 @@ import Compfiles.Imo1987P1
 import Compfiles.Imo1987P4
 import Compfiles.Imo1987P6
 import Compfiles.Imo1988P3
+import Compfiles.Imo1988P4
 import Compfiles.Imo1988P6
 import Compfiles.Imo1989P1
+import Compfiles.Imo1989P3
 import Compfiles.Imo1989P5
 import Compfiles.Imo1989P6
 import Compfiles.Imo1990P3
@@ -121,6 +125,7 @@ import Compfiles.Imo1996P3
 import Compfiles.Imo1996P4
 import Compfiles.Imo1996P6
 import Compfiles.Imo1997P3
+import Compfiles.Imo1997P4
 import Compfiles.Imo1997P5
 import Compfiles.Imo1998P2
 import Compfiles.Imo1998P3
@@ -143,6 +148,7 @@ import Compfiles.Imo2003P1
 import Compfiles.Imo2003P2
 import Compfiles.Imo2003P6
 import Compfiles.Imo2004P2
+import Compfiles.Imo2004P4
 import Compfiles.Imo2004P6
 import Compfiles.Imo2005P2
 import Compfiles.Imo2005P3
@@ -152,15 +158,19 @@ import Compfiles.Imo2006P4
 import Compfiles.Imo2006P5
 import Compfiles.Imo2007P1
 import Compfiles.Imo2007P5
+import Compfiles.Imo2007P6
 import Compfiles.Imo2008P2
 import Compfiles.Imo2008P3
 import Compfiles.Imo2008P4
 import Compfiles.Imo2008P5
+import Compfiles.Imo2009P1
+import Compfiles.Imo2009P3
 import Compfiles.Imo2009P5
 import Compfiles.Imo2009P6
 import Compfiles.Imo2010P1
 import Compfiles.Imo2010P3
 import Compfiles.Imo2010P5
+import Compfiles.Imo2010P6
 import Compfiles.Imo2011P3
 import Compfiles.Imo2011P5
 import Compfiles.Imo2012P2
@@ -170,10 +180,12 @@ import Compfiles.Imo2012P6
 import Compfiles.Imo2013P1
 import Compfiles.Imo2013P5
 import Compfiles.Imo2014P1
+import Compfiles.Imo2014P2
 import Compfiles.Imo2014P4
 import Compfiles.Imo2015P2
 import Compfiles.Imo2015P5
 import Compfiles.Imo2015P6
+import Compfiles.Imo2016P2
 import Compfiles.Imo2016P4
 import Compfiles.Imo2016P5
 import Compfiles.Imo2017P1
@@ -214,6 +226,7 @@ import Compfiles.Imo2024P6
 import Compfiles.Imo2025P1
 import Compfiles.Imo2025P2
 import Compfiles.Imo2025P3
+import Compfiles.Imo2025P4
 import Compfiles.Imo2025P5
 import Compfiles.Imo2025P6
 import Compfiles.India1998P1
@@ -232,6 +245,7 @@ import Compfiles.Singapore2019P7
 import Compfiles.Singapore2019P11
 import Compfiles.UK2024R1P1
 import Compfiles.UK2024R1P2
+import Compfiles.UK2024R1P4
 import Compfiles.UpperLowerContinuous
 import Compfiles.Usa1972P1
 import Compfiles.Usa1972P3
@@ -240,14 +254,17 @@ import Compfiles.Usa1973P4
 import Compfiles.Usa1974P1
 import Compfiles.Usa1974P2
 import Compfiles.Usa1976P3
+import Compfiles.Usa1977P1
 import Compfiles.Usa1978P1
 import Compfiles.Usa1979P1
 import Compfiles.Usa1980P5
 import Compfiles.Usa1981P5
 import Compfiles.Usa1982P4
 import Compfiles.Usa1983P5
+import Compfiles.Usa1984P5
 import Compfiles.Usa1985P1
 import Compfiles.Usa1987P1
+import Compfiles.Usa1988P4
 import Compfiles.Usa1989P1
 import Compfiles.Usa1989P5
 import Compfiles.Usa1990P2
@@ -256,6 +273,7 @@ import Compfiles.Usa1992P2
 import Compfiles.Usa1993P1
 import Compfiles.Usa1993P3
 import Compfiles.Usa1996P1
+import Compfiles.Usa1996P6
 import Compfiles.Usa1997P5
 import Compfiles.Usa1998P1
 import Compfiles.Usa1998P3
@@ -286,6 +304,7 @@ import Compfiles.Usa2017P5
 import Compfiles.Usa2017P6
 import Compfiles.Usa2018P1
 import Compfiles.Usa2019P1
+import Compfiles.Usa2020P3
 import Compfiles.Usa2022P1
 import Compfiles.Usa2022P3
 import Compfiles.Usa2022P4
@@ -293,4 +312,5 @@ import Compfiles.Usa2023P2
 import Compfiles.Usa2023P4
 import Compfiles.Usa2023P5
 import Compfiles.Usa2024P2
+import Compfiles.Usa2026P1
 import Compfiles.ZeroesOnesAndTwos

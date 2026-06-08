@@ -244,7 +244,7 @@ lemma card_lt_M_of_M_le {n : ℕ} (h : M a N ≤ n) :
   have ha : M a N ≤ a (Nat.nth (a · = n) (M a N - 1)) := (Nat.nth_mem _ hin').symm ▸ h
   refine ⟨ha, ?_⟩
   suffices H : a (Nat.nth (fun x ↦ a x = n) (M a N - 1) + 1) = M a N from Nat.le_of_eq H.symm
-  convert hc.apply_nth_add_one_eq hin' (N_lt_of_M_le_apply ha).le using 1
+  convert! hc.apply_nth_add_one_eq hin' (N_lt_of_M_le_apply ha).le using 1
 
 lemma bddAbove_setOf_infinite_setOf_apply_eq : BddAbove {m | {i | a i = m}.Infinite} := by
   refine ⟨M a N, fun x hi ↦ ?_⟩
@@ -403,7 +403,7 @@ lemma not_medium_of_N'aux_lt {j : ℕ} (h : N'aux a N < j) : ¬Medium a (a j) :=
     rintro i ⟨hk, -⟩
     rwa [hc.finite_setOf_apply_eq_iff_not_small (by lia), Small, not_le]
   exact fun hm ↦ notMem_of_csSup_lt (le_sup_left.trans_lt h)
-    (hf.subset fun i hi ↦ (by simpa [s] using hi)).bddAbove hm
+    (hf.subset fun i hi ↦ (by simpa [s, Medium] using hi)).bddAbove hm
 
 lemma small_or_big_of_N'aux_lt {j : ℕ} (h : N'aux a N < j) : Small a (a j) ∨ Big a (a j) := by
   have _ := hc.not_medium_of_N'aux_lt h
@@ -542,7 +542,7 @@ lemma apply_sub_one_big_of_apply_small_of_N'_lt {i : ℕ} (h : Small a (a i)) (h
 
 lemma apply_sub_two_small_of_apply_small_of_N'_lt {i : ℕ} (h : Small a (a i)) (hN' : N' a N < i) :
     Small a (a (i - 2)) := by
-  convert hc.apply_sub_one_small_of_apply_big_of_N'_le
+  convert! hc.apply_sub_one_small_of_apply_big_of_N'_le
     (hc.apply_sub_one_big_of_apply_small_of_N'_lt h hN') (by lia) using 1
 
 lemma N_add_one_lt_apply_of_apply_big_of_N'_le {i : ℕ} (h : Big a (a i)) (hN' : N' a N ≤ i) :
@@ -754,8 +754,8 @@ lemma exists_apply_sub_two_eq_of_apply_eq {i j : ℕ} (hi : N' a N + 2 < i) (hij
           congr 1
           ext t
           simp only [Finset.mem_filter, Finset.mem_range]
-          refine ⟨fun ⟨htj, htj'⟩ ↦ ⟨?_, by convert htj' using 1⟩,
-            fun ⟨htj, htj'⟩ ↦ ⟨by lia, by convert htj' using 1⟩⟩
+          refine ⟨fun ⟨htj, htj'⟩ ↦ ⟨?_, by convert! htj' using 1⟩,
+            fun ⟨htj, htj'⟩ ↦ ⟨by lia, by convert! htj' using 1⟩⟩
           by_contra htj''
           have ht1 : t = j - 1 := by lia
           subst ht1
@@ -827,10 +827,14 @@ lemma card_filter_apply_eq_Ico_add_p_le_one (n : ℕ) {j : ℕ} (hjs : Small a j
   simp only [Finset.mem_filter, Finset.mem_Ico] at hx hy
   rcases lt_trichotomy x y with hxy | rfl | hxy
   · replace h := h.2 (y - n) x hx.1.1 (by lia) (hx.2 ▸ hjs)
-    lia
+    have hny : n + (y - n) = y := by lia
+    rw [hny, hy.2, hx.2] at h
+    exact absurd (h rfl) (by lia)
   · rfl
   · replace h := h.2 (x - n) y hy.1.1 (by lia) (hy.2 ▸ hjs)
-    lia
+    have hnx : n + (x - n) = x := by lia
+    rw [hnx, hx.2, hy.2] at h
+    exact absurd (h rfl) (by lia)
 
 lemma apply_add_p_eq {n : ℕ} (hn : N' a N + 2 < n) (hs : Small a (a n)) : a (n + p a n) = a n := by
   rcases hc.exists_mem_Ico_small_and_apply_add_p_eq n with ⟨i, hiIco, his, hin⟩
@@ -924,7 +928,7 @@ lemma exists_p_eq : ∃ b c, ∀ n, b < n → p a (N' a N + 2 * n) = c := by
       · have hs : Small a (a (N' a N + 2 * (2 + t + u))) := by
           rw [hc.small_apply_N'_add_iff_even]
           simp
-        convert hc.p_apply_le_p_apply_add_two (by lia) hs using 1
+        convert! hc.p_apply_le_p_apply_add_two (by lia) hs using 1
   refine ⟨1 + t, c, fun n hn ↦ ?_⟩
   rw [show n = 2 + t + (n - (2 + t)) by lia]
   exact heqc _

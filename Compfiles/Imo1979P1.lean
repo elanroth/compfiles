@@ -104,7 +104,7 @@ lemma lemma4 (n m : ℕ) (f : ℕ → ℚ) :
   rw [←Finset.sum_range_reflect (fun x ↦ f (n + (m + x)))]
   refine Finset.sum_congr rfl fun x hx => ?_
   rw [Finset.mem_range] at hx
-  lia
+  congr 1; lia
 
 lemma lemma9' (i : ℕ) (hi : i ∈ Finset.range 330) :
      (((∏ j ∈ Finset.range 330,
@@ -203,7 +203,7 @@ problem imo1979_p1 (p q : ℤ) (hp : 0 < p) (hq : 0 < q)
       intro H
       have := (Nat.Prime.dvd_mul hpp).mp H
       lia
-    exact Prime.not_dvd_finset_prod (Nat.prime_iff.mp hpp) h30
+    exact Prime.not_dvd_finsetProd (Nat.prime_iff.mp hpp) h30
   obtain ⟨p', rfl⟩ := Int.eq_ofNat_of_zero_le (le_of_lt hp)
   obtain ⟨q', rfl⟩ := Int.eq_ofNat_of_zero_le (le_of_lt hq)
   simp only [Int.cast_natCast] at h

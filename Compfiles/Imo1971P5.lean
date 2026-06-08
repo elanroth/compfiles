@@ -100,7 +100,7 @@ lemma finite₂ {S : Set Pt} (hS : S.Finite)
     ext p
     simp
     constructor <;> rintro ⟨s, hs, t, ht, hstp⟩ <;> use s <;> rw [and_iff_right hs]
-      <;> use t <;> rw [and_iff_right ht] <;> grind only
+      <;> use t <;> rw [and_iff_right ht] <;> tauto
   rw [h']
   apply Set.Finite.biUnion hS
   intro s hs
@@ -142,7 +142,7 @@ problem imo1971_p5 (m : ℕ) :
     have hd_set := (norm_one_infinity.diff ((finite₁ hS'₂).union (finite₂ hS'₂))).nonempty
     rw [← Set.diff_diff] at hd_set
     obtain ⟨d, ⟨hd₁, hd₂⟩, hd₃⟩ := hd_set
-    dsimp at hd₁ hd₂ hd₃; push_neg at hd₂ hd₃
+    dsimp at hd₁ hd₂ hd₃; push Not at hd₂ hd₃
     -- Define translated set S'' = S' + d
     set f := fun p ↦ p + d with hf
     set S'' := {p : Pt | ∃ p' ∈ S', p = p' + d} with hS''

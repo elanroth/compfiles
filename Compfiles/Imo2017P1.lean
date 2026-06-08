@@ -130,7 +130,7 @@ lemma aux_2_4
   · have hl₃: a x l = a x i + (l - i) * 3 := by
       exact aux_2_1 a ha₁ x i j l hx₀ hl₀ hl₁ hl₂
     grind
-  · push_neg at hlp
+  · push Not at hlp
     have hl₃: l = i := Nat.le_antisymm hlp hl₁
     rw [hl₃, hi₀]
     refine hh₄ c ?_ hh₃
@@ -180,7 +180,7 @@ lemma aux_2_5
         have hl₇: a x l % 3 = 0 := by lia
         rw [hl₆] at hl₇
         norm_num at hl₇
-    · push_neg at hl₄
+    · push Not at hl₄
       by_cases hl₅: a x l ≤ (c.sqrt + (2 : ℕ)) ^ (2 : ℕ)
       · obtain hl₆ | hl₆ := lt_or_eq_of_le hl₅
         · exact h₀ (a x l) 1 hl₄ hl₆
@@ -190,10 +190,10 @@ lemma aux_2_5
             have hl₇: (c.sqrt + (2 : ℕ)) % (3 : ℕ) = 2 := by lia
             rw [hl₇]
           lia
-      · push_neg at hl₅
+      · push Not at hl₅
         have h₃: a x l < (c.sqrt + (3 : ℕ)) ^ (2 : ℕ) := by lia
         exact h₀ (a x l) 2 hl₅ h₃
-  · push_neg at hlp
+  · push Not at hlp
     have hl₃: l = i := by exact Nat.le_antisymm hlp hl₁
     rw [hl₃, hi₀]
     refine hh₄ c ?_ hh₃
@@ -381,8 +381,12 @@ theorem aux_4
             refine hh₀ (d - 1) ?_
             exact Nat.le_sub_one_of_lt hd₃
           have hd₆ := ha₁ x (d - 1) hx₀
-          lia
-        · lia
+          rw [if_neg hd₅] at hd₆
+          rw [show d - 1 + 1 = d from by lia] at hd₆
+          rw [hd₆, hd₄]; lia
+        · have hdi : d = i := by lia
+          subst hdi
+          simp [c]
       rw [h₂ j hj₀, h₂ k hk₀]
       simp
       exact Nat.sub_lt_sub_right hj₀ hj₁
@@ -411,7 +415,7 @@ theorem aux_4
         bound
       · refine le_trans ?_ hj₀.2
         exact le_of_lt hk₀.2
-    · push_neg at h₃
+    · push Not at h₃
       have h₄: {n : ℕ | a x n = A ∧ i ≤ n} = ∅ := by
         refine Set.sep_eq_empty_iff_mem_false.mpr ?_
         simp
@@ -439,14 +443,19 @@ theorem aux_5
       exact Nat.sub_one_lt_of_lt hd₁
     have hd₅₀ := ha₁ x (d - 1) hx₀
     by_cases hd₄: IsSquare (a x (d - 1))
-    · have hd₅: a x d = (a x (d - 1)).sqrt := by lia
+    · have hd₅: a x d = (a x (d - 1)).sqrt := by
+        rw [if_pos hd₄] at hd₅₀
+        rwa [show d - 1 + 1 = d from by lia] at hd₅₀
       obtain ⟨t, ht₀⟩ := hd₄
       have ht₁: (t ^ (2 : ℕ)).sqrt = t := by exact Nat.sqrt_eq' t
       rw [hd₅, ht₀, ← pow_two, ht₁]
       rw [ht₀, ← pow_two] at hd₃
       exact Nat.Prime.dvd_of_dvd_pow Nat.prime_three hd₃
-    · lia
-  · push_neg at hd₁
+    · rw [if_neg hd₄] at hd₅₀
+      rw [show d - 1 + 1 = d from by lia] at hd₅₀
+      rw [hd₅₀]
+      lia
+  · push Not at hd₁
     interval_cases d
     rw [ha₀]
     exact hx₁

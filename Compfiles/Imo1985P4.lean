@@ -148,7 +148,7 @@ lemma pow_of_first_k_prime_mod_two_mem_two_pow_k_finset (k : ℕ) (n : ℕ) :
     pow_of_first_k_prime_mod_two k n ∈ two_pow_k_finset k := by
   rw [two_pow_k_finset, Finset.mem_pi]
   intro a ha
-  simp [pow_of_first_k_prime_mod_two, pow_of_kth_prime_mod_two]
+  simp only [pow_of_first_k_prime_mod_two, pow_of_kth_prime_mod_two, Finset.mem_range]
   apply Nat.mod_lt
   norm_num
 
@@ -203,7 +203,7 @@ lemma square_of_pow_of_first_k_prime_mod_two_eq {k m n : ℕ}
       have hmn''' := hmn'' h'k'
       simp only [pow_of_first_k_prime_mod_two] at hmn'''
       exact hmn'''
-    · push_neg at hk'
+    · push Not at hk'
       simp only [pow_of_kth_prime_mod_two]
       rw [padicValNat_eq_zero_of_divisors hm₀ hm hk']
       rw [padicValNat_eq_zero_of_divisors hn₀ hn hk']
@@ -238,7 +238,7 @@ lemma sqrt_prod_subset_ne_zero {M s : Finset ℕ} {k : ℕ}
   rw [hk]
   simp
   rw [Finset.prod_eq_zero_iff]
-  push_neg
+  push Not
   intro n hn
   exact Nat.ne_zero_iff_zero_lt.mpr (Mpos n (hs hn))
 

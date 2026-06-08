@@ -4,7 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: InternLM-MATH LEAN Formalizer v0.1, Goedel-Prover-V2
 -/
 
-import Mathlib
+import Mathlib.Data.Nat.Digits.Lemmas
+import Mathlib.Data.List.Palindrome
+import Mathlib.Data.PNat.Basic
+import Mathlib.Data.Set.Card
 
 import ProblemExtraction
 
@@ -27,124 +30,237 @@ namespace Imo1988P3
 
 determine solution : ℕ := 92
 
-/-- The unique function satisfying the IMO 1988 P3 recurrences. -/
-def g (n : Nat) : Nat :=
-  if n = 0 then 0
-  else if n = 1 then 1
-  else if n = 3 then 3
-  else if n % 2 = 0 then g (n / 2)
-  else if n % 4 = 1 then 2 * g ((n + 1) / 2) - g ((n - 1) / 4)
-  else 3 * g ((n - 1) / 2) - 2 * g ((n - 3) / 4)
-termination_by n
-decreasing_by all_goals omega
+snip begin
 
-lemma g_zero : g 0 = 0 := by
-  rw [g]
-  simp
+/-- Reverse the base-two digits, dropping leading zeroes. -/
+def binaryReverse (n : ℕ) : ℕ :=
+  Nat.ofDigits 2 (Nat.digits 2 n).reverse
 
-lemma g_one : g 1 = 1 := by
-  rw [g]
-  simp
+/-- Positive inputs have positive binary reversals. -/
+lemma binaryReverse_pos (n : ℕ+) : 0 < binaryReverse (n : ℕ) := by
+  unfold binaryReverse
+  have hn : (n : ℕ) ≠ 0 := Nat.ne_of_gt n.2
+  have hne : Nat.digits 2 (n : ℕ) ≠ [] := Nat.digits_ne_nil_iff_ne_zero.mpr hn
+  have hsum : 0 < ((Nat.digits 2 (n : ℕ)).reverse).sum := by
+    rw [List.sum_reverse]
+    exact List.sum_pos_iff_exists_pos_nat.mpr
+      ⟨_, List.getLast_mem hne, Nat.pos_of_ne_zero (Nat.getLast_digit_ne_zero 2 hn)⟩
+  exact lt_of_lt_of_le hsum (Nat.sum_le_ofDigits _ (by decide : 1 ≤ 2))
 
-lemma g_three : g 3 = 3 := by
-  rw [g]
-  simp
+/-- Binary reversal on positive naturals. -/
+def pnatBinaryReverse (n : ℕ+) : ℕ+ :=
+  ⟨binaryReverse (n : ℕ), binaryReverse_pos n⟩
 
-lemma g_even (n : Nat) (hn : n ≥ 2) (he : n % 2 = 0) : g n = g (n / 2) := by
-  rw [g]
-  simp [show n ≠ 0 by omega, show n ≠ 1 by omega, show n ≠ 3 by omega, he]
+/-- Binary palindromes. -/
+def BinaryPalindrome (n : ℕ) : Prop :=
+  (Nat.digits 2 n).Palindrome
 
-lemma g_mod4_1 (n : Nat) (hn : n ≥ 5) (hm : n % 4 = 1) :
-    g n = 2 * g ((n + 1) / 2) - g ((n - 1) / 4) := by
-  rw [g]
-  simp [show n ≠ 0 by omega, show n ≠ 1 by omega, show n ≠ 3 by omega,
-    show n % 2 ≠ 0 by omega, hm]
+instance instDecidablePredBinaryPalindrome : DecidablePred BinaryPalindrome := by
+  intro n
+  unfold BinaryPalindrome
+  infer_instance
 
-lemma g_mod4_3 (n : Nat) (hn : n ≥ 7) (hm : n % 4 = 3) :
-    g n = 3 * g ((n - 1) / 2) - 2 * g ((n - 3) / 4) := by
-  rw [g]
-  simp [show n ≠ 0 by omega, show n ≠ 1 by omega, show n ≠ 3 by omega,
-    show n % 2 ≠ 0 by omega, show ¬(n % 4 = 1) by omega]
+lemma binaryReverse_fixed_iff_binaryPalindrome (n : ℕ) :
+    binaryReverse n = n ↔ BinaryPalindrome n := by
+  unfold BinaryPalindrome
+  constructor
+  · intro h
+    apply List.Palindrome.of_reverse_eq
+    apply Nat.ofDigits_inj_of_len_eq (b := 2) (by decide : 1 < 2)
+    · simp
+    · intro l hl
+      exact Nat.digits_lt_base (by decide : 1 < 2) (by simpa using hl)
+    · intro l hl
+      exact Nat.digits_lt_base (by decide : 1 < 2) hl
+    · unfold binaryReverse at h
+      rw [h, Nat.ofDigits_digits]
+  · intro h
+    unfold binaryReverse
+    rw [h.reverse_eq]
+    exact Nat.ofDigits_digits 2 n
 
-lemma g_two : g 2 = 1 := by
-  simpa [g_one] using g_even 2 (by omega) (by norm_num)
+/-- The five recurrence clauses from the problem. -/
+structure SatisfiesRecurrence (f : ℕ+ → ℕ+) : Prop where
+  one : f 1 = 1
+  three : f 3 = 3
+  double : ∀ n, f (2 * n) = f n
+  four_one : ∀ n, f (4 * n + 1) + f n = 2 * f (2 * n + 1)
+  four_three : ∀ n, f (4 * n + 3) + 2 * f n = 3 * f (2 * n + 1)
 
-set_option maxHeartbeats 1000000 in
-set_option maxRecDepth 1000 in
-lemma f_eq_g
-    (f : ℕ+ → ℕ+)
-    (h₀ : f 1 = 1)
-    (h₁ : f 3 = 3)
-    (h₂ : ∀ n, f (2 * n) = f n)
-    (h₃ : ∀ n, f (4 * n + 1) + f n = 2 * f (2 * n + 1))
-    (h₄ : ∀ n, f (4 * n + 3) + 2 * f n = 3 * f (2 * n + 1))
-    (n : ℕ+) : (f n : ℕ) = g n := by
-  induction' n using PNat.strongInductionOn with n ih
-  by_cases hn : n.val ≤ 3
-  · have hcases : n = 1 ∨ n = 2 ∨ n = 3 := by
-      have hvals : (n : ℕ) = 1 ∨ (n : ℕ) = 2 ∨ (n : ℕ) = 3 := by
-        have hpos : 0 < (n : ℕ) := n.pos
-        omega
-      rcases hvals with h1 | h23
-      · exact Or.inl (PNat.eq h1)
-      · rcases h23 with h2 | h3
-        · exact Or.inr <| Or.inl (PNat.eq h2)
-        · exact Or.inr <| Or.inr (PNat.eq h3)
-    rcases hcases with rfl | rfl | rfl
-    · simpa [g_one] using congrArg PNat.val h₀
-    · have h_two : f 2 = 1 := by
-        exact (h₂ 1).trans h₀
-      simpa [g_two] using congrArg PNat.val h_two
-    · simpa [g_three] using congrArg PNat.val h₁
-  · by_cases h_even : n.val % 2 = 0
-    · obtain ⟨m, hm⟩ : ∃ m : ℕ+, n = 2 * m := by
-        exact PNat.dvd_iff.mpr (Nat.dvd_of_mod_eq_zero h_even)
-      subst hm
-      have hm_lt : (m : ℕ) < 2 * m := by
-        linarith [PNat.pos m]
-      have hm_ind : (f m : ℕ) = g m := by
-        exact ih m hm_lt
-      have hrec : (f (2 * m) : ℕ) = (f m : ℕ) := by
-        exact congrArg PNat.val (h₂ m)
-      calc
-        (f (2 * m) : ℕ) = (f m : ℕ) := hrec
-        _ = g m := hm_ind
-        _ = g (2 * m) := by
-          symm
-          simpa using g_even (2 * (m : ℕ)) (by omega) (by simp)
-    · obtain ⟨k, rfl | rfl⟩ : ∃ k : ℕ+, n = 4 * k + 1 ∨ n = 4 * k + 3 := by
-        obtain ⟨k, hk⟩ : ∃ k : ℕ, n.val = 4 * k + 1 ∨ n.val = 4 * k + 3 := by
-          exact ⟨n / 4, by omega⟩
-        exact ⟨⟨k, Nat.pos_of_ne_zero (by aesop_cat)⟩,
-          Or.imp (fun h => PNat.eq h) (fun h => PNat.eq h) hk⟩
-      · have h_rec : (f (4 * k + 1) : ℕ) + (f k : ℕ) = 2 * (f (2 * k + 1) : ℕ) := by
-          exact congrArg PNat.val (h₃ k)
-        have h_g_rec : g (4 * k + 1) = 2 * g (2 * k + 1) - g k := by
-          convert g_mod4_1 (4 * k + 1) _ _ using 1 <;> norm_num [Nat.add_mod, Nat.mul_mod]
-          · norm_num [show (4 * k + 1 + 1 : ℕ) = 2 * (2 * k + 1) by ring]
-          · linarith [PNat.pos k]
-        simp_all +decide [Nat.add_mod, Nat.mul_mod]
-        rw [← h_rec, Nat.add_sub_cancel]
-      · have h_ind_k : f k = g k := by
-          exact ih k <| by
-            show (k : ℕ) < 4 * k + 3
-            linarith
-        have h_ind_2k1 : f (2 * k + 1) = g (2 * k + 1) := by
-          exact ih _ <| by
-            show (2 * k + 1 : ℕ) < 4 * k + 3
-            linarith only [k.pos]
-        have h_g_4k3 : g (4 * k + 3) = 3 * g (2 * k + 1) - 2 * g k := by
-          convert g_mod4_3 (4 * k + 3) _ _ using 1 <;> norm_num [Nat.add_mod, Nat.mul_mod]
-          · norm_num [show 4 * (k : ℕ) = 2 * (2 * (k : ℕ)) by ring]
-          · linarith [PNat.pos k]
-        have := h₄ k
-        replace := congrArg PNat.val this
-        norm_num [h_ind_k, h_ind_2k1, h_g_4k3] at this ⊢
-        exact eq_tsub_of_add_eq this
+/-- Append a binary zero. -/
+lemma digits_two_mul (n : ℕ) (hn : n ≠ 0) :
+    Nat.digits 2 (2 * n) = 0 :: Nat.digits 2 n := by
+  simpa using
+    (Nat.digits_base_mul (b := 2) (m := n) (by decide) (Nat.pos_of_ne_zero hn))
 
-lemma count_g_fixed :
-    ((Finset.Icc (1 : ℕ+) 1988).filter (fun n : ℕ+ => g (n : ℕ) == (n : ℕ))).card = 92 := by
-  native_decide
+/-- Append a binary one. -/
+lemma digits_two_mul_add_one (n : ℕ) :
+    Nat.digits 2 (2 * n + 1) = 1 :: Nat.digits 2 n := by
+  simpa [Nat.add_comm] using
+    (Nat.digits_add 2 (by decide : 1 < 2) 1 n (by decide : 1 < 2)
+      (Or.inl one_ne_zero))
+
+lemma binaryReverse_two_mul (n : ℕ) (hn : n ≠ 0) :
+    binaryReverse (2 * n) = binaryReverse n := by
+  unfold binaryReverse
+  rw [digits_two_mul n hn, Nat.ofDigits_reverse_zero_cons]
+
+lemma digits_four_mul_add_one (n : ℕ) (hn : n ≠ 0) :
+    Nat.digits 2 (4 * n + 1) = 1 :: 0 :: Nat.digits 2 n := by
+  rw [show 4 * n + 1 = 2 * (2 * n) + 1 by ring,
+    digits_two_mul_add_one, digits_two_mul n hn]
+
+lemma digits_four_mul_add_three (n : ℕ) :
+    Nat.digits 2 (4 * n + 3) = 1 :: 1 :: Nat.digits 2 n := by
+  rw [show 4 * n + 3 = 2 * (2 * n + 1) + 1 by ring,
+    digits_two_mul_add_one, digits_two_mul_add_one]
+
+lemma binaryReverse_four_mul_add_one_recurrence (n : ℕ) (hn : n ≠ 0) :
+    binaryReverse (4 * n + 1) + binaryReverse n =
+      2 * binaryReverse (2 * n + 1) := by
+  unfold binaryReverse
+  rw [digits_four_mul_add_one n hn, Nat.ofDigits_reverse_cons,
+    Nat.ofDigits_reverse_zero_cons]
+  rw [digits_two_mul_add_one n, Nat.ofDigits_reverse_cons]
+  simp [Nat.pow_succ]
+  ring
+
+lemma binaryReverse_four_mul_add_three_recurrence (n : ℕ) :
+    binaryReverse (4 * n + 3) + 2 * binaryReverse n =
+      3 * binaryReverse (2 * n + 1) := by
+  unfold binaryReverse
+  rw [digits_four_mul_add_three n, Nat.ofDigits_reverse_cons, Nat.ofDigits_reverse_cons]
+  rw [digits_two_mul_add_one n, Nat.ofDigits_reverse_cons]
+  simp [Nat.pow_succ, Nat.add_assoc]
+  ring
+
+/-- Binary reversal satisfies the recurrence. -/
+lemma pnatBinaryReverse_satisfiesRecurrence :
+    SatisfiesRecurrence pnatBinaryReverse := by
+  refine
+    { one := PNat.eq rfl
+      three := PNat.eq rfl
+      double := ?_
+      four_one := ?_
+      four_three := ?_ }
+  · intro n
+    apply PNat.eq
+    exact binaryReverse_two_mul (n : ℕ) (Nat.ne_of_gt n.2)
+  · intro n
+    apply PNat.eq
+    simp only [PNat.add_coe, PNat.mul_coe]
+    exact binaryReverse_four_mul_add_one_recurrence (n : ℕ) (Nat.ne_of_gt n.2)
+  · intro n
+    apply PNat.eq
+    simp only [PNat.add_coe, PNat.mul_coe]
+    exact binaryReverse_four_mul_add_three_recurrence (n : ℕ)
+
+/-- One binary-recursion step of uniqueness. -/
+lemma recurrence_step {f g : ℕ+ → ℕ+}
+    (hf : SatisfiesRecurrence f) (hg : SatisfiesRecurrence g) (p : ℕ+)
+    (hp : f p = g p) (hodd : f (2 * p + 1) = g (2 * p + 1)) :
+    f (2 * p) = g (2 * p) ∧
+      f (4 * p + 1) = g (4 * p + 1) ∧
+      f (4 * p + 3) = g (4 * p + 3) := by
+  constructor
+  · calc
+      f (2 * p) = f p := hf.double p
+      _ = g p := hp
+      _ = g (2 * p) := (hg.double p).symm
+  constructor
+  · apply add_right_cancel (b := g p)
+    calc
+      f (4 * p + 1) + g p = 2 * g (2 * p + 1) := by
+        rw [← hp, hf.four_one p, hodd]
+      _ = g (4 * p + 1) + g p := (hg.four_one p).symm
+  · apply add_right_cancel (b := 2 * g p)
+    calc
+      f (4 * p + 3) + 2 * g p = 3 * g (2 * p + 1) := by
+        rw [← hp, hf.four_three p, hodd]
+      _ = g (4 * p + 3) + 2 * g p := (hg.four_three p).symm
+
+/-- The recurrence determines the function uniquely. -/
+lemma recurrence_unique {f g : ℕ+ → ℕ+}
+    (hf : SatisfiesRecurrence f) (hg : SatisfiesRecurrence g) :
+    ∀ n : ℕ+, f n = g n := by
+  let Good : ℕ → Prop := fun m => ∀ hm : m ≠ 0,
+    let p : ℕ+ := ⟨m, Nat.pos_of_ne_zero hm⟩
+    f p = g p ∧ f (2 * p + 1) = g (2 * p + 1)
+  have hGood : ∀ m, Good m := by
+    intro m
+    induction m using Nat.binaryRecFromOne with
+    | zero =>
+        intro hm
+        exact (hm rfl).elim
+    | one =>
+        intro hm
+        constructor
+        · simpa using hf.one.trans hg.one.symm
+        · exact hf.three.trans hg.three.symm
+    | bit b m hm ih =>
+        intro hbit
+        let p : ℕ+ := ⟨m, Nat.pos_of_ne_zero hm⟩
+        have ihp := ih hm
+        have hstep := recurrence_step hf hg p ihp.1 ihp.2
+        cases b
+        · let q : ℕ+ := ⟨Nat.bit false m, Nat.pos_of_ne_zero hbit⟩
+          have harg : 2 * q + 1 = 4 * p + 1 := by
+            exact PNat.eq (by simp [q, p, Nat.bit_false_apply]; ring)
+          constructor
+          · exact hstep.1
+          · change f (2 * q + 1) = g (2 * q + 1)
+            rw [harg]
+            exact hstep.2.1
+        · let q : ℕ+ := ⟨Nat.bit true m, Nat.pos_of_ne_zero hbit⟩
+          have harg : 2 * q + 1 = 4 * p + 3 := by
+            exact PNat.eq (by simp [q, p, Nat.bit_true_apply]; ring)
+          constructor
+          · exact ihp.2
+          · change f (2 * q + 1) = g (2 * q + 1)
+            rw [harg]
+            exact hstep.2.2
+  intro n
+  exact (hGood (n : ℕ) (Nat.ne_of_gt n.2)).1
+
+/-- The recurrence solution is binary reversal. -/
+lemma recurrence_unique_binaryReverse (f : ℕ+ → ℕ+) (hf : SatisfiesRecurrence f) :
+    ∀ n : ℕ+, f n = pnatBinaryReverse n :=
+  recurrence_unique hf pnatBinaryReverse_satisfiesRecurrence
+
+/-- Fixed points are binary palindromes. -/
+lemma pnatBinaryReverse_fixed_iff_palindrome (n : ℕ+) :
+    pnatBinaryReverse n = n ↔ BinaryPalindrome (n : ℕ) := by
+  rw [← binaryReverse_fixed_iff_binaryPalindrome (n : ℕ)]
+  exact ⟨fun h => congrArg Subtype.val h, fun h => Subtype.ext h⟩
+
+/-- Count binary palindromes up to `1988`. -/
+lemma binaryPalindrome_count_le_1988 :
+    ((Finset.Icc 1 1988).filter BinaryPalindrome).card = solution := by
+  rfl
+
+/-- Convert the finite count back to the problem statement. -/
+lemma fixedPoint_count_from_recurrence (f : ℕ+ → ℕ+) (hf : SatisfiesRecurrence f) :
+    Set.ncard {n | n ≤ 1988 ∧ f n = n} = solution := by
+  rw [← binaryPalindrome_count_le_1988]
+  rw [← Set.ncard_coe_finset]
+  refine Set.ncard_congr (fun n _ => (n : ℕ)) ?mem ?inj ?surj
+  · intro n hn
+    change (n : ℕ) ∈ (Finset.Icc 1 1988).filter BinaryPalindrome
+    rw [Finset.mem_filter, Finset.mem_Icc]
+    refine ⟨⟨n.2, hn.1⟩, ?_⟩
+    rw [← pnatBinaryReverse_fixed_iff_palindrome n, ← recurrence_unique_binaryReverse f hf n]
+    exact hn.2
+  · intro a b _ _ h
+    exact Subtype.ext h
+  · intro b hb
+    rcases Finset.mem_filter.mp hb with ⟨hbIcc, hpal⟩
+    rcases Finset.mem_Icc.mp hbIcc with ⟨hb1, hb1988⟩
+    have hbpos : 0 < b := Nat.lt_of_lt_of_le Nat.zero_lt_one hb1
+    refine ⟨⟨b, hbpos⟩, ⟨hb1988, ?_⟩, rfl⟩
+    rw [recurrence_unique_binaryReverse f hf, pnatBinaryReverse_fixed_iff_palindrome]
+    exact hpal
+
+snip end
 
 problem imo1988_p3 (f : ℕ+ → ℕ+)
     (h₀ : f 1 = 1)
@@ -153,24 +269,6 @@ problem imo1988_p3 (f : ℕ+ → ℕ+)
     (h₃ : ∀ n, f (4 * n + 1) + f n = 2 * f (2 * n + 1))
     (h₄ : ∀ n, f (4 * n + 3) + 2 * f n = 3 * f (2 * n + 1)) :
     Set.ncard {n | n ≤ 1988 ∧ f n = n} = solution := by
-  have key := f_eq_g f h₀ h₁ h₂ h₃ h₄
-  have hset :
-      {n | n ≤ 1988 ∧ f n = n} =
-        ↑((Finset.Icc (1 : ℕ+) 1988).filter (fun n : ℕ+ => g (n : ℕ) == (n : ℕ))) := by
-    ext n
-    constructor
-    · intro hn
-      rcases hn with ⟨hle, hfix⟩
-      have hgfix : g (n : ℕ) = (n : ℕ) := by
-        simpa [hfix] using (key n).symm
-      simp [hle, hgfix]
-    · intro hn
-      rcases (by simpa using hn : n ≤ 1988 ∧ g (n : ℕ) = (n : ℕ)) with ⟨hle, hgfix⟩
-      have hfix : f n = n := by
-        apply PNat.eq
-        simpa [hgfix] using key n
-      exact ⟨hle, hfix⟩
-  rw [hset, Set.ncard_coe_finset]
-  simpa [solution] using count_g_fixed
+  exact fixedPoint_count_from_recurrence f ⟨h₀, h₁, h₂, h₃, h₄⟩
 
 end Imo1988P3

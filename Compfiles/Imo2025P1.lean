@@ -265,7 +265,7 @@ lemma line_para (a b c a' b' c' : ℝ) (h : a ≠ 0 ∨ b ≠ 0) (h' : a' ≠ 0 
       have : SetLike.coe (line a' b' c') ≠ ∅ := by
         rw [← Set.nonempty_iff_ne_empty]
         exact line_nonempty a' b' c' h'
-      grind
+      tauto
 
 /-- If the line `a * x + b * y + c` is parallel to `L`,
 and both lines go through `(x1, y1)`, `(x2, y2)`,
@@ -335,7 +335,7 @@ lemma line_contains (L L' : AffSubOfPlane) (hL : finrank ℝ L.direction = 1) (a
     contradiction
   have x_a_expr : x - a = (q / k) • (a - b) := by rw [← hk, ← hq, ← mul_smul]; congr 1; field_simp
   have := L'.smul_vsub_vadd_mem (q / k) (p₁ := a) (p₂ := b) (p₃ := a) ha' hb' ha'
-  simpa [← x_a_expr] using this
+  simp only [vsub_eq_sub, vadd_eq_add, ← x_a_expr, sub_add_cancel] at this; exact this
 
 /-- If both of the two non-degenerate lines `L` and `L'` go through two different points
 `a` and `b`, then `L = L'`. -/
@@ -675,7 +675,7 @@ lemma not_colinear (L : AffSubOfPlane) (M a b c : ℝ) :
       _ = (b - a) * (M - c) + a * (M - b) := by linarith
       _ > (b - a) * (M - c) + a * (b - b) := by gcongr
       _ = (b - a) * (M - c) := by simp
-      _ ≥ (a - a) * (M - c) := by gcongr; linarith
+      _ ≥ (a - a) * (M - c) := by gcongr
       _ = 0 := by simp
     linarith
 
@@ -819,7 +819,7 @@ lemma coverGridNoEdgeConfig.cover_no_edge_line_surj (C : coverGridNoEdgeConfig) 
     simp [C.find_line_edge_correct]
   apply Finset.eq_of_subset_of_card_le <;> try (first | assumption | lia)
   have := C.lines_count
-  lia
+  omega
 
 def edgeEndpointCornerId (d : Fin 3) (r : Fin 2) : Fin 3 := match d, r with
   | 0, 0 => 0   -- edge 0 left corner is 0
@@ -1087,7 +1087,7 @@ lemma coverGridConfig.any_cover (C : coverGridConfig) :
         have := C.reduce_count d hd
         have := ih (reduce C d hd)
         lia
-      · push_neg at hE
+      · push Not at hE
         let C' : coverGridNoEdgeConfig := {C with hE := hE, hn := by lia}
         have := C'.cover_edge
         lia
@@ -1130,7 +1130,7 @@ noncomputable def oneSunny : strongCoverGridConfig where
     obtain ⟨rfl, rfl⟩ : a = 1 ∧ b = 1 := by lia
     simp only [line, neg_mul, one_mul, add_zero, Finset.mem_singleton, exists_eq_left]
     rw [← SetLike.mem_coe, SetLike.coe]
-    simp [AffineSubspace.instSetLike, ha, hb]
+    simp [AffineSubspace.instSetLike, ha, hb, -AffineSubspace.carrier_eq_coe]
   sunny_count := by
     have : Sunny (line (-1) 1 0) := by
       rw [sunny_slope] <;>
