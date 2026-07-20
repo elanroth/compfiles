@@ -81,7 +81,11 @@ problem imo2009_p3 (s : ℕ → ℕ) (hs : StrictMono s)
     linarith
   have h_bddBelow : BddBelow (Set.range diff) := OrderBot.bddBelow <| Set.range diff
   have ⟨a, ha⟩ : ∃ a, diff a = M := exists_eq_ciSup_of_not_isSuccLimit h_bddAbove Order.not_isSuccLimit_of_isSuccArchimedean
-  have ⟨b, hb⟩ : ∃ b, diff b = m := exists_eq_ciInf_of_not_isPredLimit h_bddBelow Order.not_isPredLimit_of_isPredArchimedean
+  have ⟨b, hb⟩ : ∃ b, diff b = m := by
+    have hmem : sInf (Set.range diff) ∈ Set.range diff :=
+      Nat.sInf_mem (Set.range_nonempty diff)
+    rw [sInf_range] at hmem
+    exact hmem
 
   have ha_sum : ∑ i ∈ Finset.range (s (s (a+1)) - (s (s a))), diff (s (s a) + i) = D * M := by
     simp_rw [diff, add_assoc]
