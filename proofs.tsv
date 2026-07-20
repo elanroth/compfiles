@@ -15,3 +15,13 @@ timestamp	commit	target	prover	before	after	delta	status	note
 2026-07-20T09:02:10	2f7b5792	Compfiles/Imo1970P6.lean	aristotle	1	0	-1	keep	IMO 1970 P6 fully proved: aristotle enriched-resubmit + 8 manual v4.28->v4.31 tactic ports; lake build green
 2026-07-20T09:03:12	-	REPO	combined	106	57	-49	keep	metric fix: added .rambam to SKIP_DIRS (staging copies were inflating count); true open count 57 across 43 files post-1970-close
 2026-07-20T09:14:45	-	REPO	combined	57	57	+0	crash	Rambam engine dir deleted from disk ~09:13 mid-run (external change); 4 aristotle jobs in flight unpollable: 26e5f3d9(2010) ad54728b(2016) 62c51ddb/40715337(2018/2020); continuing engine-free
+2026-07-20T09:19:02	-	REPO	combined	57	57	+0	keep	engine restored: Maimonides renamed to Rambam (/Users/elanroth/pure/Rambam); .maimonides->.rambam, toml renamed; all 4 in-flight jobs alive
+2026-07-20T09:24:11	af4c658e	Compfiles/Imo1988P4.lean	aristotle	1	0	-1	keep	IMO 1988 P4 closed: recovered unintegrated cloud-pipeline proof + 2 local tactic ports (natDegree_prod convert, C_eq_natCast normalization); lake build green
+2026-07-20T12:24:34	197c5847	Compfiles/Imo2016P2.lean	combined	1	0	-1	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	197c5847	Compfiles/Usa1996P6.lean	combined	1	0	-1	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	197c5847	Compfiles/Usa1999P1.lean	combined	1	0	-1	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	197c5847	Compfiles/Imo1997P4.lean	combined	1	0	-1	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	197c5847	Compfiles/Imo2004P6.lean	combined	2	0	-2	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	197c5847	Compfiles/Imo2025P5.lean	combined	2	0	-2	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	58eed6bf	Compfiles/Imo2009P3.lean	combined	1	0	-1	keep	synced from upstream + 1 local port (exists_eq_ciInf_of_not_isPredLimit -> Nat.sInf_mem route)
+2026-07-20T12:24:34	58eed6bf	Compfiles/Imo1998P6.lean	combined	1	0	-1	keep	upstream fixed the false statement (set now ranges over all admissible f) and proved it; matches our parked refutation
