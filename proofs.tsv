@@ -25,3 +25,10 @@ timestamp	commit	target	prover	before	after	delta	status	note
 2026-07-20T12:24:34	197c5847	Compfiles/Imo2025P5.lean	combined	2	0	-2	keep	synced solved file from upstream/main (dwrensha/compfiles)
 2026-07-20T12:24:34	58eed6bf	Compfiles/Imo2009P3.lean	combined	1	0	-1	keep	synced from upstream + 1 local port (exists_eq_ciInf_of_not_isPredLimit -> Nat.sInf_mem route)
 2026-07-20T12:24:34	58eed6bf	Compfiles/Imo1998P6.lean	combined	1	0	-1	keep	upstream fixed the false statement (set now ranges over all admissible f) and proved it; matches our parked refutation
+2026-07-20T12:24:56	-	REPO	combined	56	46	-10	keep	correction: upstream-sync batch landed as 197c5847 (7 files) + 58eed6bf (Imo2009P3); per-file tsv commit hashes above are partly stale
+2026-07-20T13:26:29	df2e4f1c	Compfiles/Imo2017P6.lean	combined	1	1	+0	keep	statement fix merged upstream (dwrensha/compfiles#228); problem now provable as stated, back in prover pool
+2026-07-20T14:49:58	-	Compfiles/Imo2017P6.lean	aristotle	1	1	+0	revert	job 2e7dc585 errored server-side; resubmitted fixed-statement file as 0a335581
+2026-07-20T14:59:36	2869a42d	Compfiles/Imo2010P3.lean	aristotle	1	0	-1	keep	IMO 2010 P3 closed: enriched-resubmit full proof + 1 port (ZI-valued vs pos-valued existential ending rewritten)
+2026-07-20T14:59:36	cb056fd6	Compfiles/Imo2016P5.lean	aristotle	1	0	-1	keep	IMO 2016 P5 closed: enriched-resubmit no_real_solution + 3 ports (lemma rename, open, maxHeartbeats)
+2026-07-20T15:07:19	1d93ba11	Compfiles/Imo2018P5.lean	aristotle	1	0	-1	keep	IMO 2018 P5 closed: aristotle proof + 3 ports (convert side-goal, two padic ne-zero side conditions via valuation clash)
+2026-07-20T15:11:19	d3a02e9c	Compfiles/Imo2021P5.lean	aristotle	1	0	-1	keep	IMO 2021 P5 closed: aristotle proof + 2 ports (convert goal-order drift, state_position bridge for grind)
