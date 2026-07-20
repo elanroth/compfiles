@@ -1,0 +1,1 @@
+imo2017p6.aristotle.lean:116:8: warning: declaration uses `sorry`

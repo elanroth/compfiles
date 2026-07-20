@@ -1,0 +1,17 @@
+timestamp	commit	target	prover	before	after	delta	status	note
+2026-07-19T11:33:33	276f4b51	REPO	combined	87	87	+0	keep	baseline: 87 obligations across 63 files, lake build green, branch autoprove/jul19
+2026-07-19T11:36:37	-	Compfiles/Imo1970P6.lean	mistral	1	1	+0	revert	mistral candidate had 3 sorrys, not integrated
+2026-07-19T11:36:37	-	Compfiles/Imo1998P6.lean	mistral	1	1	+0	revert	mistral candidate had 2 sorrys, not integrated
+2026-07-19T11:36:37	-	Compfiles/Imo2010P3.lean	mistral	1	1	+0	revert	mistral candidate had 1 sorry, not integrated
+2026-07-19T11:36:37	-	Compfiles/Imo2016P5.lean	mistral	1	1	+0	revert	mistral candidate had 2 sorrys, not integrated
+2026-07-19T11:40:48	-	Compfiles/Imo2010P3.lean	claude	1	1	+0	crash	run-once crashed: ran from wrong cwd, toml not loaded, 404 on retired default model; resubmitting
+2026-07-19T19:34:46	-	Compfiles/Imo1970P6.lean	aristotle	1	1	+0	revert	partially_proved: 7 helper lemmas proved, main assembly still sorry; resubmitted enriched file as a64c7c70
+2026-07-19T19:34:47	-	Compfiles/Imo1970P6.lean	mistral	1	1	+0	revert	mistral2 on enriched file: 5 sorrys, not integrated
+2026-07-19T19:34:47	-	Compfiles/Imo1998P6.lean	aristotle	1	1	+0	revert	aristotle job 2efa68b2 errored server-side; resubmitted via run-once
+2026-07-19T19:47:00	-	Compfiles/Imo1970P6.lean	claude	1	1	+0	revert	ported aristotle partial to v4.31: all 7 helpers verify green locally; only main assembly sorry remains (imo1970p6.aristotle.lean)
+2026-07-19T20:05:00	-	Compfiles/Imo2017P6.lean	aristotle	1	1	+0	human	parked: statement refuted by kernel-verified counterexample S={(1,0)} (see human-needed.md); statements are immutable
+2026-07-20T08:51:38	-	Compfiles/Imo2017P6.lean	aristotle	1	1	+0	human	parked: statement false as formalized, refutation kernel-verified locally; needs upstream statement fix (range n -> range (n+1))
+2026-07-20T08:57:52	-	Compfiles/Imo1998P6.lean	aristotle	1	1	+0	human	parked: statement false (f=id counterexample, verified); corrected-statement proof complete+verified in imo1998p6.aristotle.lean
+2026-07-20T09:02:10	2f7b5792	Compfiles/Imo1970P6.lean	aristotle	1	0	-1	keep	IMO 1970 P6 fully proved: aristotle enriched-resubmit + 8 manual v4.28->v4.31 tactic ports; lake build green
+2026-07-20T09:03:12	-	REPO	combined	106	57	-49	keep	metric fix: added .rambam to SKIP_DIRS (staging copies were inflating count); true open count 57 across 43 files post-1970-close
+2026-07-20T09:14:45	-	REPO	combined	57	57	+0	crash	Rambam engine dir deleted from disk ~09:13 mid-run (external change); 4 aristotle jobs in flight unpollable: 26e5f3d9(2010) ad54728b(2016) 62c51ddb/40715337(2018/2020); continuing engine-free

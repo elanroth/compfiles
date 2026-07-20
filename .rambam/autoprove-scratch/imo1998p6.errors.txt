@@ -1,0 +1,74 @@
+imo1998p6.aristotle.lean:116:40: warning: `PNat.one_le` has been deprecated: use `one_le`
+imo1998p6.aristotle.lean:128:6: error: `grind` failed
+case grind
+u : ℕ+ → ℕ+
+hu_mul : ∀ (a b : ℕ+), u (a * b) = u a * u b
+hu_inv : ∀ (n : ℕ+), u (u n) = n
+h_u1998_decomp : u 1998 = u 2 * u 3 ^ 3 * u 37
+p q r : ℕ
+h_distinct_primes : Nat.Prime ↑(u 2) ∧ Nat.Prime ↑(u 3) ∧ Nat.Prime ↑(u 37) ∧ ¬u 2 = u 3 ∧ ¬u 2 = u 37 ∧ ¬u 3 = u 37
+hp : Nat.Prime (p + 3)
+hq : Nat.Prime (q + 3)
+hpq : ¬p = q
+hr : Nat.Prime (r + 3)
+hpr : ¬p = r
+hqr : ¬q = r
+h : (p + 3) * (q + 3) ^ 3 * (r + 3) ≤ 119
+⊢ False
+[grind] Goal diagnostics
+  [facts] Asserted facts
+    [prop] ∀ (a b : ℕ+), u (a * b) = u a * u b
+    [prop] ∀ (n : ℕ+), u (u n) = n
+    [prop] u 1998 = u 2 * u 3 ^ 3 * u 37
+    [prop] Nat.Prime ↑(u 2) ∧ Nat.Prime ↑(u 3) ∧ Nat.Prime ↑(u 37) ∧ ¬u 2 = u 3 ∧ ¬u 2 = u 37 ∧ ¬u 3 = u 37
+    [prop] Nat.Prime (p + 3)
+    [prop] Nat.Prime (q + 3)
+    [prop] ¬p = q
+    [prop] Nat.Prime (r + 3)
+    [prop] ¬p = r
+    [prop] ¬q = r
+    [prop] (p + 3) * (q + 3) ^ 3 * (r + 3) ≤ 119
+  [eqc] True propositions
+    [prop] Nat.Prime ↑(u 2)
+    [prop] Nat.Prime ↑(u 3)
+    [prop] Nat.Prime ↑(u 37)
+    [prop] Nat.Prime (p + 3)
+    [prop] Nat.Prime (q + 3)
+    [prop] Nat.Prime (r + 3)
+    [prop] ¬u 2 = u 3
+    [prop] ¬u 2 = u 37
+    [prop] ¬u 3 = u 37
+    [prop] Nat.Prime ↑(u 2) ∧ Nat.Prime ↑(u 3) ∧ Nat.Prime ↑(u 37) ∧ ¬u 2 = u 3 ∧ ¬u 2 = u 37 ∧ ¬u 3 = u 37
+    [prop] Nat.Prime ↑(u 3) ∧ Nat.Prime ↑(u 37) ∧ ¬u 2 = u 3 ∧ ¬u 2 = u 37 ∧ ¬u 3 = u 37
+    [prop] Nat.Prime ↑(u 37) ∧ ¬u 2 = u 3 ∧ ¬u 2 = u 37 ∧ ¬u 3 = u 37
+    [prop] ¬u 2 = u 3 ∧ ¬u 2 = u 37 ∧ ¬u 3 = u 37
+    [prop] ¬u 2 = u 37 ∧ ¬u 3 = u 37
+    [prop] (p + 3) * (q + 3) ^ 3 * (r + 3) ≤ 119
+    [prop] ∀ (n : ℕ+), u (u n) = n
+    [prop] ∀ (a b : ℕ+), u (a * b) = u a * u b
+  [eqc] False propositions
+    [prop] p = q
+    [prop] p = r
+    [prop] q = r
+    [prop] u 2 = u 3
+    [prop] u 2 = u 37
+    [prop] u 3 = u 37
+  [eqc] Equivalence classes
+    [eqc] {u 1998, u 2 * u 3 ^ 3 * u 37}
+  [ematch] E-matching patterns
+    [thm] hu_mul: [u (@HMul.hMul `[ℕ+] `[ℕ+] `[ℕ+] `[instHMul] #1 #0)]
+    [thm] hu_inv: [u (u #0)]
+    [thm] hu_inv: [u #0]
+    [thm] Nat.pow_pos: [@HPow.hPow `[ℕ] `[ℕ] `[ℕ] `[instHPow] #2 #1]
+    [thm] Nat.div_pow_of_pos: [@HPow.hPow `[ℕ] `[ℕ] `[ℕ] `[instHPow] #2 #1]
+  [cutsat] Assignment satisfying linear constraints
+    [assign] p := 0
+    [assign] q := 1
+    [assign] r := 2
+    [assign] ↑(u 2) := 6
+    [assign] ↑(u 3) := 7
+    [assign] ↑(u 37) := 8
+    [assign] 「(q + 3) ^ 3」 := 0
+    [assign] 「(q + 3) ^ 3」 := 0
+  [limits] Thresholds reached
+    [limit] maximum number of E-matching rounds has been reached, threshold: `(ematch := 0)`

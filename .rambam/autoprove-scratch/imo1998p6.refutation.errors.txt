@@ -1,0 +1,3 @@
+imo1998p6.refutation.lean:26:32: warning: Try `simp at h120` instead of `simpa using h120`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
