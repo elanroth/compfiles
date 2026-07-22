@@ -1,0 +1,6 @@
+.rambam/autoprove-scratch/job2018or2020.result.lean:117:28: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+.rambam/autoprove-scratch/job2018or2020.result.lean:117:18: warning: 'all_goals exact ⟨hp⟩' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`

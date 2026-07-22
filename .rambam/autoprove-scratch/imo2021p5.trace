@@ -1,0 +1,211 @@
+.rambam/autoprove-scratch/imo2021p5.result.lean:118:6: error: `grind` failed
+case grind.1.1.2.1
+p : Position
+h :
+  ∀ (k : Fin 2021),
+    ¬(((p.nth k).swapped k).1 < k ∧ k < ((p.nth k).swapped k).2 ∨
+        ((p.nth k).swapped k).2 < k ∧ k < ((p.nth k).swapped k).1)
+a b : Fin 2021
+hab : central p a + 1 = central p b
+hba : ¬b < a
+h_not_lt_a : ¬↑((p.nth a) (central p b)) < ↑a
+h_second_comp : (p.nth a) (central p b) = ((p.nth a).swapped a).2
+h_1 : ¬p.nth b = (state p ↑b).1
+w : Fin 2021
+h_2 : ¬(p.nth b) w = (state p ↑b).1 w
+h_3 : ((p.nth a).swapped a).1 < a
+h_4 : ((p.nth b).swapped b).2 < b
+h_5 : ¬a = b
+h_6 : ((p.nth a).swapped a).1 = ((p.nth b).swapped b).1
+⊢ False
+[grind] Goal diagnostics
+  [facts] Asserted facts
+    [prop] (∀ (k : Fin 2021), ((p.nth k).swapped k).1 < k → ¬k < ((p.nth k).swapped k).2) ∧
+          ∀ (k : Fin 2021), ((p.nth k).swapped k).2 < k → ¬k < ((p.nth k).swapped k).1
+    [prop] central p a + 1 = central p b
+    [prop] ¬b < a
+    [prop] ↑a ≤ ↑((p.nth a) (central p b))
+    [prop] (p.nth a) (central p b) = ((p.nth a).swapped a).2
+    [prop] ¬p.nth b = (state p ↑b).1
+    [prop] ∃ x, ¬(p.nth b) x = (state p ↑b).1 x
+    [prop] ((p.nth a).swapped a).2 < a → ¬a < ((p.nth a).swapped a).1
+    [prop] ((p.nth b).swapped b).2 < b → ¬b < ((p.nth b).swapped b).1
+    [prop] ((p.nth a).swapped a).1 < a → ¬a < ((p.nth a).swapped a).2
+    [prop] ((p.nth b).swapped b).1 < b → ¬b < ((p.nth b).swapped b).2
+    [prop] ↑((p.nth a) (central p b)) = ↑↑((p.nth a) (central p b))
+    [prop] ↑b = ↑↑b
+    [prop] ↑a = ↑↑a
+    [prop] ↑b ≤ 2020
+    [prop] ↑((p.nth a) (central p b)) ≤ 2020
+    [prop] ↑a ≤ 2020
+    [prop] ¬(p.nth b) w = (state p ↑b).1 w
+    [prop] ¬↑((p.nth b) w) = ↑((state p ↑b).1 w)
+    [prop] ↑((state p ↑b).1 w) = ↑↑((state p ↑b).1 w)
+    [prop] ↑((p.nth b) w) = ↑↑((p.nth b) w)
+    [prop] ↑((state p ↑b).1 w) ≤ 2020
+    [prop] ↑((p.nth b) w) ≤ 2020
+    [prop] ((p.nth a).swapped a).1 < a
+    [prop] ↑((p.nth a).swapped a).1 = ↑↑((p.nth a).swapped a).1
+    [prop] ↑((p.nth a).swapped a).1 ≤ 2020
+    [prop] ((p.nth b).swapped b).2 < b
+    [prop] ↑((p.nth b).swapped b).1 = ↑↑((p.nth b).swapped b).1
+    [prop] ↑((p.nth b).swapped b).2 = ↑↑((p.nth b).swapped b).2
+    [prop] ↑((p.nth b).swapped b).2 ≤ 2020
+    [prop] ↑((p.nth b).swapped b).1 ≤ 2020
+    [prop] ¬a = b
+    [prop] ¬↑a = ↑b
+    [prop] ((p.nth a).swapped a).1 = ((p.nth b).swapped b).1
+  [eqc] True propositions
+    [prop] (∀ (k : Fin 2021), ((p.nth k).swapped k).1 < k → ¬k < ((p.nth k).swapped k).2) ∧
+          ∀ (k : Fin 2021), ((p.nth k).swapped k).2 < k → ¬k < ((p.nth k).swapped k).1
+    [prop] ↑a ≤ ↑((p.nth a) (central p b))
+    [prop] ∀ (k : Fin 2021), ((p.nth k).swapped k).1 < k → ¬k < ((p.nth k).swapped k).2
+    [prop] ∀ (k : Fin 2021), ((p.nth k).swapped k).2 < k → ¬k < ((p.nth k).swapped k).1
+    [prop] ¬a < ((p.nth a).swapped a).1
+    [prop] ¬a < ((p.nth a).swapped a).2
+    [prop] ¬b < ((p.nth b).swapped b).1
+    [prop] ¬b < ((p.nth b).swapped b).2
+    [prop] ∃ x, ¬(p.nth b) x = (state p ↑b).1 x
+    [prop] ((p.nth a).swapped a).1 = ((p.nth b).swapped b).1
+    [prop] ↑a ≤ 2020
+    [prop] ↑b ≤ 2020
+    [prop] ↑((p.nth a) (central p b)) ≤ 2020
+    [prop] ((p.nth a).swapped a).1 < a
+    [prop] ((p.nth b).swapped b).1 < b
+    [prop] ((p.nth b).swapped b).2 < b
+    [prop] ((p.nth a).swapped a).1 < a → ¬a < ((p.nth a).swapped a).2
+    [prop] ((p.nth b).swapped b).1 < b → ¬b < ((p.nth b).swapped b).2
+    [prop] ((p.nth a).swapped a).2 < a → ¬a < ((p.nth a).swapped a).1
+    [prop] ((p.nth b).swapped b).2 < b → ¬b < ((p.nth b).swapped b).1
+    [prop] ↑((p.nth a).swapped a).1 ≤ 2020
+    [prop] ↑((p.nth b).swapped b).2 ≤ 2020
+    [prop] ↑((p.nth b).swapped b).1 ≤ 2020
+    [prop] ↑((p.nth b) w) ≤ 2020
+    [prop] ↑((state p ↑b).1 w) ≤ 2020
+  [eqc] False propositions
+    [prop] a = b
+    [prop] p.nth b = (state p ↑b).1
+    [prop] b < a
+    [prop] ↑a = ↑b
+    [prop] (p.nth b) w = (state p ↑b).1 w
+    [prop] a < ((p.nth a).swapped a).1
+    [prop] a < ((p.nth a).swapped a).2
+    [prop] b < ((p.nth b).swapped b).1
+    [prop] b < ((p.nth b).swapped b).2
+    [prop] ↑((p.nth b) w) = ↑((state p ↑b).1 w)
+  [eqc] Equivalence classes
+    [eqc] {(p.nth a).swapped a, (((p.nth a).swapped a).1, ((p.nth a).swapped a).2)}
+    [eqc] {central p b, central p a + 1}
+    [eqc] {state p ↑b, ((state p ↑b).1, (state p ↑b).2)}
+    [eqc] {((p.nth a).swapped a).1, ((p.nth b).swapped b).1}
+      [eqc] {(((p.nth a).swapped a).1, ((p.nth a).swapped a).2).1, (((p.nth b).swapped b).1, ((p.nth b).swapped b).2).1}
+    [eqc] {((p.nth a).swapped a).2, (p.nth a) (central p b)}
+      [eqc] {(((p.nth a).swapped a).1, ((p.nth a).swapped a).2).2}
+    [eqc] {↑((p.nth a).swapped a).1, ↑((p.nth b).swapped b).1}
+    [eqc] {(p.nth b).swapped b, (((p.nth b).swapped b).1, ((p.nth b).swapped b).2)}
+    [eqc] others
+      [eqc] {↑↑a, ↑a}
+      [eqc] {↑↑b, ↑b}
+      [eqc] {↑↑((p.nth a) (central p b)), ↑((p.nth a).swapped a).2, ↑((p.nth a) (central p b))}
+      [eqc] {↑2021, 2021}
+      [eqc] {(state p ↑b).1, ((state p ↑b).1, (state p ↑b).2).1}
+      [eqc] {(state p ↑b).2, ((state p ↑b).1, (state p ↑b).2).2}
+      [eqc] {↑((p.nth a).swapped a).1, ↑↑((p.nth a).swapped a).1, ↑((p.nth b).swapped b).1, ↑↑((p.nth b).swapped b).1}
+      [eqc] {↑((p.nth b).swapped b).2, ↑↑((p.nth b).swapped b).2}
+      [eqc] {((p.nth b).swapped b).2, (((p.nth b).swapped b).1, ((p.nth b).swapped b).2).2}
+      [eqc] {↑((p.nth b) w), ↑↑((p.nth b) w)}
+      [eqc] {↑((state p ↑b).1 w), ↑↑((state p ↑b).1 w)}
+  [cases] Case analyses
+    [cases] [1/1]: ∃ x, ¬(p.nth b) x = (state p ↑b).1 x
+      [cases] source: Extensionality `Equiv.ext`
+    [cases] [1/2]: ((p.nth a).swapped a).1 < a
+      [cases] source: E-matching `local_1`
+    [cases] [1/2]: ((p.nth b).swapped b).2 < b
+      [cases] source: E-matching `local_0`
+    [cases] [2/2]: a = b
+      [cases] source: Model-based theory combination at argument #1 of
+            central p b
+          and
+            central p a
+    [cases] [1/2]: ((p.nth a).swapped a).1 = ((p.nth b).swapped b).1
+      [cases] source: Model-based theory combination at argument #2 of
+            (((p.nth b).swapped b).1, ((p.nth b).swapped b).2)
+          and
+            (((p.nth a).swapped a).1, ((p.nth a).swapped a).2)
+  [ematch] E-matching patterns
+    [thm] local_0: [@LT.lt `[Fin
+           2021] `[instLTFin] (@Prod.snd `[Fin 2021] `[Fin 2021] (Position.swapped (Position.nth `[p] #1) #1)) #1]
+    [thm] local_0: [@Prod.snd `[Fin 2021] `[Fin 2021] (Position.swapped (Position.nth `[p] #1) #1)]
+    [thm] local_0: [Position.swapped (Position.nth `[p] #1) #1]
+    [thm] local_0: [Position.nth `[p] #1]
+    [thm] local_0: [@LT.lt `[Fin
+           2021] `[instLTFin] #1 (@Prod.fst `[Fin 2021] `[Fin 2021] (Position.swapped (Position.nth `[p] #1) #1))]
+    [thm] local_0: [@Prod.fst `[Fin 2021] `[Fin 2021] (Position.swapped (Position.nth `[p] #1) #1)]
+    [thm] local_1: [@LT.lt `[Fin
+           2021] `[instLTFin] (@Prod.fst `[Fin 2021] `[Fin 2021] (Position.swapped (Position.nth `[p] #1) #1)) #1]
+    [thm] local_1: [@Prod.fst `[Fin 2021] `[Fin 2021] (Position.swapped (Position.nth `[p] #1) #1)]
+    [thm] local_1: [Position.swapped (Position.nth `[p] #1) #1]
+    [thm] local_1: [Position.nth `[p] #1]
+    [thm] local_1: [@LT.lt `[Fin
+           2021] `[instLTFin] #1 (@Prod.snd `[Fin 2021] `[Fin 2021] (Position.swapped (Position.nth `[p] #1) #1))]
+    [thm] local_1: [@Prod.snd `[Fin 2021] `[Fin 2021] (Position.swapped (Position.nth `[p] #1) #1)]
+    [thm] Lean.Grind.toInt_fin: [@Lean.Grind.ToInt.toInt (Fin #1) _ _ #0]
+    [thm] Fin.isLt: [@Fin.val #1 #0]
+    [thm] natCast_apply: [@DFunLike.coe #7 #6 _ #5 (@NatCast.natCast _ #4 #1) #0]
+    [thm] add_apply: [@DFunLike.coe #9 #8 _ #6 (@HAdd.hAdd _ _ _ _ #2 #1) #0]
+    [thm] one_apply_eq_self: [@DFunLike.coe #5 #4 _ #3 (@OfNat.ofNat _ `[1] _) #0]
+    [thm] zero_apply: [@DFunLike.coe #7 #6 _ #4 (@OfNat.ofNat _ `[0] _) #0]
+    [thm] one_apply: [@DFunLike.coe #7 #6 _ #4 (@OfNat.ofNat _ `[1] _) #0]
+    [thm] map_add: [@DFunLike.coe #7 #9 _ #4 #2 (@HAdd.hAdd _ _ _ _ #1 #0)]
+    [thm] map_zero: [@DFunLike.coe #5 #7 _ #2 #0 (@OfNat.ofNat _ `[0] _)]
+    [thm] map_one: [@DFunLike.coe #5 #7 _ #2 #0 (@OfNat.ofNat _ `[1] _)]
+  [cutsat] Assignment satisfying linear constraints
+    [assign] a := 1
+    [assign] b := 2
+    [assign] ((p.nth a).swapped a).1 := 0
+    [assign] (((p.nth a).swapped a).1, ((p.nth a).swapped a).2).1 := 0
+    [assign] ((p.nth a).swapped a).2 := 1
+    [assign] (((p.nth a).swapped a).1, ((p.nth a).swapped a).2).2 := 1
+    [assign] (p.nth a) (central p b) := 1
+    [assign] ((p.nth b).swapped b).1 := 0
+    [assign] (((p.nth b).swapped b).1, ((p.nth b).swapped b).2).1 := 0
+    [assign] ((p.nth b).swapped b).2 := 0
+    [assign] (((p.nth b).swapped b).1, ((p.nth b).swapped b).2).2 := 0
+    [assign] (p.nth b) w := 0
+    [assign] (state p ↑b).1 w := 1
+  [ring] Ring `ℤ`
+    [basis] Basis
+      [_] ↑((p.nth a).swapped a).1 + -1 * ↑((p.nth b).swapped b).1 = 0
+[grind] Diagnostics
+  [thm] E-Matching instances
+    [thm] Fin.isLt ↦ 8
+    [thm] Lean.Grind.toInt_fin ↦ 8
+    [thm] local_0 ↦ 2
+    [thm] local_1 ↦ 2
+p : Position
+h :
+  ∀ (k : Fin 2021),
+    ¬(((p.nth k).swapped k).1 < k ∧ k < ((p.nth k).swapped k).2 ∨
+        ((p.nth k).swapped k).2 < k ∧ k < ((p.nth k).swapped k).1)
+a b : Fin 2021
+hab : central p a + 1 = central p b
+hba : ¬b < a
+h_not_lt_a : ¬∃ k, ↑k < ↑a ∧ central p k = central p b
+⊢ p.nth a = (state p ↑a).1
+p : Position
+h :
+  ∀ (k : Fin 2021),
+    ¬(((p.nth k).swapped k).1 < k ∧ k < ((p.nth k).swapped k).2 ∨
+        ((p.nth k).swapped k).2 < k ∧ k < ((p.nth k).swapped k).1)
+a b : Fin 2021
+hab : central p a + 1 = central p b
+hba : ¬b < a
+h_not_lt_a : ¬∃ k, ↑k < ↑a ∧ central p k = central p b
+⊢ ¬∃ k, ↑k < ↑a ∧ central p k = central p b
+.rambam/autoprove-scratch/imo2021p5.result.lean:144:2: warning: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```

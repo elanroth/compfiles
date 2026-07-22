@@ -1,0 +1,42 @@
+.rambam/autoprove-scratch/job2018or2020.result.lean:136:43: error: linarith failed to find a contradiction
+case h1
+a : ℕ → ℤ
+apos : ∀ (n : ℕ), 0 < a n
+N : ℕ
+hint : ∀ (n : ℕ), N ≤ n → ∃ z, ↑z = ↑(a n) / ↑(a (n + 1)) + (↑(a (n + 1)) - ↑(a n)) / ↑(a 0)
+n p : ℕ
+z : ℤ
+hn : N ≤ n
+hp : Nat.Prime p
+hz : ↑z = ↑(a n) / ↑(a (n + 1)) + (↑(a (n + 1)) - ↑(a n)) / ↑(a 0)
+h_eq : (z - 1) * (a 0 * a (n + 1)) = (a n - a (n + 1)) * (a 0 - a (n + 1))
+h_contra :
+  (a n).natAbs.factorization p < (a (n + 1)).natAbs.factorization p ∧
+    (a 0).natAbs.factorization p < (a (n + 1)).natAbs.factorization p
+h_val : padicValInt p (a n) < padicValInt p (a (n + 1)) ∧ padicValInt p (a 0) < padicValInt p (a (n + 1))
+h_val_rhs :
+  padicValInt p (a n - a (n + 1)) = padicValInt p (a n) ∧ padicValInt p (a 0 - a (n + 1)) = padicValInt p (a 0)
+a✝ : a n < a (n + 1)
+⊢ False
+failed
+.rambam/autoprove-scratch/job2018or2020.result.lean:139:43: error: linarith failed to find a contradiction
+case h1
+a : ℕ → ℤ
+apos : ∀ (n : ℕ), 0 < a n
+N : ℕ
+hint : ∀ (n : ℕ), N ≤ n → ∃ z, ↑z = ↑(a n) / ↑(a (n + 1)) + (↑(a (n + 1)) - ↑(a n)) / ↑(a 0)
+n p : ℕ
+z : ℤ
+hn : N ≤ n
+hp : Nat.Prime p
+hz : ↑z = ↑(a n) / ↑(a (n + 1)) + (↑(a (n + 1)) - ↑(a n)) / ↑(a 0)
+h_eq : (z - 1) * (a 0 * a (n + 1)) = (a n - a (n + 1)) * (a 0 - a (n + 1))
+h_contra :
+  (a n).natAbs.factorization p < (a (n + 1)).natAbs.factorization p ∧
+    (a 0).natAbs.factorization p < (a (n + 1)).natAbs.factorization p
+h_val : padicValInt p (a n) < padicValInt p (a (n + 1)) ∧ padicValInt p (a 0) < padicValInt p (a (n + 1))
+h_val_rhs :
+  padicValInt p (a n - a (n + 1)) = padicValInt p (a n) ∧ padicValInt p (a 0 - a (n + 1)) = padicValInt p (a 0)
+a✝ : a 0 < a (n + 1)
+⊢ False
+failed

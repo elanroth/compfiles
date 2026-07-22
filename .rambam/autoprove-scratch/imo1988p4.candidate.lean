@@ -249,10 +249,10 @@ lemma Qpoly_monic : Qpoly.Monic := by
   exact Polynomial.monic_prod_of_monic _ _ fun x hx => Polynomial.monic_X_sub_C _
 
 lemma Qpoly_natDegree : Qpoly.natDegree = 70 := by
-  convert Polynomial.natDegree_prod _ _ _ ;
-  · erw [ Finset.sum_congr rfl fun _ _ => Polynomial.natDegree_X_sub_C _ ] ; norm_cast;
-  · infer_instance;
-  · exact fun i hi => Polynomial.X_sub_C_ne_zero _
+  unfold Qpoly
+  rw [Polynomial.natDegree_prod _ _ fun i _ => Polynomial.X_sub_C_ne_zero _]
+  simp only [← Polynomial.C_eq_natCast, Polynomial.natDegree_X_sub_C]
+  simp
 
 lemma Qpoly_coeff69 : Qpoly.coeff 69 = -2485 := by
   have h : Qpoly = ∏ k ∈ Finset.Icc (1:ℕ) 70, (X + C (-(k:ℝ))) := by

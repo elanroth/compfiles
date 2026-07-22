@@ -1,0 +1,259 @@
+.rambam/autoprove-scratch/job2018or2020.result.lean:117:18: error: No goals to be solved
+.rambam/autoprove-scratch/job2018or2020.result.lean:136:10: error: `grind` failed
+case grind
+a : ℕ → ℤ
+apos : ∀ (n : ℕ), 0 < a n
+N : ℕ
+hint : ∀ (n : ℕ), N ≤ n → ∃ z, ↑z = ↑(a n) / ↑(a (n + 1)) + (↑(a (n + 1)) - ↑(a n)) / ↑(a 0)
+n p : ℕ
+z : ℤ
+hn : N ≤ n
+hp : Nat.Prime p
+hz : ↑z = ↑(a n) / ↑(a (n + 1)) + (↑(a (n + 1)) - ↑(a n)) / ↑(a 0)
+h_eq : (z - 1) * (a 0 * a (n + 1)) = (a n - a (n + 1)) * (a 0 - a (n + 1))
+h_contra :
+  (a n).natAbs.factorization p < (a (n + 1)).natAbs.factorization p ∧
+    (a 0).natAbs.factorization p < (a (n + 1)).natAbs.factorization p
+h_val : padicValInt p (a n) < padicValInt p (a (n + 1)) ∧ padicValInt p (a 0) < padicValInt p (a (n + 1))
+h_val_rhs :
+  padicValInt p (a n - a (n + 1)) = padicValInt p (a n) ∧ padicValInt p (a 0 - a (n + 1)) = padicValInt p (a 0)
+h : a n + -1 * a (n + 1) = 0
+⊢ False
+[grind] Goal diagnostics
+  [facts] Asserted facts
+    [prop] ∀ (n : ℕ), -1 * a n + 1 ≤ 0
+    [prop] ∀ (n : ℕ),
+          N ≤ n →
+            ∃ z,
+              IntCast.intCast z =
+                IntCast.intCast (a n) * (IntCast.intCast (a (n + 1)))⁻¹ +
+                  (IntCast.intCast (a (n + 1)) - IntCast.intCast (a n)) * (IntCast.intCast (a 0))⁻¹
+    [prop] N ≤ n
+    [prop] Nat.Prime p
+    [prop] IntCast.intCast z =
+          IntCast.intCast (a n) * (IntCast.intCast (a (n + 1)))⁻¹ +
+            (IntCast.intCast (a (n + 1)) - IntCast.intCast (a n)) * (IntCast.intCast (a 0))⁻¹
+    [prop] if IntCast.intCast (a 0) = 0 then (IntCast.intCast (a 0))⁻¹ = 0
+        else IntCast.intCast (a 0) * (IntCast.intCast (a 0))⁻¹ = 1
+    [prop] if IntCast.intCast (a (n + 1)) = 0 then (IntCast.intCast (a (n + 1)))⁻¹ = 0
+        else IntCast.intCast (a (n + 1)) * (IntCast.intCast (a (n + 1)))⁻¹ = 1
+    [prop] (z - 1) * (a 0 * a (n + 1)) = (a n - a (n + 1)) * (a 0 - a (n + 1))
+    [prop] (a n).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p ∧
+          (a 0).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p
+    [prop] padicValInt p (a n) + 1 ≤ padicValInt p (a (n + 1)) ∧ padicValInt p (a 0) + 1 ≤ padicValInt p (a (n + 1))
+    [prop] padicValInt p (a n + -1 * a (n + 1)) = padicValInt p (a n) ∧
+          padicValInt p (a 0 + -1 * a (n + 1)) = padicValInt p (a 0)
+    [prop] a n + -1 * a (n + 1) = 0
+  [eqc] True propositions
+    [prop] Nat.Prime p
+    [prop] padicValInt p (a n + -1 * a (n + 1)) = padicValInt p (a n) ∧
+          padicValInt p (a 0 + -1 * a (n + 1)) = padicValInt p (a 0)
+    [prop] padicValInt p (a n) + 1 ≤ padicValInt p (a (n + 1)) ∧ padicValInt p (a 0) + 1 ≤ padicValInt p (a (n + 1))
+    [prop] (a n).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p ∧
+          (a 0).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p
+    [prop] padicValInt p (a n + -1 * a (n + 1)) = padicValInt p (a n)
+    [prop] padicValInt p (a 0 + -1 * a (n + 1)) = padicValInt p (a 0)
+    [prop] N ≤ n
+    [prop] padicValInt p (a n) + 1 ≤ padicValInt p (a (n + 1))
+    [prop] padicValInt p (a 0) + 1 ≤ padicValInt p (a (n + 1))
+    [prop] (a n).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p
+    [prop] (a 0).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p
+    [prop] if IntCast.intCast (a 0) = 0 then (IntCast.intCast (a 0))⁻¹ = 0
+        else IntCast.intCast (a 0) * (IntCast.intCast (a 0))⁻¹ = 1
+    [prop] if IntCast.intCast (a (n + 1)) = 0 then (IntCast.intCast (a (n + 1)))⁻¹ = 0
+        else IntCast.intCast (a (n + 1)) * (IntCast.intCast (a (n + 1)))⁻¹ = 1
+    [prop] ∀ (n : ℕ), -1 * a n + 1 ≤ 0
+    [prop] ∀ (n : ℕ),
+          N ≤ n →
+            ∃ z,
+              IntCast.intCast z =
+                IntCast.intCast (a n) * (IntCast.intCast (a (n + 1)))⁻¹ +
+                  (IntCast.intCast (a (n + 1)) - IntCast.intCast (a n)) * (IntCast.intCast (a 0))⁻¹
+  [eqc] Equivalence classes
+    [eqc] {a n, a (n + 1)}
+    [eqc] {(a n).natAbs, (a (n + 1)).natAbs}
+    [eqc] {(a n).natAbs.factorization, (a (n + 1)).natAbs.factorization}
+    [eqc] {padicValInt p (a n), padicValInt p (a (n + 1)), padicValInt p (a n + -1 * a (n + 1))}
+    [eqc] {padicValInt p (a 0), padicValInt p (a 0 + -1 * a (n + 1))}
+    [eqc] {0, a n + -1 * a (n + 1), (z - 1) * (a 0 * a (n + 1)), (a n - a (n + 1)) * (a 0 - a (n + 1))}
+    [eqc] {(a n).natAbs.factorization p, (a (n + 1)).natAbs.factorization p}
+    [eqc] others
+      [eqc] {IntCast.intCast z,
+          IntCast.intCast (a n) * (IntCast.intCast (a (n + 1)))⁻¹ +
+            (IntCast.intCast (a (n + 1)) - IntCast.intCast (a n)) * (IntCast.intCast (a 0))⁻¹}
+      [eqc] {IntCast.intCast (a n), IntCast.intCast (a (n + 1))}
+  [ematch] E-matching patterns
+    [thm] apos: [@LE.le `[ℤ] `[Int.instLEInt] (@HAdd.hAdd `[ℤ] `[ℤ] `[ℤ] `[instHAdd] (@HMul.hMul `[ℤ] `[ℤ] `[ℤ] `[instHMul] `[-1] (a #0)) `[1]) `[0]]
+    [thm] apos: [a #0]
+    [thm] hint: [@LE.le `[ℕ] `[instLENat] `[N] #1]
+    [thm] intCast_apply: [@DFunLike.coe #7 #6 _ #5 (@IntCast.intCast _ #4 #1) #0]
+    [thm] inv_apply: [@DFunLike.coe #8 #7 _ #5 (@Inv.inv _ #3 #1) #0]
+    [thm] sub_apply: [@DFunLike.coe #9 #8 _ #6 (@HSub.hSub _ _ _ _ #2 #1) #0]
+    [thm] mul_apply_eq_comp: [@DFunLike.coe #7 #6 _ #5 (@HMul.hMul _ _ _ _ #2 #1) #0]
+    [thm] add_apply: [@DFunLike.coe #9 #8 _ #6 (@HAdd.hAdd _ _ _ _ #2 #1) #0]
+    [thm] mul_apply: [@DFunLike.coe #9 #8 _ #6 (@HMul.hMul _ _ _ _ #2 #1) #0]
+    [thm] one_apply_eq_self: [@DFunLike.coe #5 #4 _ #3 (@OfNat.ofNat _ `[1] _) #0]
+    [thm] zero_apply: [@DFunLike.coe #7 #6 _ #4 (@OfNat.ofNat _ `[0] _) #0]
+    [thm] one_apply: [@DFunLike.coe #7 #6 _ #4 (@OfNat.ofNat _ `[1] _) #0]
+    [thm] map_sub: [@DFunLike.coe #7 #9 _ #6 #2 (@HSub.hSub _ _ _ _ #1 #0)]
+    [thm] map_inv: [@DFunLike.coe #6 #8 _ #5 #1 (@Inv.inv _ _ #0)]
+    [thm] map_add: [@DFunLike.coe #7 #9 _ #4 #2 (@HAdd.hAdd _ _ _ _ #1 #0)]
+    [thm] map_mul: [@DFunLike.coe #7 #9 _ #4 #2 (@HMul.hMul _ _ _ _ #1 #0)]
+    [thm] map_zero: [@DFunLike.coe #5 #7 _ #2 #0 (@OfNat.ofNat _ `[0] _)]
+    [thm] map_one: [@DFunLike.coe #5 #7 _ #2 #0 (@OfNat.ofNat _ `[1] _)]
+    [thm] Finsupp.zero_apply: [@DFunLike.coe (Finsupp #3 #2 #1) _ _ _ (@OfNat.ofNat (Finsupp _ _ _) `[0] _) #0]
+  [ring] Rings
+    [ring] Ring `ℤ`
+      [basis] Basis
+        [_] z * a 0 * a n + -1 * (a 0 * a n) = 0
+        [_] a (n + 1) + -1 * a n = 0
+    [ring] Ring `ℚ`
+      [basis] Basis
+        [_] IntCast.intCast (a n) + -1 * IntCast.intCast (a (n + 1)) = 0
+  [limits] Thresholds reached
+    [limit] maximum number of E-matching rounds has been reached, threshold: `(ematch := 0)`
+    [limit] maximum number of case-splits has been reached, threshold: `(splits := 0)`
+[grind] Issues
+  [issue] failed to canonicalize instance
+        Classical.propDecidable (IntCast.intCast (a (n + 1)) = 0)
+      synthesized instance is not definitionally equal
+        instDecidableEqRat (IntCast.intCast (a (n + 1))) 0
+  [issue] failed to canonicalize instance
+        Classical.propDecidable (IntCast.intCast (a 0) = 0)
+      synthesized instance is not definitionally equal
+        instDecidableEqRat (IntCast.intCast (a 0)) 0
+.rambam/autoprove-scratch/job2018or2020.result.lean:137:10: error: `grind` failed
+case grind.1.1.1
+a : ℕ → ℤ
+apos : ∀ (n : ℕ), 0 < a n
+N : ℕ
+hint : ∀ (n : ℕ), N ≤ n → ∃ z, ↑z = ↑(a n) / ↑(a (n + 1)) + (↑(a (n + 1)) - ↑(a n)) / ↑(a 0)
+n p : ℕ
+z : ℤ
+hn : N ≤ n
+hp : Nat.Prime p
+hz : ↑z = ↑(a n) / ↑(a (n + 1)) + (↑(a (n + 1)) - ↑(a n)) / ↑(a 0)
+h_eq : (z - 1) * (a 0 * a (n + 1)) = (a n - a (n + 1)) * (a 0 - a (n + 1))
+h_contra :
+  (a n).natAbs.factorization p < (a (n + 1)).natAbs.factorization p ∧
+    (a 0).natAbs.factorization p < (a (n + 1)).natAbs.factorization p
+h_val : padicValInt p (a n) < padicValInt p (a (n + 1)) ∧ padicValInt p (a 0) < padicValInt p (a (n + 1))
+h_val_rhs :
+  padicValInt p (a n - a (n + 1)) = padicValInt p (a n) ∧ padicValInt p (a 0 - a (n + 1)) = padicValInt p (a 0)
+h : a 0 + -1 * a (n + 1) = 0
+h_1 : -1 * a n ≤ 0
+h_2 : -1 * a (n + 1) ≤ 0
+h_3 : -1 * a 0 ≤ 0
+⊢ False
+[grind] Goal diagnostics
+  [facts] Asserted facts
+    [prop] ∀ (n : ℕ), -1 * a n + 1 ≤ 0
+    [prop] ∀ (n : ℕ),
+          N ≤ n →
+            ∃ z,
+              IntCast.intCast z =
+                IntCast.intCast (a n) * (IntCast.intCast (a (n + 1)))⁻¹ +
+                  (IntCast.intCast (a (n + 1)) - IntCast.intCast (a n)) * (IntCast.intCast (a 0))⁻¹
+    [prop] N ≤ n
+    [prop] Nat.Prime p
+    [prop] IntCast.intCast z =
+          IntCast.intCast (a n) * (IntCast.intCast (a (n + 1)))⁻¹ +
+            (IntCast.intCast (a (n + 1)) - IntCast.intCast (a n)) * (IntCast.intCast (a 0))⁻¹
+    [prop] (z - 1) * (a 0 * a (n + 1)) = (a n - a (n + 1)) * (a 0 - a (n + 1))
+    [prop] (a n).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p ∧
+          (a 0).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p
+    [prop] ↑(a 0).natAbs = if -1 * a 0 ≤ 0 then a 0 else -1 * a 0
+    [prop] ↑(a (n + 1)).natAbs = if -1 * a (n + 1) ≤ 0 then a (n + 1) else -1 * a (n + 1)
+    [prop] ↑(a n).natAbs = if -1 * a n ≤ 0 then a n else -1 * a n
+    [prop] padicValInt p (a n) + 1 ≤ padicValInt p (a (n + 1)) ∧ padicValInt p (a 0) + 1 ≤ padicValInt p (a (n + 1))
+    [prop] padicValInt p (a n + -1 * a (n + 1)) = padicValInt p (a n) ∧
+          padicValInt p (a 0 + -1 * a (n + 1)) = padicValInt p (a 0)
+    [prop] a 0 + -1 * a (n + 1) = 0
+    [prop] -1 * a n ≤ 0
+    [prop] -1 * a (n + 1) ≤ 0
+    [prop] -1 * a 0 ≤ 0
+  [eqc] True propositions
+    [prop] Nat.Prime p
+    [prop] padicValInt p (a n + -1 * a (n + 1)) = padicValInt p (a n) ∧
+          padicValInt p (a 0 + -1 * a (n + 1)) = padicValInt p (a 0)
+    [prop] padicValInt p (a n) + 1 ≤ padicValInt p (a (n + 1)) ∧ padicValInt p (a 0) + 1 ≤ padicValInt p (a (n + 1))
+    [prop] (a n).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p ∧
+          (a 0).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p
+    [prop] padicValInt p (a n + -1 * a (n + 1)) = padicValInt p (a n)
+    [prop] padicValInt p (a 0 + -1 * a (n + 1)) = padicValInt p (a 0)
+    [prop] -1 * a n ≤ 0
+    [prop] -1 * a 0 ≤ 0
+    [prop] -1 * a (n + 1) ≤ 0
+    [prop] N ≤ n
+    [prop] padicValInt p (a n) + 1 ≤ padicValInt p (a (n + 1))
+    [prop] padicValInt p (a 0) + 1 ≤ padicValInt p (a (n + 1))
+    [prop] (a n).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p
+    [prop] (a 0).natAbs.factorization p + 1 ≤ (a (n + 1)).natAbs.factorization p
+    [prop] ∀ (n : ℕ), -1 * a n + 1 ≤ 0
+    [prop] ∀ (n : ℕ),
+          N ≤ n →
+            ∃ z,
+              IntCast.intCast z =
+                IntCast.intCast (a n) * (IntCast.intCast (a (n + 1)))⁻¹ +
+                  (IntCast.intCast (a (n + 1)) - IntCast.intCast (a n)) * (IntCast.intCast (a 0))⁻¹
+  [eqc] Equivalence classes
+    [eqc] {padicValInt p (a n), padicValInt p (a n + -1 * a (n + 1))}
+    [eqc] {padicValInt p (a 0), padicValInt p (a 0 + -1 * a (n + 1))}
+    [eqc] {0, a 0 + -1 * a (n + 1)}
+    [eqc] {(z - 1) * (a 0 * a (n + 1)), (a n - a (n + 1)) * (a 0 - a (n + 1))}
+    [eqc] others
+      [eqc] {a n, ↑(a n).natAbs, if -1 * a n ≤ 0 then a n else -1 * a n}
+      [eqc] {a 0, ↑(a 0).natAbs, if -1 * a 0 ≤ 0 then a 0 else -1 * a 0}
+      [eqc] {a (n + 1), ↑(a (n + 1)).natAbs, if -1 * a (n + 1) ≤ 0 then a (n + 1) else -1 * a (n + 1)}
+      [eqc] {IntCast.intCast z,
+          IntCast.intCast (a n) * (IntCast.intCast (a (n + 1)))⁻¹ +
+            (IntCast.intCast (a (n + 1)) - IntCast.intCast (a n)) * (IntCast.intCast (a 0))⁻¹}
+  [cases] Case analyses
+    [cases] [1/2]: if -1 * a n ≤ 0 then a n else -1 * a n
+      [cases] source: Initial goal
+    [cases] [1/2]: if -1 * a (n + 1) ≤ 0 then a (n + 1) else -1 * a (n + 1)
+      [cases] source: Initial goal
+    [cases] [1/2]: if -1 * a 0 ≤ 0 then a 0 else -1 * a 0
+      [cases] source: Initial goal
+  [ematch] E-matching patterns
+    [thm] apos: [@LE.le `[ℤ] `[Int.instLEInt] (@HAdd.hAdd `[ℤ] `[ℤ] `[ℤ] `[instHAdd] (@HMul.hMul `[ℤ] `[ℤ] `[ℤ] `[instHMul] `[-1] (a #0)) `[1]) `[0]]
+    [thm] apos: [a #0]
+    [thm] hint: [@LE.le `[ℕ] `[instLENat] `[N] #1]
+    [thm] Nat.pow_pos: [@HPow.hPow `[ℕ] `[ℕ] `[ℕ] `[instHPow] #2 #1]
+    [thm] Nat.div_pow_of_pos: [@HPow.hPow `[ℕ] `[ℕ] `[ℕ] `[instHPow] #2 #1]
+    [thm] intCast_apply: [@DFunLike.coe #7 #6 _ #5 (@IntCast.intCast _ #4 #1) #0]
+    [thm] natCast_apply: [@DFunLike.coe #7 #6 _ #5 (@NatCast.natCast _ #4 #1) #0]
+    [thm] pow_apply: [@DFunLike.coe #9 #8 _ #6 (@HPow.hPow _ #10 _ _ #2 #1) #0]
+    [thm] inv_apply: [@DFunLike.coe #8 #7 _ #5 (@Inv.inv _ #3 #1) #0]
+    [thm] sub_apply: [@DFunLike.coe #9 #8 _ #6 (@HSub.hSub _ _ _ _ #2 #1) #0]
+    [thm] mul_apply_eq_comp: [@DFunLike.coe #7 #6 _ #5 (@HMul.hMul _ _ _ _ #2 #1) #0]
+    [thm] add_apply: [@DFunLike.coe #9 #8 _ #6 (@HAdd.hAdd _ _ _ _ #2 #1) #0]
+    [thm] mul_apply: [@DFunLike.coe #9 #8 _ #6 (@HMul.hMul _ _ _ _ #2 #1) #0]
+    [thm] map_zpow: [@DFunLike.coe #7 #9 _ #6 #2 (@HPow.hPow _ `[ℤ] _ _ #1 #0)]
+    [thm] map_pow: [@DFunLike.coe #7 #9 _ #6 #2 (@HPow.hPow _ `[ℕ] _ _ #1 #0)]
+    [thm] map_sub: [@DFunLike.coe #7 #9 _ #6 #2 (@HSub.hSub _ _ _ _ #1 #0)]
+    [thm] map_inv: [@DFunLike.coe #6 #8 _ #5 #1 (@Inv.inv _ _ #0)]
+    [thm] map_add: [@DFunLike.coe #7 #9 _ #4 #2 (@HAdd.hAdd _ _ _ _ #1 #0)]
+    [thm] map_mul: [@DFunLike.coe #7 #9 _ #4 #2 (@HMul.hMul _ _ _ _ #1 #0)]
+  [cutsat] Assignment satisfying linear constraints
+    [assign] N := 0
+    [assign] n := 0
+    [assign] p := 3
+    [assign] z := 0
+    [assign] a n := 0
+    [assign] a 0 := 0
+    [assign] a (n + 1) := 0
+    [assign] (a n).natAbs := 0
+    [assign] (a 0).natAbs := 0
+    [assign] (a (n + 1)).natAbs := 0
+    [assign] padicValInt p (a n) := 0
+    [assign] padicValInt p (a 0) := 0
+    [assign] padicValInt p (a (n + 1)) := 1
+    [assign] padicValInt p (a n + -1 * a (n + 1)) := 0
+    [assign] padicValInt p (a 0 + -1 * a (n + 1)) := 0
+    [assign] (a n).natAbs.factorization p := 0
+    [assign] (a 0).natAbs.factorization p := 0
+    [assign] (a (n + 1)).natAbs.factorization p := 1
+    [assign] 「a (n + 1) ^ 2」 := 0
+  [limits] Thresholds reached
+    [limit] maximum number of E-matching rounds has been reached, threshold: `(ematch := 0)`

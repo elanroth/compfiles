@@ -1,0 +1,6 @@
+Compfiles/Imo2018P5.lean:142:28: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Compfiles/Imo2018P5.lean:142:18: warning: 'all_goals exact ⟨hp⟩' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`

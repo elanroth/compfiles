@@ -66,11 +66,96 @@ Do NOT resubmit any theorem listed here. Submitting duplicates wastes budget.
 To check a job's status, pass the full `project_id` shown below to `check_aristotle_job` — never the display name.
 
 ### Already completed by Aristotle (do not resubmit):
+- `imo2017p6-fixed-statement-retry` → **COMPLETE** (project_id: 0a335581-5724-4273-b40e-784a16847cb6)
+- `imo2021p3-enriched` → **COMPLETE** (project_id: df7fa6b0-2ff9-479f-93c1-505e74a6f511)
+- `imo2020p3-or-2018p5` → **COMPLETE** (project_id: 40715337-f483-4619-8871-9958293440d1)
+- `imo2010p3-enriched` → **COMPLETE_WITH_ERRORS** (project_id: 26e5f3d9-1bb8-43c4-99fe-27b97ea7684b)
+- `imo2016p5-enriched` → **COMPLETE** (project_id: ad54728b-c8ff-477d-a811-31b09e8f885c)
+- `imo2018p5-or-2020p3` → **COMPLETE_WITH_ERRORS** (project_id: 62c51ddb-2d75-4dee-a814-c6f10284015f)
+- `imo2021p3` → **COMPLETE_WITH_ERRORS** (project_id: 1ccc670f-dca6-487e-9b29-3de41d5da2a4)
+- `imo2021p5` → **COMPLETE_WITH_ERRORS** (project_id: 3d23a517-1881-4fe0-9a71-362ee81ad9b4)
 - `ffb26551-c53` → **COMPLETE** (project_id: ffb26551-c537-4ba3-888f-5b8b749deaff)
 - `9100886b-7a0` → **COMPLETE** (project_id: 9100886b-7a0e-4622-80e9-163dd290a5bb)
 
 
 ## ARISTOTLE OUTPUT SUMMARIES (what was proved and what remains — use this as your starting point):
+
+### imo2017p6-fixed-statement-retry (COMPLETE)
+Filled all sorries in `Main.lean` while preserving the theorem statements exactly. Added explicit lemmas for homogeneous polynomial representation, products and powers, modular evaluation, coprimality of determinant products, and the Euler-theorem power step used in the induction proof of `imo2017_p6`.
+
+Verification completed:
+- `lake build` succeeds with no errors or warnings.
+- No forbidden placeholders or constructs remain (`sorry`, `admit`, `exact?`, `native_decide`, `axiom`, or `sorryAx`).
+- The main theorem uses only the permitted standard axioms: `propext`, `Classical.choice`, and `Quot.sound`.
+- The project configuration now pins the compatible Mathlib revision and builds `Main.lean` as the default library root.
+
+### imo2021p3-enriched (COMPLETE)
+Made substantial verified progress while preserving every original theorem statement exactly:
+
+- Proved `imo2021_p3_E_ne_F` remains valid and axiom-clean.
+- Added and proved two general Euclidean helper lemmas characterizing intersections of a line with a circle whose center is equidistant from the line’s endpoints.
+- Proved `imo2021_p3_circumcenters_ne`, establishing that the two circumcenters in the problem are distinct.
+- Reduced the unresolved work to the single focused theorem `imo2021_p3_concurrency`, which is now the only `sorry` in `Main.lean`, as requested for the case where the full target cannot be completed.
+- Reassembled `imo2021_p3_remaining` and the original final theorem from the proved components and this sole remaining concurrency lemma.
+- Confirmed all completed lemmas use only permitted standard axioms (`propext`, `Classical.choice`, and `Quot.sound`).
+- Aligned the project toolchain with its Mathlib dependency and committed and pushed all changes.
+
+The file elaborates successfully apart from the explicit warning for the one remaining `sorry`. The full concurrency argument for IMO 2021 Problem 3 remains unproved.
+
+### imo2020p3-or-2018p5 (COMPLETE)
+Filled all sorries in `Main.lean` while preserving the main theorem statement exactly. The completed proof uses complementary pebble pairs, Hall matching, a balanced orientation, and a directed cycle cover to construct the required partition.
+
+Verification completed:
+- `Main.lean` compiles with no errors or warnings.
+- No `sorry`, `admit`, `axiom`, `native_decide`, `exact?`, `Classical.arbitrary`, or `sorryAx` remains.
+- The theorem uses only the permitted foundational axioms: `propext`, `Classical.choice`, and `Quot.sound`.
+- Changes were committed and pushed.
+
+### imo2010p3-enriched (COMPLETE_WITH_ERRORS)
+Filled all `sorry`s in `Main.lean` while preserving the original theorem statements. Added explicit number-theoretic helper lemmas for p-adic valuations, square factors, and modular congruences, then proved `step_one` and the full `imo2010_p3` characterization.
+
+Verification completed:
+- `Main.lean` compiles with no errors or warnings.
+- No `sorry`, `admit`, `exact?`, `native_decide`, `axiom`, `Classical.arbitrary`, or `sorryAx` remains.
+- The main theorem uses only the permitted standard axioms: `propext`, `Classical.choice`, and `Quot.sound`.
+- Changes were committed and pushed.
+
+### imo2016p5-enriched (COMPLETE)
+Completed all proofs in `Main.lean`, including the alternating block-product inequality and the final `no_real_solution` theorem for IMO 2016 Problem 5.
+
+Verification:
+- The project builds successfully with no errors or warnings.
+- No `sorry`, `admit`, `axiom`, `exact?`, `native_decide`, or other prohibited constructs remain.
+- The main theorem uses only the permitted standard axioms `propext`, `Classical.choice`, and `Quot.sound`.
+- Added `Main` as the library root so the default project build checks the completed theorem file.
+
+### imo2018p5-or-2020p3 (COMPLETE_WITH_ERRORS)
+Filled all sorries in `Main.lean` and preserved the statement of `Imo2018P5.imo2018_p5` exactly. The proof now includes explicit lemmas for consecutive-sum integrality, p-adic boundedness, reduced-ratio descent, and eventual stabilization.
+
+Also updated the library root in `lakefile.lean` so the target builds normally. Verified that:
+- `lake build` completes successfully with zero Lean/linter warnings.
+- No forbidden `sorry`, `admit`, `exact?`, `native_decide`, `axiom`, or `Classical.arbitrary` remains.
+- The main theorem uses only the permitted axioms `propext`, `Classical.choice`, and `Quot.sound`.
+
+### imo2021p3 (COMPLETE_WITH_ERRORS)
+I could not complete the full IMO 2021 Problem 3 formalization without violating the stated soundness constraints. I made the following verified progress in `Main.lean`:
+
+- Proved the explicit nondegeneracy conclusion `E ≠ F` as the helper lemma `Imo2021P3.imo2021_p3_E_ne_F`.
+- Cleaned that proof so it compiles without linter warnings.
+- Preserved the exact statement of `imo2021_p3`.
+- Reduced the unresolved work to a single helper, `imo2021_p3_remaining`, containing precisely the two hard remaining conclusions: `O₁ ≠ O₂` and the concurrency assertion.
+- The main theorem now assembles the proved `E ≠ F` result with that one remaining helper.
+
+The project is committed and pushed. The sole remaining `sorry` is in `imo2021_p3_remaining`; no other proof obligations remain.
+
+### imo2021p5 (COMPLETE_WITH_ERRORS)
+Filled all sorries in `Main.lean` and proved `Imo2021P5.imo2021_p5` without changing its mathematical statement. The proof formalizes the two-coloring argument via explicit lemmas for the move counter, the black-position invariant, bijectivity of central positions, opposite colors on adjacent positions, and impossibility of two-coloring an odd cycle.
+
+Verification completed:
+- Full project build succeeds with zero errors and zero warnings.
+- No `sorry`, `admit`, `axiom`, `native_decide`, `exact?`, or `Classical.arbitrary` remains.
+- The theorem uses only the permitted axioms `propext`, `Classical.choice`, and `Quot.sound`.
+- Updated the library target so `Main.lean` is included in the default build.
 
 ### ffb26551-c53 (COMPLETE)
 Completed the formalization of Canada 1998 Problem 5 in `Main.lean`. The file now builds cleanly with no errors, no linter warnings, and no remaining `sorry` (the main theorem `canada1998_p5` uses only the standard axioms `propext`, `Classical.choice`, `Quot.sound`).
@@ -158,17 +243,94 @@ No jobs submitted yet. All 80 sorrys are available.
 - **Next action:** Review sorry map and pick next P1 target.
 
 ## Status (auto-updated)
-_Last updated: 2026-07-20 15:38 UTC_
+_Last updated: 2026-07-22 00:30 UTC_
 
-**Sorry count:** 68  
+**Sorry count:** 42  
 **Active (with Aristotle):** 0  
-**Completed jobs:** 2
+**Completed jobs:** 10
 
 ### Next action
 `9100886b-7a0` is COMPLETE. Move to next unsubmitted P1 item.
 
 ### Aristotle output summaries
 _(Use these — do not re-submit anything listed here)_
+
+#### `imo2017p6-fixed-statement-retry` — COMPLETE
+Filled all sorries in `Main.lean` while preserving the theorem statements exactly. Added explicit lemmas for homogeneous polynomial representation, products and powers, modular evaluation, coprimality of determinant products, and the Euler-theorem power step used in the induction proof of `imo2017_p6`.
+
+Verification completed:
+- `lake build` succeeds with no errors or warnings.
+- No forbidden placeholders or constructs remain (`sorry`, `admit`, `exact?`, `native_decide`, `axiom`, or `sorryAx`).
+- The main theorem uses only the permitted standard axioms: `propext`, `Classical.choice`, and `Quot.sound`.
+- The project configuration now pins the compatible Mathlib revision and builds `Main.lean` as the default library root.
+
+#### `imo2021p3-enriched` — COMPLETE
+Made substantial verified progress while preserving every original theorem statement exactly:
+
+- Proved `imo2021_p3_E_ne_F` remains valid and axiom-clean.
+- Added and proved two general Euclidean helper lemmas characterizing intersections of a line with a circle whose center is equidistant from the line’s endpoints.
+- Proved `imo2021_p3_circumcenters_ne`, establishing that the two circumcenters in the problem are distinct.
+- Reduced the unresolved work to the single focused theorem `imo2021_p3_concurrency`, which is now the only `sorry` in `Main.lean`, as requested for the case where the full target cannot be completed.
+- Reassembled `imo2021_p3_remaining` and the original final theorem from the proved components and this sole remaining concurrency lemma.
+- Confirmed all completed lemmas use only permitted standard axioms (`propext`, `Classical.choice`, and `Quot.sound`).
+- Aligned the project toolchain with its Mathlib dependency and committed and pushed all changes.
+
+The file elaborates successfully apart from the explicit warning for the one remaining `sorry`. The full concurrency argument for IMO 2021 Problem 3 remains unproved.
+
+#### `imo2020p3-or-2018p5` — COMPLETE ✓ integrated
+Filled all sorries in `Main.lean` while preserving the main theorem statement exactly. The completed proof uses complementary pebble pairs, Hall matching, a balanced orientation, and a directed cycle cover to construct the required partition.
+
+Verification completed:
+- `Main.lean` compiles with no errors or warnings.
+- No `sorry`, `admit`, `axiom`, `native_decide`, `exact?`, `Classical.arbitrary`, or `sorryAx` remains.
+- The theorem uses only the permitted foundational axioms: `propext`, `Classical.choice`, and `Quot.sound`.
+- Changes were committed and pushed.
+
+#### `imo2010p3-enriched` — COMPLETE_WITH_ERRORS ✓ integrated
+Filled all `sorry`s in `Main.lean` while preserving the original theorem statements. Added explicit number-theoretic helper lemmas for p-adic valuations, square factors, and modular congruences, then proved `step_one` and the full `imo2010_p3` characterization.
+
+Verification completed:
+- `Main.lean` compiles with no errors or warnings.
+- No `sorry`, `admit`, `exact?`, `native_decide`, `axiom`, `Classical.arbitrary`, or `sorryAx` remains.
+- The main theorem uses only the permitted standard axioms: `propext`, `Classical.choice`, and `Quot.sound`.
+- Changes were committed and pushed.
+
+#### `imo2016p5-enriched` — COMPLETE
+Completed all proofs in `Main.lean`, including the alternating block-product inequality and the final `no_real_solution` theorem for IMO 2016 Problem 5.
+
+Verification:
+- The project builds successfully with no errors or warnings.
+- No `sorry`, `admit`, `axiom`, `exact?`, `native_decide`, or other prohibited constructs remain.
+- The main theorem uses only the permitted standard axioms `propext`, `Classical.choice`, and `Quot.sound`.
+- Added `Main` as the library root so the default project build checks the completed theorem file.
+
+#### `imo2018p5-or-2020p3` — COMPLETE_WITH_ERRORS
+Filled all sorries in `Main.lean` and preserved the statement of `Imo2018P5.imo2018_p5` exactly. The proof now includes explicit lemmas for consecutive-sum integrality, p-adic boundedness, reduced-ratio descent, and eventual stabilization.
+
+Also updated the library root in `lakefile.lean` so the target builds normally. Verified that:
+- `lake build` completes successfully with zero Lean/linter warnings.
+- No forbidden `sorry`, `admit`, `exact?`, `native_decide`, `axiom`, or `Classical.arbitrary` remains.
+- The main theorem uses only the permitted axioms `propext`, `Classical.choice`, and `Quot.sound`.
+
+#### `imo2021p3` — COMPLETE_WITH_ERRORS
+I could not complete the full IMO 2021 Problem 3 formalization without violating the stated soundness constraints. I made the following verified progress in `Main.lean`:
+
+- Proved the explicit nondegeneracy conclusion `E ≠ F` as the helper lemma `Imo2021P3.imo2021_p3_E_ne_F`.
+- Cleaned that proof so it compiles without linter warnings.
+- Preserved the exact statement of `imo2021_p3`.
+- Reduced the unresolved work to a single helper, `imo2021_p3_remaining`, containing precisely the two hard remaining conclusions: `O₁ ≠ O₂` and the concurrency assertion.
+- The main theorem now assembles the proved `E ≠ F` result with that one remaining helper.
+
+The project is committed and pushed. The sole remaining `sorry` is in `imo2021_p3_remaining`; no other proof obligations remain.
+
+#### `imo2021p5` — COMPLETE_WITH_ERRORS
+Filled all sorries in `Main.lean` and proved `Imo2021P5.imo2021_p5` without changing its mathematical statement. The proof formalizes the two-coloring argument via explicit lemmas for the move counter, the black-position invariant, bijectivity of central positions, opposite colors on adjacent positions, and impossibility of two-coloring an odd cycle.
+
+Verification completed:
+- Full project build succeeds with zero errors and zero warnings.
+- No `sorry`, `admit`, `axiom`, `native_decide`, `exact?`, or `Classical.arbitrary` remains.
+- The theorem uses only the permitted axioms `propext`, `Classical.choice`, and `Quot.sound`.
+- Updated the library target so `Main.lean` is included in the default build.
 
 #### `ffb26551-c53` — COMPLETE ✓ integrated
 Completed the formalization of Canada 1998 Problem 5 in `Main.lean`. The file now builds cleanly with no errors, no linter warnings, and no remaining `sorry` (the main theorem `canada1998_p5` uses only the standard axioms `propext`, `Classical.choice`, `Quot.sound`).

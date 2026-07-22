@@ -1,0 +1,29 @@
+.rambam/autoprove-scratch/imo2021p5.result.lean:106:58: error: unsolved goals
+p : Position
+h :
+  ∀ (k : Fin 2021),
+    ¬(((p.nth k).swapped k).1 < k ∧ k < ((p.nth k).swapped k).2 ∨
+        ((p.nth k).swapped k).2 < k ∧ k < ((p.nth k).swapped k).1)
+a b : Fin 2021
+hab : central p a + 1 = central p b
+hba : ¬b < a
+h_not_lt_a : ¬∃ k, ↑k < ↑a ∧ central p k = central p b
+⊢ p.nth a = (state p ↑a).1
+
+p : Position
+h :
+  ∀ (k : Fin 2021),
+    ¬(((p.nth k).swapped k).1 < k ∧ k < ((p.nth k).swapped k).2 ∨
+        ((p.nth k).swapped k).2 < k ∧ k < ((p.nth k).swapped k).1)
+a b : Fin 2021
+hab : central p a + 1 = central p b
+hba : ¬b < a
+h_not_lt_a : ¬∃ k, ↑k < ↑a ∧ central p k = central p b
+⊢ ¬∃ k, ↑k < ↑a ∧ central p k = central p b
+.rambam/autoprove-scratch/imo2021p5.result.lean:145:2: warning: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
