@@ -4,5 +4,6 @@ build/
 lake-packages/
 _site
 _extracted
+_check
 .DS_Store
 __pycache__/
