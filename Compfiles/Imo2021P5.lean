@@ -167,7 +167,6 @@ private lemma odd_cycle_not_two_colorable (color : Fin 2021 → Prop)
   have := h 2020
   simp +decide [h_ind 2020] at this
 
-
 snip end
 
 problem imo2021_p5 (p : Position) :
@@ -198,6 +197,5 @@ problem imo2021_p5 (p : Position) :
     simpa [color] using h_color_ab
   letI : DecidablePred color := Classical.decPred color
   exact Imo2021P5.odd_cycle_not_two_colorable color h_adjacent
-
 
 end Imo2021P5

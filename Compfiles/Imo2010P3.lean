@@ -32,11 +32,9 @@ notation "ℤ>0" => PosInt
 instance : Add PosInt where
   add a b := ⟨a.val + b.val, by linarith [a.prop, b.prop]⟩
 
-
 determine SolutionSet : Set (ℤ>0 → ℤ>0) := { f | f = id ∨ ∃ c, ∀ x, f x = x + c }
 
 snip begin
-
 
 /-
 Key lemma: if (g(m)+n)(g(n)+m) is always a perfect square, then g is injective
@@ -46,18 +44,10 @@ are both perfect squares. Since g(a)=g(b) the second factors agree, so first fac
 lemma injective_of_sq (g : ℤ>0 → ℤ>0) (h : ∀ m n : ℤ>0, IsSquare ((g m + n) * (g n + m))) :
     Function.Injective g := by
   intro a b hab
-  -- (g(a)+a)(g(a)+a) = (g(a)+a)^2 is a square
-  -- (g(a)+b)(g(b)+a) = (g(a)+b)(g(a)+a) must be a square
-  -- similarly swap m,n: (g(b)+a)(g(a)+b) = (g(a)+b)(g(a)+a)^2... hmm
-  -- If g(a)=g(b), then (g(m)+a)(g(a)+m) and (g(m)+b)(g(b)+m)=(g(m)+b)(g(a)+m) are squares
-  -- With m=a: (g(a)+a)^2 is a square (trivial) and (g(a)+b)(g(a)+a) must be a square
-  -- With m=b: (g(b)+a)(g(a)+b)=(g(a)+a)(g(a)+b) and (g(b)+b)^2=(g(a)+b)^2 are squares
-  -- So (g(a)+a)(g(a)+b) is a square and (g(a)+b)(g(a)+a) is a square: consistent
-  -- Need a stronger argument. Use: (g(n)+a)(g(a)+n) and (g(n)+b)(g(b)+n) both squares
-  -- Since g(a)=g(b): second factors equal. So (g(n)+a)*(X) and (g(n)+b)*(X) both squares
-  -- where X=g(a)+n. If X≠0: ratio (g(n)+a)/(g(n)+b) must be a ratio of squares, i.e. a perfect square.
-  -- For large n, (g(n)+a)/(g(n)+b) → 1, so it must equal 1 eventually, giving a=b.
-  -- Choose a prime $p$ such that $p > \max(a, b)$ and $p > g(a) + \max(a, b)$.
+  -- Pick a prime `p` exceeding both `max a b` and `g a + max a b`, and set `m = p - g a`,
+  -- so that `g a + m = p`. Then `(g m + a) * p` and `(g m + b) * p` are both squares, so
+  -- `p` divides each square root; dividing through by `p` forces `k ^ 2 = l ^ 2`, and
+  -- `p > max a b` leaves `a = b` as the only possibility.
   obtain ⟨p, hp_prime, hp_gt⟩ : ∃ p : ℕ, Nat.Prime p ∧ p > max a.val b.val ∧ p > (g a).val + max a.val b.val := by
     obtain ⟨p, hp⟩ := Nat.exists_infinite_primes (Int.natAbs (g a + max a b) + 1)
     exact ⟨p, hp.2, by cases max_cases (a : ℤ) (b : ℤ) <;> cases abs_cases (g a + max a b : ℤ) <;> linarith! [show (g a : ℤ) > 0 from mod_cast Subtype.property (g a), show (max a b : ℤ) > 0 from mod_cast lt_max_iff.mpr (Or.inl a.prop)], by cases max_cases (a : ℤ) (b : ℤ) <;> cases abs_cases (g a + max a b : ℤ) <;> linarith! [show (g a : ℤ) > 0 from mod_cast Subtype.property (g a), show (max a b : ℤ) > 0 from mod_cast lt_max_iff.mpr (Or.inl a.prop)]⟩
@@ -291,6 +281,5 @@ problem imo2010_p3 (g : ℤ>0 → ℤ>0) :
     rcases c with ⟨_ | c⟩ <;> norm_num at hc hc_nonneg
     · exact Or.inl <| funext fun x => Subtype.ext <| hc x x.prop
     · exact Or.inr ⟨⟨c + 1, by linarith⟩, fun x => Subtype.ext <| hc x x.prop⟩
-
 
 end Imo2010P3

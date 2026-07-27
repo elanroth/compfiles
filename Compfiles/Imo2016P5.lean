@@ -390,7 +390,6 @@ theorem no_real_solution :
   · exact fun a ha b hb hab => Finset.disjoint_left.mpr fun x hx₁ hx₂ => hab <| by norm_num at *; omega
   · exact fun a ha b hb hab => Finset.disjoint_left.mpr fun x hx₁ hx₂ => hab <| by norm_num at *; omega
 
-
 snip end
 
 determine solution_value : ℕ := 2016
@@ -450,6 +449,5 @@ problem imo2016_p5 :
       rw [Finset.mem_sdiff]; exact ⟨hic, hiR⟩
     rw [←Finset.prod_erase_mul _ _ hic1, ←Finset.prod_erase_mul _ _ hic2] at hLR
     simp at hLR
-
 
 end Imo2016P5
