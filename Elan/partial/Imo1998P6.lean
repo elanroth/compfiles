@@ -246,7 +246,8 @@ lemma lb_c_dvd (f : ℕ+ → ℕ+) (hf : ∀ s t, f (t ^ 2 * f s) = s * (f t) ^ 
     have h_mul : ∀ t u : ℕ+, (f 1 : ℕ) * f (t * u) = f t * f u := by
       intro t u
       exact (by
-      convert congr_arg PNat.val ( lb_c_f_mul f hf t u ) using 1);
+      convert congr_arg PNat.val ( lb_c_f_mul f hf t u ) using 1 <;>
+        simp [PNat.mul_coe]);
     grind;
   -- By induction on $k$, we can show that $f(1)^{2^k - 1} * f(t^{2^k}) = f(t)^{2^k}$.
   have h_ind : ∀ k : ℕ, (f 1 : ℕ) ^ (2 ^ k - 1) * (f (t ^ (2 ^ k)) : ℕ) = (f t : ℕ) ^ (2 ^ k) := by
