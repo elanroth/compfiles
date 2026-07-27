@@ -7,3 +7,7 @@ _extracted
 _check
 .DS_Store
 __pycache__/
+
+# Rambam run state: prover output, staging, scratch and audit.
+# Run artifacts, not project content; retained under ~/.local/state/rambam.
+.rambam/
