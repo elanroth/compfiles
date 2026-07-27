@@ -138,8 +138,7 @@ lemma local_integrality_bounded (a : ℕ → ℤ) (apos : ∀ n, 0 < a n)
               generalize_proofs at *; (
               have h_div_y : (p : ℤ) ^ (padicValInt p x + 1) ∣ y := by
                 have h_div_y : (p : ℤ) ^ (padicValInt p y) ∣ y := by
-                  convert padicValInt_dvd y using 1;
-                  all_goals exact ⟨ hp ⟩
+                  convert padicValInt_dvd y using 1
                 generalize_proofs at *; (
                 exact dvd_trans ( pow_dvd_pow _ ( Nat.succ_le_of_lt hxy ) ) h_div_y)
               generalize_proofs at *; (

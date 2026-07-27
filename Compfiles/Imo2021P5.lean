@@ -159,7 +159,6 @@ private lemma adjacent_central_opposite (p : Position)
 
 private lemma odd_cycle_not_two_colorable (color : Fin 2021 → Prop)
     [DecidablePred color] (h : ∀ x, color x ↔ ¬color (x + 1)) : False := by
-  -- We can prove this through induction on $x$.
   have h_ind : ∀ x : Fin 2021, color x ↔ color 0 = (x.val % 2 = 0) := by
     intro x; induction' x using Fin.inductionOn with x ih; norm_num at *;
     specialize h ( Fin.castSucc x ) ; norm_num [ Nat.add_mod ] at * ; by_cases h₁ : ( x : ℕ ) % 2 = 0 <;> simp +decide [ h₁ ] at ih h ⊢;
@@ -177,14 +176,12 @@ problem imo2021_p5 (p : Position) :
   revert p;
   -- By contradiction, assume there exists a position \( p \) such that no move straddles.
   by_contra h_contra
-  push_neg at h_contra;
+  push Not at h_contra;
   obtain ⟨ p, hp ⟩ := h_contra;
   have := Imo2021P5.central_bijective p ( fun k => by
     grind )
   generalize_proofs at *;
-  -- Define the coloring function based on the parity of the number of moves required to reach each hole.
   set color : Fin 2021 → Prop := fun x => lowerSwap p (Equiv.ofBijective (central p) this |>.symm x);
-  -- For adjacent x and x+1, let a=invCentral x and b=invCentral(x+1); then central a=x and central b=x+1, so adjacent_central_opposite gives color x ↔ ¬color(x+1).
   have h_adjacent : ∀ x : Fin 2021, color x ↔ ¬color (x + 1) := by
     intro x
     set a := (Equiv.ofBijective (central p) this).symm x

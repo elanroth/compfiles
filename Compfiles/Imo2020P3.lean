@@ -1,4 +1,7 @@
 import Mathlib
+import ProblemExtraction
+
+problem_file { tags := [.Combinatorics] }
 
 namespace Imo2020P3
 
@@ -81,36 +84,36 @@ private lemma exists_balanced_orientation {n : ℕ} {c : Fin (4 * n) → Fin n}
   have hg_complement : ∀ x : Fin (4 * n), x ∈ Set.range g ↔ partner n x ∉ Set.range g := by
     intro x
     constructor
-    intro hx
-    obtain ⟨a, ha⟩ := hx
-    have h_partner : partner n x ∈ Set.range g → False := by
-      grind +suggestions
-    exact h_partner
-    intro hx
-    have h_partner : partner n x ∈ Set.range g → False := by
-      exact hx
-    have h_exists : ∃ a : Fin n × Fin 2, g a = x ∨ g a = partner n x := by
-      obtain ⟨a, ha⟩ : ∃ a : Fin n × Fin 2, lowerPebble n (f a) = x ∨ lowerPebble n (f a) = partner n x := by
-        obtain ⟨a, ha⟩ : ∃ a : Fin (2 * n), lowerPebble n a = x ∨ lowerPebble n a = partner n x := by
+    · intro hx
+      obtain ⟨a, ha⟩ := hx
+      have h_partner : partner n x ∈ Set.range g → False := by
+        grind +suggestions
+      exact h_partner
+    · intro hx
+      have h_partner : partner n x ∈ Set.range g → False := by
+        exact hx
+      have h_exists : ∃ a : Fin n × Fin 2, g a = x ∨ g a = partner n x := by
+        obtain ⟨a, ha⟩ : ∃ a : Fin n × Fin 2, lowerPebble n (f a) = x ∨ lowerPebble n (f a) = partner n x := by
           obtain ⟨a, ha⟩ : ∃ a : Fin (2 * n), lowerPebble n a = x ∨ lowerPebble n a = partner n x := by
-            have h_exists : x.val < 2 * n ∨ (4 * n - 1 - x.val) < 2 * n := by
-              exact Classical.or_iff_not_imp_left.2 fun h => by omega;
-            cases' h_exists with h_exists h_exists <;> [ exact ⟨ ⟨ x, by linarith ⟩, Or.inl <| Fin.ext <| by simp +decide [ lowerPebble ] ⟩ ; exact ⟨ ⟨ 4 * n - 1 - x, by linarith ⟩, Or.inr <| Fin.ext <| by simp +decide [ lowerPebble, partner ] ⟩ ] ;
-          generalize_proofs at *; (
-          use a)
-        obtain ⟨b, hb⟩ : ∃ b : Fin n × Fin 2, f b = a := h_surjective a
-        use b
-        simp [ha, hb]
-      use a
-      simp [hg_def];
-      cases ha <;> simp +decide [ * ];
-      · grind +ring;
-      · simp +decide [ partner_invol ];
-        grind +ring
-    obtain ⟨a, ha⟩ := h_exists
-    have h_choose : g a = x := by
-      exact ha.resolve_right fun h => h_partner <| h ▸ Set.mem_range_self a
-    exact ⟨a, h_choose⟩
+            obtain ⟨a, ha⟩ : ∃ a : Fin (2 * n), lowerPebble n a = x ∨ lowerPebble n a = partner n x := by
+              have h_exists : x.val < 2 * n ∨ (4 * n - 1 - x.val) < 2 * n := by
+                exact Classical.or_iff_not_imp_left.2 fun h => by omega;
+              cases' h_exists with h_exists h_exists <;> [ exact ⟨ ⟨ x, by linarith ⟩, Or.inl <| Fin.ext <| by simp +decide [ lowerPebble ] ⟩ ; exact ⟨ ⟨ 4 * n - 1 - x, by linarith ⟩, Or.inr <| Fin.ext <| by simp +decide [ lowerPebble, partner ] ⟩ ] ;
+            generalize_proofs at *; (
+            use a)
+          obtain ⟨b, hb⟩ : ∃ b : Fin n × Fin 2, f b = a := h_surjective a
+          use b
+          simp [ha, hb]
+        use a
+        simp [hg_def];
+        cases ha <;> simp +decide [ * ];
+        · grind +ring;
+        · simp +decide [ partner_invol ];
+          grind +ring
+      obtain ⟨a, ha⟩ := h_exists
+      have h_choose : g a = x := by
+        exact ha.resolve_right fun h => h_partner <| h ▸ Set.mem_range_self a
+      exact ⟨a, h_choose⟩
   have hg_card : ∀ i : Fin n, (Finset.filter (fun x => c x = i) (Finset.image g Finset.univ)).card = 2 := by
     intro i; rw [ Finset.card_filter ] ; rw [ Finset.sum_image <| by tauto ] ; simp +decide [ hg_color ] ;
     rw [ show ( Finset.filter ( fun x : Fin n × Fin 2 => x.1 = i ) Finset.univ : Finset ( Fin n × Fin 2 ) ) = Finset.image ( fun j : Fin 2 => ( i, j ) ) Finset.univ from by ext ⟨ x, y ⟩ ; aesop ] ; rw [ Finset.card_image_of_injective ] <;> norm_num [ Function.Injective ] ;
@@ -220,8 +223,7 @@ private lemma total_weight (n : ℕ) :
       linarith
   rw [← hsum, Finset.sum_range]
 
-/-- Main theorem -/
-theorem imo2020_p3 {n : ℕ} {c : Fin (4 * n) → Fin n} (h : ∀ i, #{j | c j = i} = 4) :
+problem imo2020_p3 {n : ℕ} {c : Fin (4 * n) → Fin n} (h : ∀ i, #{j | c j = i} = 4) :
     ∃ S : Finset (Fin (4 * n)), ∑ i ∈ S, ((i : ℕ) + 1) = ∑ i ∈ Sᶜ, ((i : ℕ) + 1) ∧
       ∀ i, #{j ∈ S | c j = i} = 2 := by
   by_cases hn : n = 0
