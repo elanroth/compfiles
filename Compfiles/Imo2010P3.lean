@@ -98,7 +98,7 @@ lemma exists_positive_shift_odd_padic {p : ℕ} (hp : Nat.Prime p) {a b : ℤ}
   -- Set d = a - b. If d = 0, set x = p*(1+p*a), M = x - a; x > a, and p exactly divides x, so both valuations are 1.
   set d := a - b with hd
   by_cases hd_zero : d = 0
-  · refine' ⟨p * (1 + p * a) - a, _, _, _⟩
+  · refine ⟨p * (1 + p * a) - a, ?_, ?_, ?_⟩
     · nlinarith [hp.two_le, mul_pos (Nat.cast_pos.mpr hp.pos) ha]
     · simp +zetaDelta at *
       haveI := Fact.mk hp; rw [padicValInt.mul] <;> norm_num [hp.ne_zero, hp.ne_one, ha.ne', hb.ne']
@@ -269,7 +269,7 @@ problem imo2010_p3 (g : ℤ>0 → ℤ>0) :
       · rcases n with (_ | n) <;> simp_all +decide
         cases h_step (n + 1) (by linarith) <;> simp_all +decide [add_assoc]
         contrapose! hsq
-        refine' ⟨n + 2, by linarith, 1, by linarith, _⟩ ; simp_all +decide [IsSquare]
+        refine ⟨n + 2, by linarith, 1, by linarith, ?_⟩ ; simp_all +decide [IsSquare]
         intro x hx; erw [Subtype.mk_eq_mk] at *; simp_all +decide [← sq]
         exact fun h => by nlinarith only [show x = g ⟨1, by linarith⟩ + n + 1 by nlinarith only [hx, h, show (g ⟨1, by linarith⟩ : ℤ) > 0 from mod_cast Subtype.property _], h, show (g ⟨1, by linarith⟩ : ℤ) > 0 from mod_cast Subtype.property _]
       · linarith

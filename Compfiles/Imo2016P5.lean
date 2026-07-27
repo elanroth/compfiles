@@ -125,7 +125,7 @@ lemma ratio_product_bound (n : ℕ) :
 
 lemma prod_Ico_sub_reindex {α : Type*} [CommMonoid α] (f : ℕ → α) (k : ℕ) :
     ∏ m ∈ Finset.Ico 1 k, f (k - m) = ∏ j ∈ Finset.Icc 1 (k - 1), f j := by
-  refine' Finset.prod_bij (fun m hm => k - m) _ _ _ _
+  refine Finset.prod_bij (fun m hm => k - m) ?_ ?_ ?_ ?_
   · grind
   · grind
   · exact fun b hb => ⟨k - b, Finset.mem_Ico.mpr ⟨Nat.sub_pos_of_lt (Finset.mem_Icc.mp hb |>.2.trans_lt (Nat.pred_lt (by aesop_cat))), Nat.sub_lt (Nat.pos_of_ne_zero (by aesop_cat)) (Finset.mem_Icc.mp hb |>.1)⟩, Nat.sub_sub_self (le_trans (Finset.mem_Icc.mp hb |>.2) (Nat.pred_le _))⟩
@@ -134,7 +134,7 @@ lemma prod_Ico_sub_reindex {α : Type*} [CommMonoid α] (f : ℕ → α) (k : �
 lemma prod_Ioc_sub_reindex {α : Type*} [CommMonoid α] (f : ℕ → α) (n k : ℕ)
     (hk : k ≤ n) :
     ∏ m ∈ Finset.Ioc k n, f (m - k) = ∏ j ∈ Finset.Icc 1 (n - k), f j := by
-  refine' Finset.prod_bij (fun m hm => m - k) _ _ _ _ <;> simp_all +decide
+  refine Finset.prod_bij (fun m hm => m - k) ?_ ?_ ?_ ?_ <;> simp_all +decide
   · exact fun a ha₁ ha₂ => Nat.sub_pos_of_lt ha₁
   · intros; omega
   · exact fun b hb₁ hb₂ => ⟨b + k, ⟨by linarith, by omega⟩, by omega⟩
@@ -230,7 +230,7 @@ lemma alternating_block_products_difficult (n k : ℕ) (hk1 : 1 ≤ k) (hkn : k 
                                        (∏ m ∈ Finset.Ico (k + 1) (n + 1), (x - (4 * m - 3 : ℕ)) * (x - (4 * m : ℕ)))) < 3 ∧
                                        ((x - (4 * k - 2 : ℕ)) * (x - (4 * k - 1 : ℕ))) /
                                        ((x - (4 * k - 3 : ℕ)) * (x - (4 * k : ℕ))) ≤ 1 / 9 := by
-                                         refine' ⟨_, _, _⟩
+                                         refine ⟨?_, ?_, ?_⟩
                                          · convert left_product_ratio_lt_three k hk1 x hx1 hx2 using 1
                                          · convert right_product_ratio_lt_three n k hkn x hx1 hx2 using 1
                                            grind +suggestions
@@ -238,21 +238,21 @@ lemma alternating_block_products_difficult (n k : ℕ) (hk1 : 1 ≤ k) (hkn : k 
                                            · nlinarith [sq_nonneg (x - (4 * k - 2) - 1 / 2)]
                                            · nlinarith
                         simp_all +decide [mul_div_assoc]
-                        refine' lt_of_le_of_lt (mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left h_bound.2.2 _) _) _
-                        · refine' div_nonneg _ _ <;> refine' Finset.prod_nonneg fun m hm => _ <;> norm_num at *
+                        refine lt_of_le_of_lt (mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left h_bound.2.2 ?_) ?_) ?_
+                        · refine div_nonneg ?_ ?_ <;> refine Finset.prod_nonneg fun m hm => ?_ <;> norm_num at *
                           · exact mul_nonneg (sub_nonneg.2 <| le_trans (Nat.cast_le.2 <| by omega) hx1.le) (sub_nonneg.2 <| le_trans (Nat.cast_le.2 <| by omega) hx1.le)
                           · exact mul_nonneg (sub_nonneg.2 <| le_trans (mod_cast by omega) hx1.le) (sub_nonneg.2 <| le_trans (mod_cast by omega) hx1.le)
-                        · refine' div_nonneg _ _ <;> refine' Finset.prod_nonneg fun m hm => _ <;> norm_num at *
+                        · refine div_nonneg ?_ ?_ <;> refine Finset.prod_nonneg fun m hm => ?_ <;> norm_num at *
                           · rw [Nat.cast_sub, Nat.cast_sub] at * <;> push_cast at * <;> repeat linarith
                             nlinarith [show (m : ℝ) ≥ k + 1 by norm_cast; linarith]
                           · rw [Nat.cast_sub] at * <;> push_cast at * <;> repeat linarith
                             nlinarith [show (m : ℝ) ≥ k + 1 by norm_cast; linarith]
-                        · refine' lt_of_le_of_lt (mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right h_bound.1.le (by norm_num)) (_)) _
-                          · refine' div_nonneg _ _
-                            · refine' Finset.prod_nonneg fun m hm => mul_nonneg_of_nonpos_of_nonpos _ _ <;> norm_num at *
+                        · refine lt_of_le_of_lt (mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right h_bound.1.le (by norm_num)) (?_)) ?_
+                          · refine div_nonneg ?_ ?_
+                            · refine Finset.prod_nonneg fun m hm => mul_nonneg_of_nonpos_of_nonpos ?_ ?_ <;> norm_num at *
                               · exact hx2.le.trans (mod_cast by omega)
                               · exact hx2.le.trans (mod_cast Nat.sub_le_sub_right (by linarith) _)
-                            · refine' Finset.prod_nonneg fun m hm => _
+                            · refine Finset.prod_nonneg fun m hm => ?_
                               rw [Nat.cast_sub] <;> push_cast <;> repeat linarith [Finset.mem_Ico.mp hm]
                               rw [Nat.cast_sub] at * <;> push_cast at * <;> repeat linarith
                               nlinarith [show (m : ℝ) ≥ k + 1 by norm_cast; linarith [Finset.mem_Ico.mp hm]]
@@ -262,9 +262,9 @@ lemma alternating_block_products_difficult (n k : ℕ) (hk1 : 1 ≤ k) (hkn : k 
     have h_prod_neg : (∏ m ∈ Finset.Icc 1 n, (x - (4 * m - 3 : ℕ)) * (x - (4 * m : ℕ))) < 0 := by
       rw [Finset.prod_eq_prod_diff_singleton_mul
         (Finset.mem_Icc.mpr ⟨hk1, hkn⟩), mul_comm]
-      refine' mul_neg_of_neg_of_pos _ _
+      refine mul_neg_of_neg_of_pos ?_ ?_
       · rcases k with (_ | _ | k) <;> norm_num [Nat.mul_succ] at *; all_goals nlinarith
-      · refine' Finset.prod_pos fun m hm => _
+      · refine Finset.prod_pos fun m hm => ?_
         by_cases hmk : m < k
         · rw [Nat.cast_sub, Nat.cast_sub] at * <;> push_cast at *
           any_goals linarith [Finset.mem_Icc.mp (Finset.mem_sdiff.mp hm |>.1)]
@@ -273,7 +273,7 @@ lemma alternating_block_products_difficult (n k : ℕ) (hk1 : 1 ≤ k) (hkn : k 
           rw [Nat.cast_sub] at * <;> push_cast at * <;> repeat linarith
           nlinarith [show (m : ℝ) ≥ k + 1 by exact_mod_cast lt_of_le_of_ne hmk (Ne.symm hm.2)]
     nlinarith
-  · refine' Finset.prod_ne_zero_iff.mpr _
+  · refine Finset.prod_ne_zero_iff.mpr ?_
     intro m hm; rcases lt_trichotomy m k with (H | rfl | H) <;> norm_num at *
     · constructor <;> rw [Nat.cast_sub] at * <;> push_cast at * <;> repeat linarith
       · linarith [show (m : ℝ) + 1 ≤ k by norm_cast]
@@ -302,14 +302,14 @@ lemma alternating_block_products_easy (n : ℕ) (hn : 0 < n) (x : ℝ)
       · constructor <;> nlinarith [show (m : ℝ) + 1 ≤ k by norm_cast]
       · constructor <;> nlinarith [show (m : ℝ) ≥ k + 1 by norm_cast]
     rw [← Finset.mul_prod_erase _ _ (show k ∈ Finset.Icc 1 n from Finset.mem_Icc.mpr ⟨hk₁, hk₂⟩), ← Finset.mul_prod_erase _ _ (show k ∈ Finset.Icc 1 n from Finset.mem_Icc.mpr ⟨hk₁, hk₂⟩)]
-    refine' lt_of_lt_of_le _ (mul_nonneg _ _) <;> norm_num at *
+    refine lt_of_lt_of_le ?_ (mul_nonneg ?_ ?_) <;> norm_num at *
     · exact mul_neg_of_neg_of_pos (by rw [Nat.cast_sub (by linarith)] ; push_cast; linarith) (Finset.prod_pos fun m hm => by rw [Nat.cast_sub (by linarith [Finset.mem_Icc.mp (Finset.mem_of_mem_erase hm)])] ; push_cast; linarith [h_pos m (Finset.mem_Icc.mp (Finset.mem_of_mem_erase hm) |>.1) (Finset.mem_Icc.mp (Finset.mem_of_mem_erase hm) |>.2) (by aesop)])
     · rw [Nat.cast_sub, Nat.cast_sub] <;> push_cast <;> linarith
     · exact Finset.prod_nonneg fun m hm => by rw [Nat.cast_sub (by linarith [Finset.mem_Icc.mp (Finset.mem_of_mem_erase hm)]), Nat.cast_sub (by linarith [Finset.mem_Icc.mp (Finset.mem_of_mem_erase hm)])] ; push_cast ; linarith [h_pos m (Finset.mem_Icc.mp (Finset.mem_of_mem_erase hm) |>.1) (Finset.mem_Icc.mp (Finset.mem_of_mem_erase hm) |>.2) (by aesop)] ;)
   · -- Otherwise every left block is nonnegative. Since each right block equals left block + 2, use strict product comparison; carefully handle a zero left factor separately, showing the right product is positive.
     by_cases h_zero_left : ∃ k : ℕ, 1 ≤ k ∧ k ≤ n ∧ (x - (4 * k - 3 : ℕ)) * (x - (4 * k : ℕ)) = 0
     · obtain ⟨k, hk₁, hk₂, hk₃⟩ := h_zero_left; simp_all +decide [Finset.prod_eq_zero (Finset.mem_Icc.mpr ⟨hk₁, hk₂⟩)]
-      refine' Finset.prod_pos fun m hm => _
+      refine Finset.prod_pos fun m hm => ?_
       rcases hk₃ with (hk₃ | hk₃) <;> rcases eq_or_ne m k with (rfl | hne) <;> simp_all +decide [sub_eq_iff_eq_add]
       · rcases m with (_ | _ | m) <;> norm_num [Nat.mul_succ] at * ; linarith
       · rw [Nat.cast_sub, Nat.cast_sub, Nat.cast_sub] <;> push_cast <;> try linarith

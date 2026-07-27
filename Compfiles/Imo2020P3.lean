@@ -154,10 +154,10 @@ private lemma exists_directed_cycle_cover {α β : Type*} [Fintype α] [Fintype 
     intro S
     have h_card : ∑ i ∈ S, Finset.card (K i) ≤ ∑ i ∈ Finset.biUnion S (fun i => Finset.image (fun x => c (p x)) (K i)), Finset.card (Finset.filter (fun x => c (p x) = i) O) := by
       have h_card : ∑ i ∈ S, Finset.card (K i) ≤ ∑ i ∈ S, ∑ j ∈ Finset.biUnion S (fun i => Finset.image (fun x => c (p x)) (K i)), Finset.card (Finset.filter (fun x => c (p x) = j) (K i)) := by
-        refine' Finset.sum_le_sum fun i hi => _
+        refine Finset.sum_le_sum fun i hi => ?_
         rw [← Finset.card_eq_sum_card_fiberwise]
         exact fun x hx => Finset.mem_biUnion.mpr ⟨i, hi, Finset.mem_image_of_mem _ hx⟩
-      refine' le_trans h_card _
+      refine le_trans h_card ?_
       rw [Finset.sum_comm]
       gcongr
       rw [← Finset.card_biUnion]
@@ -170,7 +170,7 @@ private lemma exists_directed_cycle_cover {α β : Type*} [Fintype α] [Fintype 
       have := Finset.all_card_le_biUnion_card_iff_exists_injective (fun i => Finset.image (fun x => c (p x)) (K i)) ; simp_all +decide
       exact ⟨h_hall.choose, h_hall.choose_spec.2, fun i j hij => h_hall.choose_spec.1.ne hij⟩
     obtain ⟨f, hf₁, hf₂⟩ := h_hall; choose g hg using fun i => Finset.mem_image.mp (hf₁ i) ; use g; aesop
-  refine' ⟨Finset.image f Finset.univ, _, _, _⟩ <;> simp_all +decide [Finset.subset_iff]
+  refine ⟨Finset.image f Finset.univ, ?_, ?_, ?_⟩ <;> simp_all +decide [Finset.subset_iff]
   · exact fun i => Finset.mem_filter.mp (hf.1 i) |>.1
   · intro i; rw [Finset.card_eq_one] ; use f i; ext x; aesop
   · intro i; rw [Finset.card_eq_one] ; use f (Classical.choose (show ∃ j, c (p (f j)) = i from by
@@ -192,7 +192,7 @@ private lemma regular_involution_bisection {n : ℕ} {c : Fin (4 * n) → Fin n}
     apply exists_directed_cycle_cover (partner n) c O (partner_invol n) (hO.right) (by
     intro i
     have h_card : Finset.card (Finset.filter (fun x => c (partner n x) = i) O) = Finset.card (Finset.filter (fun x => c x = i) (Finset.univ \ O)) := by
-      refine' Finset.card_bij (fun x hx => partner n x) _ _ _ <;> simp +contextual
+      refine Finset.card_bij (fun x hx => partner n x) ?_ ?_ ?_ <;> simp +contextual
       · exact fun x hx hx' => hO.1 x |>.1 hx
       · exact fun x hx₁ hx₂ y hy₁ hy₂ hxy => by simpa [partner_invol] using congr_arg (fun z => partner n z) hxy
       · grind +suggestions
@@ -202,7 +202,7 @@ private lemma regular_involution_bisection {n : ℕ} {c : Fin (4 * n) → Fin n}
       · congr with x ; by_cases hx : x ∈ O <;> simp +decide [hx]
       · exact Finset.disjoint_left.mpr fun x hx₁ hx₂ => Finset.mem_sdiff.mp (Finset.mem_filter.mp hx₂ |>.1) |>.2 (Finset.mem_filter.mp hx₁ |>.1)
     linarith [h i, hO.2 i])
-  refine' h_contra ⟨M ∪ Finset.image (fun x => partner n x) M, _, _⟩ <;> simp +decide [Finset.subset_iff] at *
+  refine h_contra ⟨M ∪ Finset.image (fun x => partner n x) M, ?_, ?_⟩ <;> simp +decide [Finset.subset_iff] at *
   · grind +suggestions
   · intro i; rw [Finset.filter_union, Finset.card_union_of_disjoint] ; simp +decide [Finset.filter_image, hM]
     · rw [Finset.card_image_of_injective _ fun x y hxy => by simpa [partner_invol] using congr_arg (fun z => partner n z) hxy] ; simp +decide [hM.2.2]

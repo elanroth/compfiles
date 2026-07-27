@@ -215,7 +215,7 @@ lemma local_transition_measure_decreases (c x y z : ℤ)
         c.natAbs / Nat.gcd y.natAbs c.natAbs < c.natAbs / Nat.gcd x.natAbs c.natAbs := by
   contrapose! hne; have := @reduced_transition_decreases (x.natAbs / Nat.gcd x.natAbs c.natAbs) (c.natAbs / Nat.gcd x.natAbs c.natAbs) (y.natAbs / Nat.gcd y.natAbs c.natAbs) (c.natAbs / Nat.gcd y.natAbs c.natAbs)
   contrapose! this; simp_all +decide [ne_of_gt]
-  refine' ⟨Nat.le_of_dvd (by positivity) (Nat.gcd_dvd_left _ _), Nat.le_of_dvd (by positivity) (Nat.gcd_dvd_right _ _), Nat.le_of_dvd (by positivity) (Nat.gcd_dvd_left _ _), Nat.le_of_dvd (by positivity) (Nat.gcd_dvd_right _ _), _, _, _, _⟩
+  refine ⟨Nat.le_of_dvd (by positivity) (Nat.gcd_dvd_left _ _), Nat.le_of_dvd (by positivity) (Nat.gcd_dvd_right _ _), Nat.le_of_dvd (by positivity) (Nat.gcd_dvd_left _ _), Nat.le_of_dvd (by positivity) (Nat.gcd_dvd_right _ _), ?_, ?_, ?_, ?_⟩
   · rw [Nat.Coprime, Nat.gcd_div (Nat.gcd_dvd_left _ _) (Nat.gcd_dvd_right _ _), Nat.div_self (Nat.gcd_pos_of_pos_left _ (Int.natAbs_pos.mpr hx.ne'))]
   · rw [Nat.Coprime, Nat.gcd_div (Nat.gcd_dvd_left _ _) (Nat.gcd_dvd_right _ _), Nat.div_self (Nat.gcd_pos_of_pos_left _ (Int.natAbs_pos.mpr hy.ne'))]
   · simp_all +decide [abs_of_pos, div_div_eq_mul_div, Nat.gcd_dvd_left, Nat.gcd_dvd_right]
