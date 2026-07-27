@@ -1,1 +1,0 @@
-.rambam/autoprove-scratch/imo2016p5.result.lean:265:10: error(lean.unknownIdentifier): Unknown constant `Finset.prod_eq_prod_sdiff_singleton_mul`

@@ -1,2 +1,0 @@
-imo1998p6.aristotle.lean:116:40: warning: `PNat.one_le` has been deprecated: use `one_le`
-imo1998p6.aristotle.lean:132:22: error(lean.unknownIdentifier): Unknown identifier `h`

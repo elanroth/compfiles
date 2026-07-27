@@ -1,2 +1,0 @@
-# Summary of changes for run 3e03ab09-513b-40e5-8190-6b9a8e94e282
-Updated `Main.lean` and proved `injective_of_sq` and the main theorem’s reduction/assembly. The project now has exactly one remaining unproved target, `step_one`, which is the core consecutive-value lemma; all other sorries were eliminated. The file otherwise elaborates successfully, with the sole warning being the unavoidable warning for that remaining `sorry`. Changes were committed and pushed.

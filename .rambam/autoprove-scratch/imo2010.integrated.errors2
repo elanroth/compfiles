@@ -1,8 +1,0 @@
-Compfiles/Imo2010P3.lean:284:18: error: Application type mismatch: The argument
-  c
-has type
-  ℤ
-but is expected to have type
-  ℤ>0
-in the application
-  Exists.intro c
