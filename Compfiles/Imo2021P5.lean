@@ -109,7 +109,7 @@ private lemma central_bijective (p : Position)
     have := black_position_invariant p h 2021 (by omega) x
     simp at this
     exact this
-  generalize_proofs at *; exact ⟨Finite.injective_iff_surjective.mpr h_surj, h_surj⟩
+  exact ⟨Finite.injective_iff_surjective.mpr h_surj, h_surj⟩
 
 private lemma adjacent_central_opposite (p : Position)
     (h : ∀ k, ¬((((p.nth k).swapped k).1 < k ∧ k < ((p.nth k).swapped k).2) ∨
@@ -179,7 +179,6 @@ problem imo2021_p5 (p : Position) :
   obtain ⟨p, hp⟩ := h_contra
   have := Imo2021P5.central_bijective p (fun k => by
     grind)
-  generalize_proofs at *
   set color : Fin 2021 → Prop := fun x => lowerSwap p (Equiv.ofBijective (central p) this |>.symm x)
   have h_adjacent : ∀ x : Fin 2021, color x ↔ ¬color (x + 1) := by
     intro x

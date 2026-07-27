@@ -54,6 +54,8 @@ lemma injective_of_sq (g : ℤ>0 → ℤ>0) (h : ∀ m n : ℤ>0, IsSquare ((g m
   -- Choose $m = p - g(a)$.
   set m : PosInt := ⟨p - (g a).val, by
     grind⟩
+  -- `set` leaves the positivity side-goal as an anonymous proof term; name it so the
+  -- `linarith` calls below can see it.
   generalize_proofs at *
   -- Then $(g(m) + a)(g(a) + m) = (g(m) + a)p$ and $(g(m) + b)(g(b) + m) = (g(m) + b)p$ are both perfect squares.
   have h_sq_a : IsSquare ((g m + a).val * p) := by
@@ -217,21 +219,21 @@ lemma step_one (g : ℤ>0 → ℤ>0)
     (hinj : Function.Injective g) :
     ∀ n : ℤ>0, (g ⟨n.val + 1, by linarith [n.prop]⟩).val = g n + 1 ∨
                (g ⟨n.val + 1, by linarith [n.prop]⟩).val + 1 = g n := by
-  generalize_proofs at *
   intro n
+  -- Name the anonymous positivity proofs inside the `⟨n.val + 1, _⟩` coercions above,
+  -- so the case analysis below can rewrite under them.
   generalize_proofs at *
   -- Show that the absolute difference between consecutive values is 1.
   have h_abs_diff : Int.natAbs ((g ⟨n.val + 1, by linarith⟩).val - (g n).val) = 1 := by
     by_contra h_contra
-    generalize_proofs at *
     -- Let $p$ be a prime divisor of $|g(n+1) - g(n)|$.
     obtain ⟨p, hp_prime, hp_div⟩ : ∃ p : ℕ, Nat.Prime p ∧ (p : ℤ) ∣ (g ⟨n.val + 1, by linarith⟩).val - (g n).val := by
       exact ⟨Nat.minFac _, Nat.minFac_prime h_contra, Int.natCast_dvd.mpr <| Nat.minFac_dvd _⟩
-    generalize_proofs at *; (
+    (
     -- Apply the input_modEq_of_output_modEq lemma to infer that $n+1 \equiv n \pmod{p}$, which contradicts the fact that $p$ is a prime greater than 1.
     have h_contradiction : (n.val + 1 : ℤ) ≡ n.val [ZMOD p] := by
       apply input_modEq_of_output_modEq g hsq hp_prime ⟨n.val + 1, by linarith⟩ n; exact Int.ModEq.symm <| Int.modEq_of_dvd hp_div
-    generalize_proofs at *; (
+    (
     exact absurd h_contradiction (by rw [Int.modEq_iff_dvd] ; norm_num; exact mod_cast hp_prime.not_dvd_one)))
   grind
 

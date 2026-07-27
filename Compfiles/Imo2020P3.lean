@@ -88,7 +88,6 @@ private lemma exists_balanced_orientation {n : ℕ} {c : Fin (4 * n) → Fin n}
       intro A; exact (by
       convert color_pair_hall h A using 1
       exact congr_arg Finset.card (by ext; aesop))
-    generalize_proofs at *
     have := Finset.all_card_le_biUnion_card_iff_exists_injective (fun a : Fin n × Fin 2 => Finset.filter (fun e : Fin (2 * n) => c (lowerPebble n e) = a.1 ∨ c (partner n (lowerPebble n e)) = a.1) Finset.univ) ; aesop
   cases' h_injective with f hf_inj
   have h_surjective : Function.Surjective f := by
@@ -118,7 +117,7 @@ private lemma exists_balanced_orientation {n : ℕ} {c : Fin (4 * n) → Fin n}
               have h_exists : x.val < 2 * n ∨ (4 * n - 1 - x.val) < 2 * n := by
                 exact Classical.or_iff_not_imp_left.2 fun h => by omega
               cases' h_exists with h_exists h_exists <;> [exact ⟨⟨x, by linarith⟩, Or.inl <| Fin.ext <| by simp +decide [lowerPebble]⟩ ; exact ⟨⟨4 * n - 1 - x, by linarith⟩, Or.inr <| Fin.ext <| by simp +decide [lowerPebble, partner]⟩]
-            generalize_proofs at *; (
+            (
             use a)
           obtain ⟨b, hb⟩ : ∃ b : Fin n × Fin 2, f b = a := h_surjective a
           use b

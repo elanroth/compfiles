@@ -126,7 +126,6 @@ lemma local_integrality_bounded (a : ℕ → ℤ) (apos : ∀ n, 0 < a n)
       have h_val : padicValInt p (a (n + 1)) > max (padicValInt p (a n)) (padicValInt p (a 0)) := by
         simp_all +decide [padicValInt]
         simp_all +decide [Nat.factorization]
-      generalize_proofs at *
       have h_val_rhs : padicValInt p ((a n - a (n + 1)) * (a 0 - a (n + 1))) = padicValInt p (a n) + padicValInt p (a 0) := by
         have h_val_rhs : padicValInt p (a n - a (n + 1)) = padicValInt p (a n) ∧ padicValInt p (a 0 - a (n + 1)) = padicValInt p (a 0) := by
           have h_val_diff : ∀ {x y : ℤ}, 0 < x → 0 < y → padicValInt p x < padicValInt p y → padicValInt p (x - y) = padicValInt p x := by
@@ -135,27 +134,26 @@ lemma local_integrality_bounded (a : ℕ → ℤ) (apos : ∀ n, 0 < a n)
               have h_div : (p : ℤ) ^ padicValInt p x ∣ x ∧ ¬(p : ℤ) ^ (padicValInt p x + 1) ∣ x := by
                 haveI := Fact.mk hp; simp +decide [padicValInt_dvd_iff]
                 linarith
-              generalize_proofs at *; (
+              (
               have h_div_y : (p : ℤ) ^ (padicValInt p x + 1) ∣ y := by
                 have h_div_y : (p : ℤ) ^ (padicValInt p y) ∣ y := by
                   convert padicValInt_dvd y using 1
-                generalize_proofs at *; (
+                (
                 exact dvd_trans (pow_dvd_pow _ (Nat.succ_le_of_lt hxy)) h_div_y)
-              generalize_proofs at *; (
+              (
               exact ⟨dvd_sub h_div.1 (dvd_trans (pow_dvd_pow _ (Nat.le_succ _)) h_div_y), fun h => h_div.2 <| by simpa using dvd_add h (dvd_trans (pow_dvd_pow _ (Nat.le_refl _)) h_div_y)⟩))
-            generalize_proofs at *; (
+            (
             have h_val_diff : padicValInt p (x - y) = Nat.factorization (Int.natAbs (x - y)) p := by
               rw [padicValInt]
               rw [Nat.factorization_def] ; aesop
-            generalize_proofs at *; (
+            (
             obtain ⟨k, hk⟩ := h_div.1; simp_all +decide [Int.natAbs_mul]
             rw [Nat.factorization_mul] <;> norm_num [hp.ne_zero, hp.ne_one]
             · simp_all +decide
               exact Nat.factorization_eq_zero_of_not_dvd fun h => h_div <| mul_dvd_mul_left _ <| Int.natCast_dvd.mpr h
             · aesop_cat))
-          generalize_proofs at *; (
+          (
           exact ⟨h_val_diff (apos _) (apos _) (lt_of_le_of_lt (le_max_left _ _) h_val), h_val_diff (apos _) (apos _) (lt_of_le_of_lt (le_max_right _ _) h_val)⟩)
-        generalize_proofs at *
         haveI := Fact.mk hp; rw [padicValInt.mul] <;> simp_all +decide
         · intro h
           have h' : a n = a (n + 1) := by linarith
@@ -169,7 +167,6 @@ lemma local_integrality_bounded (a : ℕ → ℤ) (apos : ∀ n, 0 < a n)
         haveI := Fact.mk hp; rw [padicValInt.mul, padicValInt.mul] <;> norm_num [ne_of_gt (apos _)]
         intro H; simp_all +decide [sub_eq_iff_eq_add]
         grind
-      generalize_proofs at *
       grind
     intro n hn p hp; induction hn <;> simp_all +decide
     grind
