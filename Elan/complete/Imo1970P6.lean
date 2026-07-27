@@ -486,6 +486,9 @@ lemma ordered_triples_mul_bound (P : Fin 100 → Pt)
       abc.1 ≠ abc.2.1 ∧ abc.1 ≠ abc.2.2 ∧ abc.2.1 ≠ abc.2.2 ∧ IsAcuteTriple P abc } ≤
     7 * Nat.card { abc : Fin 100 × Fin 100 × Fin 100 //
       abc.1 ≠ abc.2.1 ∧ abc.1 ≠ abc.2.2 ∧ abc.2.1 ≠ abc.2.2 } := by
+  -- `IsAcuteTriple` is a `noncomputable def : Prop`, so the subtype has no
+  -- `DecidablePred` and hence no `Fintype`; work classically.
+  classical
   obtain ⟨S, hS⟩ : ∃ S : Finset (Fin 100 × Fin 100 × Fin 100), S.card = Nat.card {abc : Fin 100 × Fin 100 × Fin 100 // abc.1 ≠ abc.2.1 ∧ abc.1 ≠ abc.2.2 ∧ abc.2.1 ≠ abc.2.2 ∧ IsAcuteTriple P abc} ∧ ∀ abc ∈ S, abc.1 ≠ abc.2.1 ∧ abc.1 ≠ abc.2.2 ∧ abc.2.1 ≠ abc.2.2 ∧ IsAcuteTriple P abc := by
     refine' ⟨ _, _, _ ⟩;
     exact Finset.image ( fun x : { abc : Fin 100 × Fin 100 × Fin 100 // ¬abc.1 = abc.2.1 ∧ ¬abc.1 = abc.2.2 ∧ ¬abc.2.1 = abc.2.2 ∧ IsAcuteTriple P abc } => x.val ) ( Finset.univ );

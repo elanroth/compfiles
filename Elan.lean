@@ -10,9 +10,18 @@ mathlib and fails to elaborate (checked 2026-07-27, Lean 4.31.0-rc1). It is
 excluded so this gate is green and meaningful, not so the rot is hidden — it
 needs real proof maintenance, not a rename:
 
-  Elan/complete/Imo1970P6.lean   4 errors  (`grind` failed x2; a Fintype instance
-                                            for the acute-triple subtype no longer
-                                            synthesizes, which then strands :492)
+  Elan/complete/Imo1970P6.lean   2 errors, down from 4. The `Fintype` failure is
+                                 FIXED: `IsAcuteTriple` is a `noncomputable def : Prop`
+                                 so its subtype has no `DecidablePred`; a `classical`
+                                 in `ordered_triples_mul_bound` restores the instance
+                                 and also cleared the goal it had stranded at :492.
+                                 Still open, both `grind` regressions:
+                                   :113 — after `use`, must show the Cramer's-rule
+                                          α, β satisfy the two coordinate equations.
+                                          `field_simp` leaves a rational identity that
+                                          `ring`/`nlinarith` do not close; wants an
+                                          explicit `div_eq_iff h_det` derivation.
+                                   :312 — a 100-point non-collinearity case split.
 
 Repaired 2026-07-27 and now built:
   Elan/complete/Imo2000P5.lean   `aesop` at :186 no longer closes the goal. The fix
