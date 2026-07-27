@@ -31,9 +31,13 @@ Repaired 2026-07-27 and now built:
                                  With the fix applied the two files were byte-identical
                                  and shared a namespace (so they could not both be
                                  imported), and attempt1/ was deleted as redundant.
-  Elan/partial/Imo1998P6.lean    `convert ... using 1` left two ℕ+ coercion goals
+  Elan/complete/Imo1998P6.lean   `convert ... using 1` left two ℕ+ coercion goals
                                  (`↑(f 1) * ↑(f (t*u)) = ↑(f 1 * f (t*u))`);
-                                 discharged with `simp [PNat.mul_coe]`.
+                                 discharged with `simp [PNat.mul_coe]`. Moved from
+                                 partial/ to complete/ 2026-07-27: it has NO real
+                                 sorry — its only occurrence is inside a commented-out
+                                 copy of the original problem statement, so it had been
+                                 filed as unfinished for nothing.
   Elan/complete/Imo2016P5.lean   four independent regressions: the renamed
                                  `Finset.prod_eq_mul_prod_diff_singleton_of_mem`;
                                  a `convert` now emitting a spurious instance-equality
@@ -49,10 +53,9 @@ Re-add a module here once its file elaborates again.
 
 import Elan.complete.Imo1988P3
 import Elan.complete.Imo2000P5
-import Elan.«partial».Imo1998P6
+import Elan.complete.Imo1998P6
 import Elan.complete.Imo2016P5
 import Elan.«partial».Ciim2022P6
-import Elan.«partial».Imo2010P3
 import Elan.«partial».Imo2021P3
 import Elan.«partial».Imo2022P3
 import Elan.«partial».Imo2022P6
