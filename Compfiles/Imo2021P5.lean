@@ -54,9 +54,9 @@ private def lowerSwap (p : Position) (k : Fin 2021) : Prop :=
 
 private lemma state_moveNumber (p : Position) (n : ℕ) (hn : n < 2021) :
     (state p n).2 = ⟨n, hn⟩ := by
-  induction n <;> simp_all +decide [ Function.iterate_succ_apply', state ];
-  simp_all +decide [ move ];
-  rename_i k hk; rw [ hk ( Nat.lt_of_succ_lt hn ) ] ; norm_num [ Fin.add_def, Nat.mod_eq_of_lt hn ] ;
+  induction n <;> simp_all +decide [Function.iterate_succ_apply', state]
+  simp_all +decide [move]
+  rename_i k hk; rw [hk (Nat.lt_of_succ_lt hn)] ; norm_num [Fin.add_def, Nat.mod_eq_of_lt hn]
 
 private lemma state_position (p : Position) (k : Fin 2021) : (state p k).1 = p.nth k := by
   rfl
@@ -77,26 +77,26 @@ private lemma black_position_invariant (p : Position)
         ∃ k : Fin 2021, k.val < m ∧ central p k = x := by
   -- We proceed by induction on $m$.
   intro m hm
-  induction' m with m ih;
-  · aesop;
+  induction' m with m ih
+  · aesop
   · -- By definition of `state`, we know that `(state p (m + 1)).1` is obtained by applying `move` to `(state p m).1`.
     have h_state_succ : (state p (m + 1)).1 = ((state p m).1).trans (Equiv.swap ((state p m).1.swapped ((state p m).2)).1 ((state p m).1.swapped ((state p m).2)).2) := by
-      exact congr_arg Prod.fst ( Function.iterate_succ_apply' move m ( p, 0 ) );
+      exact congr_arg Prod.fst (Function.iterate_succ_apply' move m (p, 0))
     -- By definition of `central`, we know that `central p m = (state p m).1.symm m`.
     have h_central : central p ⟨m, by linarith⟩ = (state p m).1.symm ⟨m, by linarith⟩ := by
-      exact state_position p ⟨ m, by linarith ⟩ ▸ rfl;
+      exact state_position p ⟨m, by linarith⟩ ▸ rfl
     -- By definition of `swapped`, we know that `swapped p m` are the two neighbors of `m` in the current position.
     have h_swapped : ((state p m).1.swapped ((state p m).2)).1 < ⟨m, by linarith⟩ ∧ ((state p m).1.swapped ((state p m).2)).2 < ⟨m, by linarith⟩ ∨ ⟨m, by linarith⟩ < ((state p m).1.swapped ((state p m).2)).1 ∧ ⟨m, by linarith⟩ < ((state p m).1.swapped ((state p m).2)).2 := by
-      have := no_straddle_separates p h ⟨ m, by linarith ⟩;
-      have := state_moveNumber p m ( by linarith ) ; have := state_position p ⟨ m, by linarith ⟩ ; aesop;
-    cases h_swapped <;> simp_all +decide [ Equiv.swap_apply_def ];
-    · intro x; specialize ih ( Nat.le_of_succ_le hm ) x; split_ifs <;> simp_all +decide [ Fin.ext_iff ] ;
-      · grind +extAll;
-      · grind +qlia;
-      · grind;
-    · intro x; split_ifs <;> simp_all +decide [ Fin.ext_iff ] ;
-      · grind;
-      · grind +revert;
+      have := no_straddle_separates p h ⟨m, by linarith⟩
+      have := state_moveNumber p m (by linarith) ; have := state_position p ⟨m, by linarith⟩ ; aesop
+    cases h_swapped <;> simp_all +decide [Equiv.swap_apply_def]
+    · intro x; specialize ih (Nat.le_of_succ_le hm) x; split_ifs <;> simp_all +decide [Fin.ext_iff]
+      · grind +extAll
+      · grind +qlia
+      · grind
+    · intro x; split_ifs <;> simp_all +decide [Fin.ext_iff]
+      · grind
+      · grind +revert
       · grind +qlia
 
 private lemma central_bijective (p : Position)
@@ -109,43 +109,43 @@ private lemma central_bijective (p : Position)
     have := black_position_invariant p h 2021 (by omega) x
     simp at this
     exact this
-  generalize_proofs at *; exact ⟨Finite.injective_iff_surjective.mpr h_surj, h_surj⟩;
+  generalize_proofs at *; exact ⟨Finite.injective_iff_surjective.mpr h_surj, h_surj⟩
 
 private lemma adjacent_central_opposite (p : Position)
     (h : ∀ k, ¬((((p.nth k).swapped k).1 < k ∧ k < ((p.nth k).swapped k).2) ∨
       (((p.nth k).swapped k).2 < k ∧ k < ((p.nth k).swapped k).1)))
     (a b : Fin 2021) (hab : central p a + 1 = central p b) :
     lowerSwap p a ↔ ¬lowerSwap p b := by
-  by_cases hba : b < a;
+  by_cases hba : b < a
   · -- At state b, central a is previous neighbor of central b, and because a is later, occupant there > b, forcing lowerSwap b false.
     have h_lowerSwap_b_false : ¬lowerSwap p b := by
       have h_central_a_gt_b : (p.nth b) (central p a) > b := by
         have h_central_a_gt_b : ¬∃ k : Fin 2021, k.val < b.val ∧ central p k = central p a := by
-          have := central_bijective p h;
-          exact fun ⟨ k, hk₁, hk₂ ⟩ => by have := this.injective hk₂; exact absurd this ( ne_of_lt ( lt_trans hk₁ hba ) ) ;
+          have := central_bijective p h
+          exact fun ⟨k, hk₁, hk₂⟩ => by have := this.injective hk₂; exact absurd this (ne_of_lt (lt_trans hk₁ hba))
         have := black_position_invariant p h b (by omega) (central p a)
         simp_all +decide [Fin.ext_iff]
-        grind +locals;
-      grind +locals;
+        grind +locals
+      grind +locals
     -- Since `central p b` is the next neighbor of `central p a`, the occupant of `central p b` is the second component of `swapped` at `a`.
     have h_second_component : ((state p a).1 (central p b)) = ((p.nth a).swapped a).2 := by
-      grind +locals;
-    grind +suggestions;
+      grind +locals
+    grind +suggestions
   · -- At state a, hole central b is not among earlier central holes, so by black_position_invariant its occupant is not <a.
     have h_not_lt_a : ¬(p.nth a (central p b)).val < a := by
       have h_not_lt_a : ¬∃ k : Fin 2021, k.val < a ∧ central p k = central p b := by
-        have := central_bijective p h;
-        exact fun ⟨ k, hk₁, hk₂ ⟩ => by have := this.injective hk₂; exact absurd this ( by exact ne_of_lt ( lt_of_lt_of_le hk₁ ( le_of_not_gt hba ) ) ) ;
-      convert black_position_invariant p h a (by omega) (central p b) |>.not.mpr _;
+        have := central_bijective p h
+        exact fun ⟨k, hk₁, hk₂⟩ => by have := this.injective hk₂; exact absurd this (by exact ne_of_lt (lt_of_lt_of_le hk₁ (le_of_not_gt hba)))
+      convert black_position_invariant p h a (by omega) (central p b) |>.not.mpr _
       all_goals first
         | rfl
         | exact h_not_lt_a
     -- As central b is adjacent clockwise to central a (`hab`), this occupant equals the second component of swapped at a.
     have h_second_comp : (p.nth a (central p b)) = ((p.nth a).swapped a).2 := by
-      simp +decide [ ← hab, Position.swapped ];
-      rfl;
+      simp +decide [← hab, Position.swapped]
+      rfl
     have h_lowerSwap_b_true : (p.nth b (central p a)).val < b := by
-      convert black_position_invariant p h b (by omega) (central p a) |>.2 _;
+      convert black_position_invariant p h b (by omega) (central p a) |>.2 _
       all_goals first
         | rfl
         | grind [state_position]
@@ -154,16 +154,16 @@ private lemma adjacent_central_opposite (p : Position)
       simp +decide
       rw [show (p.nth b).symm b = central p b from rfl, ← hab]
       simp +decide
-    have := no_straddle_separates p h b; simp_all +decide [ lowerSwap ] ;
+    have := no_straddle_separates p h b; simp_all +decide [lowerSwap]
     grind
 
 private lemma odd_cycle_not_two_colorable (color : Fin 2021 → Prop)
     [DecidablePred color] (h : ∀ x, color x ↔ ¬color (x + 1)) : False := by
   have h_ind : ∀ x : Fin 2021, color x ↔ color 0 = (x.val % 2 = 0) := by
-    intro x; induction' x using Fin.inductionOn with x ih; norm_num at *;
-    specialize h ( Fin.castSucc x ) ; norm_num [ Nat.add_mod ] at * ; by_cases h₁ : ( x : ℕ ) % 2 = 0 <;> simp +decide [ h₁ ] at ih h ⊢;
-    · grind;
-    · grind;
+    intro x; induction' x using Fin.inductionOn with x ih; norm_num at *
+    specialize h (Fin.castSucc x) ; norm_num [Nat.add_mod] at * ; by_cases h₁ : (x : ℕ) % 2 = 0 <;> simp +decide [h₁] at ih h ⊢
+    · grind
+    · grind
   have := h 2020
   simp +decide [h_ind 2020] at this
 
@@ -173,25 +173,25 @@ snip end
 problem imo2021_p5 (p : Position) :
     ∃ k, (((p.nth k).swapped k).1 < k ∧ k < ((p.nth k).swapped k).2) ∨
       (((p.nth k).swapped k).2 < k ∧ k < ((p.nth k).swapped k).1) := by
-  revert p;
+  revert p
   -- By contradiction, assume there exists a position \( p \) such that no move straddles.
   by_contra h_contra
-  push Not at h_contra;
-  obtain ⟨ p, hp ⟩ := h_contra;
-  have := Imo2021P5.central_bijective p ( fun k => by
-    grind )
-  generalize_proofs at *;
-  set color : Fin 2021 → Prop := fun x => lowerSwap p (Equiv.ofBijective (central p) this |>.symm x);
+  push Not at h_contra
+  obtain ⟨p, hp⟩ := h_contra
+  have := Imo2021P5.central_bijective p (fun k => by
+    grind)
+  generalize_proofs at *
+  set color : Fin 2021 → Prop := fun x => lowerSwap p (Equiv.ofBijective (central p) this |>.symm x)
   have h_adjacent : ∀ x : Fin 2021, color x ↔ ¬color (x + 1) := by
     intro x
     set a := (Equiv.ofBijective (central p) this).symm x
     set b := (Equiv.ofBijective (central p) this).symm (x + 1)
     have h_central_a : central p a = x := by
-      exact Equiv.apply_symm_apply ( Equiv.ofBijective ( central p ) this ) x
+      exact Equiv.apply_symm_apply (Equiv.ofBijective (central p) this) x
     have h_central_b : central p b = x + 1 := by
-      exact Equiv.apply_symm_apply ( Equiv.ofBijective ( central p ) this ) _
+      exact Equiv.apply_symm_apply (Equiv.ofBijective (central p) this) _
     have h_adjacent_ab : central p a + 1 = central p b := by
-      rw [ h_central_a, h_central_b ]
+      rw [h_central_a, h_central_b]
     have h_color_ab : lowerSwap p a ↔ ¬lowerSwap p b := by
       apply Imo2021P5.adjacent_central_opposite p (fun k => by
         grind) a b h_adjacent_ab
