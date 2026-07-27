@@ -57,5 +57,6 @@ import Elan.«partial».Imo2021P3
 import Elan.«partial».Imo2022P3
 import Elan.«partial».Imo2022P6
 import Elan.«partial».Imo2023P5
+import Elan.«partial».Usa1977P1
 import Elan.unstarted.Imo2004P6_loophole
 import Elan.unstarted.Imo2009P6_answer_only
