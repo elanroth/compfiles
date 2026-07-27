@@ -5,16 +5,14 @@ has a real build gate rather than a standalone `lake env lean` check.
 `partial` and `end` are Lean keywords, so directory-derived module names under
 `Elan/partial/` need «guillemets».
 
-TWO FILES ARE DELIBERATELY EXCLUDED. They have bit-rotted against current
-mathlib and fail to elaborate (checked 2026-07-27, Lean 4.31.0-rc1). They are
-excluded so this gate is green and meaningful, not so the rot is hidden — each
+ONE FILE IS DELIBERATELY EXCLUDED. It has bit-rotted against current
+mathlib and fails to elaborate (checked 2026-07-27, Lean 4.31.0-rc1). It is
+excluded so this gate is green and meaningful, not so the rot is hidden — it
 needs real proof maintenance, not a rename:
 
   Elan/complete/Imo1970P6.lean   4 errors  (`grind` failed x2; a Fintype instance
                                             for the acute-triple subtype no longer
                                             synthesizes, which then strands :492)
-  Elan/complete/Imo2016P5.lean   5 errors  (`rewrite` pattern not found; `linarith`
-                                            failed x2; application type mismatch)
 
 Repaired 2026-07-27 and now built:
   Elan/complete/Imo2000P5.lean   `aesop` at :186 no longer closes the goal. The fix
@@ -27,6 +25,15 @@ Repaired 2026-07-27 and now built:
   Elan/partial/Imo1998P6.lean    `convert ... using 1` left two ℕ+ coercion goals
                                  (`↑(f 1) * ↑(f (t*u)) = ↑(f 1 * f (t*u))`);
                                  discharged with `simp [PNat.mul_coe]`.
+  Elan/complete/Imo2016P5.lean   four independent regressions: the renamed
+                                 `Finset.prod_eq_mul_prod_diff_singleton_of_mem`;
+                                 a `convert` now emitting a spurious instance-equality
+                                 goal (closed with `try rfl`); a stranded `convert`
+                                 side-goal needing `PL`/`PR` unfolded and
+                                 `Rf_eq_Lf_add_two`; and an `nlinarith` hint whose
+                                 `Real.exp` argument was spelled in a form `ring_nf`
+                                 no longer produces, so the two `exp` terms were not
+                                 the same atom.
 
 Re-add a module here once its file elaborates again.
 -/
@@ -34,6 +41,7 @@ Re-add a module here once its file elaborates again.
 import Elan.complete.Imo1988P3
 import Elan.complete.Imo2000P5
 import Elan.«partial».Imo1998P6
+import Elan.complete.Imo2016P5
 import Elan.«partial».Ciim2022P6
 import Elan.«partial».Imo2010P3
 import Elan.«partial».Imo2021P3

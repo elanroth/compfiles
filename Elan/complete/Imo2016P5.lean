@@ -178,7 +178,7 @@ lemma sum_ratio_bound (x : ℝ) (n : ℕ) (hn : 0 < n)
     rw [ div_le_div_iff₀ ] <;> nlinarith [ show ( k:ℝ ) + 1 ≤ n by norm_cast, hpos k hk ];
   -- So we can bound the sum by $\sum_{d=1}^{n} \frac{1}{2d^2}$.
   have h_sum_bound : ∑ k ∈ Finset.range n, 2 / (Lf x k) ≤ ∑ d ∈ Finset.Icc 1 n, (1 : ℝ) / (2 * d ^ 2) := by
-    convert Finset.sum_le_sum fun i hi => h_bound i ( Finset.mem_range.mp hi ) using 1;
+    convert Finset.sum_le_sum fun i hi => h_bound i ( Finset.mem_range.mp hi ) using 1 <;> try rfl
     erw [ Finset.sum_Ico_eq_sum_range ] ; norm_num [ add_comm, mul_comm ];
     rw [ ← Finset.sum_range_reflect ];
     exact Finset.sum_congr rfl fun i hi => by rw [ Nat.cast_sub <| Nat.le_sub_one_of_lt <| Finset.mem_range.mp hi ] ; rw [ Nat.cast_sub <| by linarith [ Finset.mem_range.mp hi ] ] ; ring;
@@ -312,7 +312,8 @@ lemma case_both_neg (x : ℝ) (n : ℕ) (hn : 1 < n)
     rw [ div_lt_iff₀ hPL_pos ] at h_ratio;
     nlinarith [ Lf_lower_bound x ( n - 1 ) ];
   rcases n <;> simp_all +decide [ Finset.prod_range_succ ];
-  convert h_final using 1 ; ring!
+  convert h_final using 1 <;>
+    simp only [PL, PR, Nat.add_sub_cancel, Rf_eq_Lf_add_two] <;> ring!
 
 /-
 PROBLEM
@@ -355,7 +356,7 @@ lemma ratio_lt_one (x : ℝ) (n : ℕ) (j : ℕ) (hj : j < n) (hn : 1 < n)
     (hLj : Lf x j < -2) (hRj : Rf x j < 0)
     (hother : ∀ k ∈ Finset.range n, k ≠ j → Lf x k > 0) :
     ∏ k ∈ Finset.range n, Rf x k > ∏ k ∈ Finset.range n, Lf x k := by
-  by_contra h_contra; contrapose! h_contra with h_contra; simp_all +decide [ Finset.prod_eq_mul_prod_diff_singleton ( Finset.mem_range.mpr hj ) ] ;
+  by_contra h_contra; contrapose! h_contra with h_contra; simp_all +decide [ Finset.prod_eq_mul_prod_diff_singleton_of_mem ( Finset.mem_range.mpr hj ) ] ;
   -- By Lemma~\ref{lem:case_both_neg}, we have $\sum_{k \neq j} \frac{2}{Lf(x,k)} < \frac{7}{4}$.
   have hsum_bound : ∑ k ∈ Finset.range n \ {j}, (2 / Lf x k) < 7 / 4 := by
     -- For k ≠ j with k < n, we have Lf x k ≥ 4d(4d-3) where d = |k-j| ≥ 1.
@@ -415,7 +416,7 @@ lemma ratio_lt_one (x : ℝ) (n : ℕ) (j : ℕ) (hj : j < n) (hn : 1 < n)
   have hprod_bound : ∏ k ∈ Finset.range n \ {j}, (Rf x k / Lf x k) ≤ Real.exp (∑ k ∈ Finset.range n \ {j}, (2 / Lf x k)) := by
     have hprod_bound : ∀ k ∈ Finset.range n \ {j}, (Rf x k / Lf x k) ≤ Real.exp (2 / Lf x k) := by
       intro k hk; rw [ div_le_iff₀ ( hother k ( Finset.mem_range.mp ( Finset.mem_sdiff.mp hk |>.1 ) ) ( by aesop ) ) ] ; ring_nf;
-      nlinarith [ Real.add_one_le_exp ( ( 4 + ( - ( x * 5 ) - x * k * 8 ) + x ^ 2 + k * 20 + k ^ 2 * 16 : ℝ ) ⁻¹ * 2 ), hother k ( Finset.mem_range.mp ( Finset.mem_sdiff.mp hk |>.1 ) ) ( by aesop ), inv_mul_cancel₀ ( show ( 4 + ( - ( x * 5 ) - x * k * 8 ) + x ^ 2 + k * 20 + k ^ 2 * 16 : ℝ ) ≠ 0 from fun h => by have := hother k ( Finset.mem_range.mp ( Finset.mem_sdiff.mp hk |>.1 ) ) ( by aesop ) ; norm_num [ show Lf x k = 0 by { unfold Lf; nlinarith } ] at this ) ];
+      nlinarith [ Real.add_one_le_exp ( ( 4 - x * 5 - x * k * 8 + x ^ 2 + k * 20 + k ^ 2 * 16 : ℝ ) ⁻¹ * 2 ), hother k ( Finset.mem_range.mp ( Finset.mem_sdiff.mp hk |>.1 ) ) ( by aesop ), inv_mul_cancel₀ ( show ( 4 - x * 5 - x * k * 8 + x ^ 2 + k * 20 + k ^ 2 * 16 : ℝ ) ≠ 0 from fun h => by have := hother k ( Finset.mem_range.mp ( Finset.mem_sdiff.mp hk |>.1 ) ) ( by aesop ) ; norm_num [ show Lf x k = 0 by { unfold Lf; nlinarith } ] at this ) ];
     simpa only [ Real.exp_sum ] using Finset.prod_le_prod ( fun _ _ => div_nonneg ( by unfold Rf; nlinarith [ hother _ ( Finset.mem_range.mp ( Finset.mem_sdiff.mp ‹_› |>.1 ) ) ( by aesop ) ] ) ( by unfold Lf; nlinarith [ hother _ ( Finset.mem_range.mp ( Finset.mem_sdiff.mp ‹_› |>.1 ) ) ( by aesop ) ] ) ) hprod_bound;
   -- By Lemma~\ref{lem:case_both_neg}, we have $\frac{|Rf(x,j)|}{|Lf(x,j)|} \cdot \exp(\sum_{k \neq j} \frac{2}{Lf(x,k)}) < 1$.
   have hratio_bound : (abs (Rf x j) / abs (Lf x j)) * Real.exp (∑ k ∈ Finset.range n \ {j}, (2 / Lf x k)) < 1 := by
