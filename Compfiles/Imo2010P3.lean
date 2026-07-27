@@ -1,18 +1,42 @@
+/-
+Copyright (c) 2023 The Compfiles Contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors:
+-/
+
 import Mathlib.Tactic
+
 import Mathlib.Data.Int.GCD
 import Mathlib.NumberTheory.Multiplicity
+
+import ProblemExtraction
+
+problem_file { tags := [.Algebra] }
+
+/-!
+# International Mathematical Olympiad 2010, Problem 3
+
+Determine all functions g : ℤ>0 → ℤ>0 such that
+
+               (g(m) + n)(g(n) + m)
+
+is always a perfect square.
+-/
 
 namespace Imo2010P3
 
 abbrev PosInt : Type := { x : ℤ // 0 < x }
+
 notation "ℤ>0" => PosInt
 
--- Helper: unwrap PosInt addition
 instance : Add PosInt where
   add a b := ⟨a.val + b.val, by linarith [a.prop, b.prop]⟩
 
--- SolutionSet: g = id or g x = x + c for some constant c : ℤ>0
-def SolutionSet : Set (ℤ>0 → ℤ>0) := { f | f = id ∨ ∃ c, ∀ x, f x = x + c }
+
+determine SolutionSet : Set (ℤ>0 → ℤ>0) := { f | f = id ∨ ∃ c, ∀ x, f x = x + c }
+
+snip begin
+
 
 /-
 Key lemma: if (g(m)+n)(g(n)+m) is always a perfect square, then g is injective
@@ -221,10 +245,9 @@ lemma step_one (g : ℤ>0 → ℤ>0)
     exact absurd h_contradiction ( by rw [ Int.modEq_iff_dvd ] ; norm_num; exact mod_cast hp_prime.not_dvd_one )));
   grind
 
-/-
-Main theorem
--/
-theorem imo2010_p3 (g : ℤ>0 → ℤ>0) :
+snip end
+
+problem imo2010_p3 (g : ℤ>0 → ℤ>0) :
     g ∈ SolutionSet ↔ ∀ m n, IsSquare ((g m + n) * (g n + m)) := by
   constructor
   · rintro (rfl | ⟨c, hc⟩) m n
@@ -264,8 +287,10 @@ theorem imo2010_p3 (g : ℤ>0 → ℤ>0) :
     -- Since $g$ maps to positive integers, we must have $c \geq 0$.
     have hc_nonneg : 0 ≤ c := by
       linarith! [ hc ⟨ 1, by decide ⟩, Subtype.property ( g ⟨ 1, by decide ⟩ ) ];
-    rcases c with ⟨ _ | c ⟩ <;> norm_num at *;
-    · exact Or.inl <| funext fun x => Subtype.ext <| hc x x.prop;
-    · exact Or.inr ⟨ ⟨ c + 1, by linarith ⟩, fun x => Subtype.ext <| hc x x.prop ⟩
+    -- `c = 0` gives `g = id`; `c > 0` gives the shifted solution.
+    rcases c with ⟨_ | c⟩ <;> norm_num at hc hc_nonneg
+    · exact Or.inl <| funext fun x => Subtype.ext <| hc x x.prop
+    · exact Or.inr ⟨⟨c + 1, by linarith⟩, fun x => Subtype.ext <| hc x x.prop⟩
+
 
 end Imo2010P3

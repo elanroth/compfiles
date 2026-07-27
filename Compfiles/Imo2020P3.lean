@@ -1,7 +1,26 @@
+/-
+Copyright (c) 2025 Joseph Myers. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Joseph Myers
+-/
+
 import Mathlib
+
 import ProblemExtraction
 
-problem_file { tags := [.Combinatorics] }
+problem_file {
+  tags := [.Combinatorics]
+}
+
+/-!
+# International Mathematical Olympiad 2020, Problem 3
+
+There are 4n pebbles of weights 1,2,3,...,4n. Each pebble is colored
+in one of n colors and there are four pebbles of each color. Show
+that we can arrange the pebbles into two piles such that the total
+weights of both piles are the same, and each pile contains two
+pebbles of each color.
+-/
 
 namespace Imo2020P3
 
