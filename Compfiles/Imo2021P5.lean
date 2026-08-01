@@ -126,9 +126,12 @@ private lemma adjacent_central_opposite (p : Position)
   · -- At state `b`, the previous neighbor of `central p b` has not moved below `b`.
     have h_lowerSwap_b_false : ¬lowerSwap p b := by
       have h_central_a_gt_b : (p.nth b) (central p a) > b := by
-        have h_central_a_gt_b : ¬∃ k : Fin 2021, k.val < b.val ∧ central p k = central p a := by
+        have h_central_a_gt_b :
+            ¬∃ k : Fin 2021, k.val < b.val ∧ central p k = central p a := by
           have := central_bijective p h
-          exact fun ⟨k, hk₁, hk₂⟩ => by have := this.injective hk₂; exact absurd this (ne_of_lt (lt_trans hk₁ hba))
+          rintro ⟨k, hk₁, hk₂⟩
+          have := this.injective hk₂
+          exact absurd this (ne_of_lt (lt_trans hk₁ hba))
         have := black_position_invariant p h b (by omega) (central p a)
         simp_all +decide [Fin.ext_iff]
         grind +locals
@@ -140,7 +143,9 @@ private lemma adjacent_central_opposite (p : Position)
     have h_not_lt_a : ¬(p.nth a (central p b)).val < a := by
       have h_not_lt_a : ¬∃ k : Fin 2021, k.val < a ∧ central p k = central p b := by
         have := central_bijective p h
-        exact fun ⟨k, hk₁, hk₂⟩ => by have := this.injective hk₂; exact absurd this (by exact ne_of_lt (lt_of_lt_of_le hk₁ (le_of_not_gt hba)))
+        rintro ⟨k, hk₁, hk₂⟩
+        have := this.injective hk₂
+        exact absurd this (ne_of_lt (lt_of_lt_of_le hk₁ (le_of_not_gt hba)))
       convert black_position_invariant p h a (by omega) (central p b) |>.not.mpr _
       all_goals first
         | rfl
@@ -164,10 +169,15 @@ private lemma adjacent_central_opposite (p : Position)
 private lemma odd_cycle_not_two_colorable (color : Fin 2021 → Prop)
     [DecidablePred color] (h : ∀ x, color x ↔ ¬color (x + 1)) : False := by
   have h_ind : ∀ x : Fin 2021, color x ↔ color 0 = (x.val % 2 = 0) := by
-    intro x; induction' x using Fin.inductionOn with x ih; norm_num at *
-    specialize h (Fin.castSucc x) ; norm_num [Nat.add_mod] at * ; by_cases h₁ : (x : ℕ) % 2 = 0 <;> simp +decide [h₁] at ih h ⊢
-    · grind
-    · grind
+    intro x
+    induction' x using Fin.inductionOn with x ih
+    · norm_num at *
+    · norm_num at *
+      specialize h (Fin.castSucc x)
+      norm_num [Nat.add_mod] at *
+      by_cases h₁ : (x : ℕ) % 2 = 0 <;> simp +decide [h₁] at ih h ⊢
+      · grind
+      · grind
   have := h 2020
   simp +decide [h_ind 2020] at this
 
