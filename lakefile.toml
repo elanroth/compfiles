@@ -1,5 +1,5 @@
 name = "compfiles"
-defaultTargets = ["ProblemExtraction", "Compfiles", "buildWebpage", "extractProblems", "checkSolution"]
+defaultTargets = ["ProblemExtraction", "Compfiles", "Elan", "buildWebpage", "extractProblems", "checkSolution"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -30,6 +30,12 @@ name = "ProblemExtraction"
 
 [[lean_lib]]
 name = "Compfiles"
+
+# Elan's working area. Fork-local: do not include in an upstream PR.
+# Built so the P5 prove/integrate/verify cycle has a real build gate.
+# See Elan.lean for the four modules excluded pending proof maintenance.
+[[lean_lib]]
+name = "Elan"
 
 [[lean_exe]]
 name = "buildWebpage"

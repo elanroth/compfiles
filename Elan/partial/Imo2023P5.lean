@@ -141,7 +141,7 @@ theorem upper_bound (n : ℕ) :
         (advRed j.val (Finset.mem_Icc.mp j.prop).1).val ≠ (p.steps j).val := by
       intro i j hij hlog
       by_contra h_contra
-      push_neg at h_contra
+      push Not at h_contra
       have h_eq := h_contra
       have h_decreasing : (advRed j.val (Finset.mem_Icc.mp j.prop).1).val <
           (advRed i.val (Finset.mem_Icc.mp i.prop).1).val :=

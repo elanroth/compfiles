@@ -1,0 +1,34 @@
+timestamp	commit	target	prover	before	after	delta	status	note
+2026-07-19T11:33:33	276f4b51	REPO	combined	87	87	+0	keep	baseline: 87 obligations across 63 files, lake build green, branch autoprove/jul19
+2026-07-19T11:36:37	-	Compfiles/Imo1970P6.lean	mistral	1	1	+0	revert	mistral candidate had 3 sorrys, not integrated
+2026-07-19T11:36:37	-	Compfiles/Imo1998P6.lean	mistral	1	1	+0	revert	mistral candidate had 2 sorrys, not integrated
+2026-07-19T11:36:37	-	Compfiles/Imo2010P3.lean	mistral	1	1	+0	revert	mistral candidate had 1 sorry, not integrated
+2026-07-19T11:36:37	-	Compfiles/Imo2016P5.lean	mistral	1	1	+0	revert	mistral candidate had 2 sorrys, not integrated
+2026-07-19T11:40:48	-	Compfiles/Imo2010P3.lean	claude	1	1	+0	crash	run-once crashed: ran from wrong cwd, toml not loaded, 404 on retired default model; resubmitting
+2026-07-19T19:34:46	-	Compfiles/Imo1970P6.lean	aristotle	1	1	+0	revert	partially_proved: 7 helper lemmas proved, main assembly still sorry; resubmitted enriched file as a64c7c70
+2026-07-19T19:34:47	-	Compfiles/Imo1970P6.lean	mistral	1	1	+0	revert	mistral2 on enriched file: 5 sorrys, not integrated
+2026-07-19T19:34:47	-	Compfiles/Imo1998P6.lean	aristotle	1	1	+0	revert	aristotle job 2efa68b2 errored server-side; resubmitted via run-once
+2026-07-19T19:47:00	-	Compfiles/Imo1970P6.lean	claude	1	1	+0	revert	ported aristotle partial to v4.31: all 7 helpers verify green locally; only main assembly sorry remains (imo1970p6.aristotle.lean)
+2026-07-19T20:05:00	-	Compfiles/Imo2017P6.lean	aristotle	1	1	+0	human	parked: statement refuted by kernel-verified counterexample S={(1,0)} (see human-needed.md); statements are immutable
+2026-07-20T08:51:38	-	Compfiles/Imo2017P6.lean	aristotle	1	1	+0	human	parked: statement false as formalized, refutation kernel-verified locally; needs upstream statement fix (range n -> range (n+1))
+2026-07-20T08:57:52	-	Compfiles/Imo1998P6.lean	aristotle	1	1	+0	human	parked: statement false (f=id counterexample, verified); corrected-statement proof complete+verified in imo1998p6.aristotle.lean
+2026-07-20T09:02:10	2f7b5792	Compfiles/Imo1970P6.lean	aristotle	1	0	-1	keep	IMO 1970 P6 fully proved: aristotle enriched-resubmit + 8 manual v4.28->v4.31 tactic ports; lake build green
+2026-07-20T09:03:12	-	REPO	combined	106	57	-49	keep	metric fix: added .rambam to SKIP_DIRS (staging copies were inflating count); true open count 57 across 43 files post-1970-close
+2026-07-20T09:14:45	-	REPO	combined	57	57	+0	crash	Rambam engine dir deleted from disk ~09:13 mid-run (external change); 4 aristotle jobs in flight unpollable: 26e5f3d9(2010) ad54728b(2016) 62c51ddb/40715337(2018/2020); continuing engine-free
+2026-07-20T09:19:02	-	REPO	combined	57	57	+0	keep	engine restored: Maimonides renamed to Rambam (/Users/elanroth/pure/Rambam); .maimonides->.rambam, toml renamed; all 4 in-flight jobs alive
+2026-07-20T09:24:11	af4c658e	Compfiles/Imo1988P4.lean	aristotle	1	0	-1	keep	IMO 1988 P4 closed: recovered unintegrated cloud-pipeline proof + 2 local tactic ports (natDegree_prod convert, C_eq_natCast normalization); lake build green
+2026-07-20T12:24:34	197c5847	Compfiles/Imo2016P2.lean	combined	1	0	-1	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	197c5847	Compfiles/Usa1996P6.lean	combined	1	0	-1	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	197c5847	Compfiles/Usa1999P1.lean	combined	1	0	-1	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	197c5847	Compfiles/Imo1997P4.lean	combined	1	0	-1	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	197c5847	Compfiles/Imo2004P6.lean	combined	2	0	-2	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	197c5847	Compfiles/Imo2025P5.lean	combined	2	0	-2	keep	synced solved file from upstream/main (dwrensha/compfiles)
+2026-07-20T12:24:34	58eed6bf	Compfiles/Imo2009P3.lean	combined	1	0	-1	keep	synced from upstream + 1 local port (exists_eq_ciInf_of_not_isPredLimit -> Nat.sInf_mem route)
+2026-07-20T12:24:34	58eed6bf	Compfiles/Imo1998P6.lean	combined	1	0	-1	keep	upstream fixed the false statement (set now ranges over all admissible f) and proved it; matches our parked refutation
+2026-07-20T12:24:56	-	REPO	combined	56	46	-10	keep	correction: upstream-sync batch landed as 197c5847 (7 files) + 58eed6bf (Imo2009P3); per-file tsv commit hashes above are partly stale
+2026-07-20T13:26:29	df2e4f1c	Compfiles/Imo2017P6.lean	combined	1	1	+0	keep	statement fix merged upstream (dwrensha/compfiles#228); problem now provable as stated, back in prover pool
+2026-07-20T14:49:58	-	Compfiles/Imo2017P6.lean	aristotle	1	1	+0	revert	job 2e7dc585 errored server-side; resubmitted fixed-statement file as 0a335581
+2026-07-20T14:59:36	2869a42d	Compfiles/Imo2010P3.lean	aristotle	1	0	-1	keep	IMO 2010 P3 closed: enriched-resubmit full proof + 1 port (ZI-valued vs pos-valued existential ending rewritten)
+2026-07-20T14:59:36	cb056fd6	Compfiles/Imo2016P5.lean	aristotle	1	0	-1	keep	IMO 2016 P5 closed: enriched-resubmit no_real_solution + 3 ports (lemma rename, open, maxHeartbeats)
+2026-07-20T15:07:19	1d93ba11	Compfiles/Imo2018P5.lean	aristotle	1	0	-1	keep	IMO 2018 P5 closed: aristotle proof + 3 ports (convert side-goal, two padic ne-zero side conditions via valuation clash)
+2026-07-20T15:11:19	d3a02e9c	Compfiles/Imo2021P5.lean	aristotle	1	0	-1	keep	IMO 2021 P5 closed: aristotle proof + 2 ports (convert goal-order drift, state_position bridge for grind)

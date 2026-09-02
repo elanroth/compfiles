@@ -1,0 +1,22 @@
+# rambam.toml — place in the Compfiles repo root (~/Desktop/Lean/compfiles/)
+#
+# Per-step model overrides for the autoprove loop. Rambam reads this from the
+# project root. The defaults below spend the expensive models only where judgment
+# matters (faithfulness review + paper ingestion) and keep the hot inner loop cheap.
+#
+# NOTE: the model IDs must be ones your Anthropic account + Rambam accept.
+# The Rambam README ships with the snapshot default "claude-sonnet-4-20250514".
+# The aliases below target the current latest line — if a string is rejected, fall
+# back to the README's dated snapshots.
+
+model = "claude-sonnet-4-6"
+
+[model_overrides]
+orchestrator = "claude-sonnet-4-6"      # picks the next move in the loop — fast, frequent
+review       = "claude-opus-4-6"         # English <-> Lean faithfulness — use the strong model
+ingest       = "claude-opus-4-6"         # paper/PDF -> Lean formalization — strong model
+quality      = "claude-haiku-4-5-20251001"  # cheap pass/fail + lightweight repair
+
+# mistral-prove defaults to labs-leanstral-2603; override here or with --model if needed.
+# [mistral]
+# model = "labs-leanstral-2603"
